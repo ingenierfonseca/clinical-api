@@ -1,0 +1,321 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{26E398B9-4FBD-BC5C-EE8D-0A43BB0A2FE1}|MedicalSuiteNova.Infrastructure\\MedicalSuiteNova.Infrastructure.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.infrastructure\\repositories\\invoicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26E398B9-4FBD-BC5C-EE8D-0A43BB0A2FE1}|MedicalSuiteNova.Infrastructure\\MedicalSuiteNova.Infrastructure.csproj|solutionrelative:medicalsuitenova.infrastructure\\repositories\\invoicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.domain\\dto\\invoiceinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|solutionrelative:medicalsuitenova.domain\\dto\\invoiceinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.domain\\dto\\paymentdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|solutionrelative:medicalsuitenova.domain\\dto\\paymentdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A618DE29-13E5-D02B-4D4B-1678C77E6E3E}|MedicalSuiteNova\\MedicalSuiteNova.Api.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova\\httptest\\invoice.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{A618DE29-13E5-D02B-4D4B-1678C77E6E3E}|MedicalSuiteNova\\MedicalSuiteNova.Api.csproj|solutionrelative:medicalsuitenova\\httptest\\invoice.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60D169E7-7A18-AE39-D2A7-6AD86AAC476E}|MedicalSuiteNova.Application\\MedicalSuiteNova.Application.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.application\\interfaces\\iinvoicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60D169E7-7A18-AE39-D2A7-6AD86AAC476E}|MedicalSuiteNova.Application\\MedicalSuiteNova.Application.csproj|solutionrelative:medicalsuitenova.application\\interfaces\\iinvoicerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A618DE29-13E5-D02B-4D4B-1678C77E6E3E}|MedicalSuiteNova\\MedicalSuiteNova.Api.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova\\controllers\\invoicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A618DE29-13E5-D02B-4D4B-1678C77E6E3E}|MedicalSuiteNova\\MedicalSuiteNova.Api.csproj|solutionrelative:medicalsuitenova\\controllers\\invoicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A618DE29-13E5-D02B-4D4B-1678C77E6E3E}|MedicalSuiteNova\\MedicalSuiteNova.Api.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova\\controllers\\customerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A618DE29-13E5-D02B-4D4B-1678C77E6E3E}|MedicalSuiteNova\\MedicalSuiteNova.Api.csproj|solutionrelative:medicalsuitenova\\controllers\\customerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.domain\\entities\\paymenttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|solutionrelative:medicalsuitenova.domain\\entities\\paymenttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.domain\\entities\\paymentterm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|solutionrelative:medicalsuitenova.domain\\entities\\paymentterm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.domain\\entities\\invoicestatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|solutionrelative:medicalsuitenova.domain\\entities\\invoicestatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.domain\\entities\\currency.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|solutionrelative:medicalsuitenova.domain\\entities\\currency.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26E398B9-4FBD-BC5C-EE8D-0A43BB0A2FE1}|MedicalSuiteNova.Infrastructure\\MedicalSuiteNova.Infrastructure.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.infrastructure\\persistence\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26E398B9-4FBD-BC5C-EE8D-0A43BB0A2FE1}|MedicalSuiteNova.Infrastructure\\MedicalSuiteNova.Infrastructure.csproj|solutionrelative:medicalsuitenova.infrastructure\\persistence\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A618DE29-13E5-D02B-4D4B-1678C77E6E3E}|MedicalSuiteNova\\MedicalSuiteNova.Api.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A618DE29-13E5-D02B-4D4B-1678C77E6E3E}|MedicalSuiteNova\\MedicalSuiteNova.Api.csproj|solutionrelative:medicalsuitenova\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.domain\\entities\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|solutionrelative:medicalsuitenova.domain\\entities\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.domain\\dto\\customerinvoicedashboarddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|solutionrelative:medicalsuitenova.domain\\dto\\customerinvoicedashboarddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26E398B9-4FBD-BC5C-EE8D-0A43BB0A2FE1}|MedicalSuiteNova.Infrastructure\\MedicalSuiteNova.Infrastructure.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.infrastructure\\repositories\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26E398B9-4FBD-BC5C-EE8D-0A43BB0A2FE1}|MedicalSuiteNova.Infrastructure\\MedicalSuiteNova.Infrastructure.csproj|solutionrelative:medicalsuitenova.infrastructure\\repositories\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{26E398B9-4FBD-BC5C-EE8D-0A43BB0A2FE1}|MedicalSuiteNova.Infrastructure\\MedicalSuiteNova.Infrastructure.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.infrastructure\\repositories\\customerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{26E398B9-4FBD-BC5C-EE8D-0A43BB0A2FE1}|MedicalSuiteNova.Infrastructure\\MedicalSuiteNova.Infrastructure.csproj|solutionrelative:medicalsuitenova.infrastructure\\repositories\\customerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|d:\\dev\\api\\medicalsuitenova\\medicalsuitenova\\medicalsuitenova.domain\\dto\\responses\\responseinvoicedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44D32100-99C6-FC5C-2D0B-0F85A2A87D26}|MedicalSuiteNova.Domain\\MedicalSuiteNova.Domain.csproj|solutionrelative:medicalsuitenova.domain\\dto\\responses\\responseinvoicedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 16,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "InvoiceInfoDto.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Dto\\InvoiceInfoDto.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Domain\\Dto\\InvoiceInfoDto.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Dto\\InvoiceInfoDto.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Domain\\Dto\\InvoiceInfoDto.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAgwBAAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T22:03:14.868Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "PaymentType.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Entities\\PaymentType.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Domain\\Entities\\PaymentType.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Entities\\PaymentType.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Domain\\Entities\\PaymentType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T21:55:36.019Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "PaymentTerm.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Entities\\PaymentTerm.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Domain\\Entities\\PaymentTerm.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Entities\\PaymentTerm.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Domain\\Entities\\PaymentTerm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T21:52:22.363Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "InvoiceStatus.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Entities\\InvoiceStatus.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Domain\\Entities\\InvoiceStatus.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Entities\\InvoiceStatus.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Domain\\Entities\\InvoiceStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T21:51:02.34Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Currency.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Entities\\Currency.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Domain\\Entities\\Currency.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Entities\\Currency.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Domain\\Entities\\Currency.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T21:48:49.971Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PaymentDetailDTO.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Dto\\PaymentDetailDTO.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Domain\\Dto\\PaymentDetailDTO.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Dto\\PaymentDetailDTO.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Domain\\Dto\\PaymentDetailDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAYAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T21:37:39.631Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova\\appsettings.json",
+              "RelativeDocumentMoniker": "MedicalSuiteNova\\appsettings.json",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova\\appsettings.json",
+              "RelativeToolTip": "MedicalSuiteNova\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-04-07T19:47:05.086Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Invoice.http",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova\\HttpTest\\Invoice.http",
+              "RelativeDocumentMoniker": "MedicalSuiteNova\\HttpTest\\Invoice.http",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova\\HttpTest\\Invoice.http",
+              "RelativeToolTip": "MedicalSuiteNova\\HttpTest\\Invoice.http",
+              "ViewState": "AgIAACcAAAAAAAAAAAAYwC4AAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2026-04-06T20:57:20.152Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Infrastructure\\Persistence\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Infrastructure\\Persistence\\ApplicationDbContext.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Infrastructure\\Persistence\\ApplicationDbContext.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Infrastructure\\Persistence\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAA4wBQAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T20:45:55.172Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CustomerInvoiceDashboardDto.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Dto\\CustomerInvoiceDashboardDto.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Domain\\Dto\\CustomerInvoiceDashboardDto.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Dto\\CustomerInvoiceDashboardDto.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Domain\\Dto\\CustomerInvoiceDashboardDto.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAgwA4AAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T20:38:56.597Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IInvoiceRepository.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Application\\Interfaces\\IInvoiceRepository.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Application\\Interfaces\\IInvoiceRepository.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Application\\Interfaces\\IInvoiceRepository.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Application\\Interfaces\\IInvoiceRepository.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAswA0AAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T20:37:36.811Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "CustomerRepository.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Infrastructure\\Repositories\\CustomerRepository.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Infrastructure\\Repositories\\CustomerRepository.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Infrastructure\\Repositories\\CustomerRepository.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Infrastructure\\Repositories\\CustomerRepository.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwBcAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-05T18:43:06.025Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "BaseRepository.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Infrastructure\\Repositories\\BaseRepository.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Infrastructure\\Repositories\\BaseRepository.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Infrastructure\\Repositories\\BaseRepository.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Infrastructure\\Repositories\\BaseRepository.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAmwDAAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-05T16:40:00.314Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ResponseInvoiceDto.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Dto\\Responses\\ResponseInvoiceDto.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Domain\\Dto\\Responses\\ResponseInvoiceDto.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Dto\\Responses\\ResponseInvoiceDto.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Domain\\Dto\\Responses\\ResponseInvoiceDto.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAIA8wB0AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-03T23:03:26.99Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Customer.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Entities\\Customer.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Domain\\Entities\\Customer.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Domain\\Entities\\Customer.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Domain\\Entities\\Customer.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAADwvxQAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-03T21:36:12.329Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CustomersController.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova\\Controllers\\CustomersController.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova\\Controllers\\CustomersController.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova\\Controllers\\CustomersController.cs",
+              "RelativeToolTip": "MedicalSuiteNova\\Controllers\\CustomersController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwBUAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-30T20:21:35.342Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InvoiceRepository.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Infrastructure\\Repositories\\InvoiceRepository.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova.Infrastructure\\Repositories\\InvoiceRepository.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova.Infrastructure\\Repositories\\InvoiceRepository.cs",
+              "RelativeToolTip": "MedicalSuiteNova.Infrastructure\\Repositories\\InvoiceRepository.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAwwIgAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-24T21:57:39.294Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "InvoiceController.cs",
+              "DocumentMoniker": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova\\Controllers\\InvoiceController.cs",
+              "RelativeDocumentMoniker": "MedicalSuiteNova\\Controllers\\InvoiceController.cs",
+              "ToolTip": "D:\\Dev\\api\\MedicalSuiteNova\\MedicalSuiteNova\\MedicalSuiteNova\\Controllers\\InvoiceController.cs",
+              "RelativeToolTip": "MedicalSuiteNova\\Controllers\\InvoiceController.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAQwCQAAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-24T22:53:23.063Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

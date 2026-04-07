@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MedicalSuiteNova.Application/MedicalSuiteNova.Application.csproj" />
+  <Project Path="MedicalSuiteNova.Domain/MedicalSuiteNova.Domain.csproj" />
+  <Project Path="MedicalSuiteNova.Infrastructure/MedicalSuiteNova.Infrastructure.csproj" />
+  <Project Path="MedicalSuiteNova/MedicalSuiteNova.Api.csproj" />
+</Solution>

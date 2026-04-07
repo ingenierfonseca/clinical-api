@@ -1,0 +1,52 @@
+@MedicalSuiteNova_HostAddress = http://localhost:5219
+
+GET {{MedicalSuiteNova_HostAddress}}/api/appointment?pageNumber=2&pageSize=5
+Accept: application/json
+### Appointment
+POST {{MedicalSuiteNova_HostAddress}}/api/appointment
+Accept: application/json
+Content-Type: application/json
+
+{
+  "PatientId": 1,
+  "AppointmentDate": "2026-03-23T14:30:00",
+  "DoctorId": 1,
+  "AppointmentTypeId": 1
+}
+
+### Patient
+
+GET {{MedicalSuiteNova_HostAddress}}/api/customers?pageNumber=1&pageSize=10&search=e
+Accept: application/json
+
+### Patient
+
+GET {{MedicalSuiteNova_HostAddress}}/api/customers/1
+Accept: application/json
+
+### Patient
+
+POST {{MedicalSuiteNova_HostAddress}}/api/customers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "FirstName": "Mike",
+  "LastName": "Rodriguez",
+  "Age": 37,
+  "Phone": "123456789456123123456789"
+}
+
+### Patient
+
+PUT {{MedicalSuiteNova_HostAddress}}/api/customers/1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "FirstName": "Emma",
+  "LastName": "Jhonson",
+  "Avatar": "https://rccnoticias.com.do/wp-content/uploads/2026/03/GettyImages-22391783621-1a4c382390354788ba65dcec0b429d5d.jpg",
+  "Age": 31,
+  "Phone": "86422597"
+}

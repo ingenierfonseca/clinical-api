@@ -1,0 +1,52 @@
+@MedicalSuiteNova_HostAddress = http://localhost:5219
+
+GET {{MedicalSuiteNova_HostAddress}}/api/invoice?pageNumber=1&pageSize=5
+Accept: application/json
+### Invoice
+POST {{MedicalSuiteNova_HostAddress}}/api/invoice
+Accept: application/json
+Content-Type: application/json
+
+{
+  "CustomerId": 1,
+  "CurrencyId": 1,
+  "CreatedBy": "ingenierfonseca",
+  "Items": [
+    {
+      "Description": "Extracción Molar",
+      "Quantity": 2,
+      "UnitPrice": 600,
+      "Discount": 0,
+      "TaxAmount": "15"
+    },
+    {
+      "Description": "Calsa Molar",
+      "Quantity": 4,
+      "UnitPrice": 500,
+      "Discount": 0,
+      "TaxAmount": "15"
+    },
+    {
+      "Description": "Limpieza General",
+      "Quantity": 1,
+      "UnitPrice": 700,
+      "Discount": 0,
+      "TaxAmount": "15"
+    }
+  ]
+}
+### Invoice
+GET {{MedicalSuiteNova_HostAddress}}/api/invoice/5
+Accept: application/json
+
+### Invoice Dashboard
+GET {{MedicalSuiteNova_HostAddress}}/api/invoice/dashboard?pageNumber=1&pageSize=5&search=henderson
+Accept: application/json
+
+### Invoice Customer
+GET {{MedicalSuiteNova_HostAddress}}/api/invoice/customer/2
+Accept: application/json
+
+### Invoice Customer Pyments
+GET {{MedicalSuiteNova_HostAddress}}/api/invoice/customer/2/payments
+Accept: application/json
