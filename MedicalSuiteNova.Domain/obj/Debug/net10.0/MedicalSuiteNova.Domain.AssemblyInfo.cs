@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MedicalSuiteNova.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f8927cc752ec88c7fad2ae97394483c9b49bb3e3")]
 [assembly: System.Reflection.AssemblyProductAttribute("MedicalSuiteNova.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MedicalSuiteNova.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

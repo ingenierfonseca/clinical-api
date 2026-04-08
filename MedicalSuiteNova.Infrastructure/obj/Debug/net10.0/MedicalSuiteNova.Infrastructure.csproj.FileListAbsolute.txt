@@ -15,3 +15,4 @@ D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Infrastructure\obj
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Infrastructure\obj\Debug\net10.0\refint\MedicalSuiteNova.Infrastructure.dll
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Infrastructure\obj\Debug\net10.0\MedicalSuiteNova.Infrastructure.pdb
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Infrastructure\obj\Debug\net10.0\ref\MedicalSuiteNova.Infrastructure.dll
+D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Infrastructure\obj\Debug\net10.0\MedicalSuiteNova.Infrastructure.sourcelink.json

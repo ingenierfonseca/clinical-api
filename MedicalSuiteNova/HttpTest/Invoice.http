@@ -43,8 +43,12 @@ Accept: application/json
 GET {{MedicalSuiteNova_HostAddress}}/api/invoice/dashboard?pageNumber=1&pageSize=5&search=henderson
 Accept: application/json
 
+### Invoice Dashboard
+GET {{MedicalSuiteNova_HostAddress}}/api/invoice/dashboard-customers?pageNumber=1&pageSize=5&search=
+Accept: application/json
+
 ### Invoice Customer
-GET {{MedicalSuiteNova_HostAddress}}/api/invoice/customer/2
+GET {{MedicalSuiteNova_HostAddress}}/api/invoice/customer/1
 Accept: application/json
 
 ### Invoice Customer Pyments

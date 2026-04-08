@@ -50,3 +50,7 @@ Content-Type: application/json
   "Age": 31,
   "Phone": "86422597"
 }
+
+### Patient Dashboard
+GET {{MedicalSuiteNova_HostAddress}}/api/customers/dashboard
+Accept: application/json

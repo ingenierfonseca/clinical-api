@@ -142,6 +142,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "MedicalSuiteNova.Api.Controllers.CustomersController",
+    "Method": "GetDashboard",
+    "RelativePath": "api/Customers/dashboard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "MedicalSuiteNova.Api.Controllers.InvoiceController",
     "Method": "Get",
     "RelativePath": "api/Invoice",
@@ -230,6 +240,16 @@
     "ContainingType": "MedicalSuiteNova.Api.Controllers.InvoiceController",
     "Method": "Get",
     "RelativePath": "api/Invoice/dashboard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MedicalSuiteNova.Api.Controllers.InvoiceController",
+    "Method": "Get",
+    "RelativePath": "api/Invoice/dashboard-customers",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

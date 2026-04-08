@@ -5,8 +5,6 @@ using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
 using MedicalSuiteNova.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.ObjectModel;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
@@ -84,13 +82,39 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<List<CustomerDashboardDto>> GetDashboard()
+        {
+            var dashboardList = new List<CustomerDashboardDto>();
+            var now = DateTime.UtcNow;
+            var firstDayCurrentMonth = new DateTime(now.Year, now.Month, 1);
+            var firstDayLastMonth = firstDayCurrentMonth.AddMonths(-1);
+
+            var allInvoices = await _context.Invoices.ToListAsync();
+            int totalCountPeding = allInvoices.Where(a => a.StatusId == 1).Count();
+            int totalCountPaid = allInvoices.Where(a => a.StatusId == 2).Count();
+
+            dashboardList.Add(new CustomerDashboardDto
+            {
+                Title = "Facturas Pendientes",
+                Value = totalCountPeding.ToString()
+            });
+
+            dashboardList.Add(new CustomerDashboardDto
+            {
+                Title = "Facturas Pagadas",
+                Value = totalCountPaid.ToString()
+            });
+
+            return dashboardList;
+        }
+
         public async Task<PagedResponse<CustomerInvoiceDashboardDto>> GetAllDashboardPaginatedAsync(int pageNumber, int pageSize, string search)
         {
             var hoy = DateTime.Today;
 
             var query = _context.Set<Customer>()
                 .Where(a => search != string.Empty && a.FirstName.Contains(search) || a.LastName.Contains(search))
-                .OrderBy(a => a.FirstName)
+                .OrderByDescending(a => a.Invoices.Select(i => i.StatusId).FirstOrDefault())
                 .Select(c => new CustomerInvoiceDashboardDto
                 {
                     Id = c.Id,
@@ -99,7 +123,16 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                     Age = c.Age,
 
                     // El balance es la suma de (Total Factura - Suma de Pagos de esa factura)
-                    Balance = c.Invoices.Any() ? c.Invoices.Sum(i => i.Total - (decimal)i.Payments.Sum(p => p.Amount)) : 0,
+                    /*Balance = c.Invoices.Any() ? c.Invoices.Sum(i => i.Total - (decimal)i.Payments.Sum(p => p.Amount)) : 0,*/
+                    // Agrupamos las facturas por moneda para obtener balances separados
+                    Balances = c.Invoices
+                    .GroupBy(i => new { i.Currency.Symbol, i.Currency.Code })
+                    .Select(g => new CurrencyBalanceDto
+                    {
+                        Symbol = g.Key.Symbol,
+                        Code = g.Key.Code,
+                        Amount = g.Sum(i => i.Total - i.Payments.Sum(p => p.Amount))
+                    }).ToList(),
 
                     // Buscamos la fecha máxima de todos los pagos de todas sus facturas
                     LastPayment = c.Invoices.SelectMany(i => i.Payments).Any()
@@ -130,8 +163,8 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                     SubTotal = a.SubTotal,
                     TaxTotal = a.TaxTotal,
                     DiscountTotal = a.DiscountTotal,
-                    Total = a.Total,
-                    Currency = a.Currency.Name,
+                    Total = a.Total - a.Payments.Sum(p => p.Amount),
+                    Currency = a.Currency.Symbol,
                     Status = a.InvoiceStatus.Name,
                     PaymentTerm = a.PaymentTerm.Name,
                     StatusId = a.StatusId,

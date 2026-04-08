@@ -76,3 +76,4 @@ D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova\obj\Debug\net10.0\
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova\obj\Debug\net10.0\MedicalSuiteNova.Api.pdb
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova\obj\Debug\net10.0\MedicalSuiteNova.Api.genruntimeconfig.cache
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova\obj\Debug\net10.0\ref\MedicalSuiteNova.Api.dll
+D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova\obj\Debug\net10.0\MedicalSuiteNova.Api.sourcelink.json

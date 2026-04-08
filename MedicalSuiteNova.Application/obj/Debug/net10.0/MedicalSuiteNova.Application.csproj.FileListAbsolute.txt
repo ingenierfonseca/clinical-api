@@ -13,3 +13,4 @@ D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Application\obj\De
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Application\obj\Debug\net10.0\refint\MedicalSuiteNova.Application.dll
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Application\obj\Debug\net10.0\MedicalSuiteNova.Application.pdb
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Application\obj\Debug\net10.0\ref\MedicalSuiteNova.Application.dll
+D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Application\obj\Debug\net10.0\MedicalSuiteNova.Application.sourcelink.json

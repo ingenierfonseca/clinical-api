@@ -9,3 +9,4 @@ D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Domain\obj\Debug\n
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Domain\obj\Debug\net10.0\refint\MedicalSuiteNova.Domain.dll
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Domain\obj\Debug\net10.0\MedicalSuiteNova.Domain.pdb
 D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Domain\obj\Debug\net10.0\ref\MedicalSuiteNova.Domain.dll
+D:\Dev\api\MedicalSuiteNova\MedicalSuiteNova\MedicalSuiteNova.Domain\obj\Debug\net10.0\MedicalSuiteNova.Domain.sourcelink.json

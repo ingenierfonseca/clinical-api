@@ -46,6 +46,13 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpGet("dashboard")]
+        public async Task<IActionResult> Get()
+        {
+            var invoices = await _invoiceRepository.GetDashboard();
+            return Ok(invoices);
+        }
+
+        [HttpGet("dashboard-customers")]
         public async Task<IActionResult> Get(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10,
