@@ -12,6 +12,11 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
     {
         public InvoiceRepository(ApplicationDbContext context) : base(context) { }
 
+        public async Task<bool> IsValidInvoiceAsync(int invoiceId)
+        {
+            return await _context.Invoices.AnyAsync(p => p.Id == invoiceId);
+        }
+
         public async Task<PagedResponse<InvoiceDto>> GetAllPaginatedAsync(int pageNumber, int pageSize)
         {
             var query = _context.Set<Invoice>()
@@ -47,7 +52,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             return await GetAllAsync(pageNumber, pageSize, query);
         }
 
-        new public async Task<InvoiceDto?> GetByIdAsync(int id)
+        public async Task<InvoiceDto?> GetByIdDtoAsync(int id)
         {
             return await _context.Invoices
                 .Where(a => a.Id == id)
@@ -240,12 +245,11 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                 invoice.TaxTotal = runningTax;
                 invoice.Total = runningSubTotal + runningTax;
 
-                _context.Invoices.Add(invoice);
-                await _context.SaveChangesAsync();
+                var result = await AddAsync(invoice);
 
                 await transaction.CommitAsync();
 
-                return Result<ResponseInvoiceDto>.Success(ResponseInvoiceDto.ToDto(invoice));
+                return Result<ResponseInvoiceDto>.Success(ResponseInvoiceDto.ToDto(result));
             }
             catch (Exception ex)
             {

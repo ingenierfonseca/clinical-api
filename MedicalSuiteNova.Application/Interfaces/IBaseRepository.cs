@@ -25,7 +25,7 @@ namespace MedicalSuiteNova.Application.Interfaces
             Expression<Func<T, TDto>>[] includes
         ) where TDto : class;*/
         Task<T?> GetByIdAsync(int id);
-        Task AddAsync(T patient);
-        Task UpdateAsync(T t);
+        Task<T> AddAsync(T patient);
+        Task<T> UpdateAsync(T t);
     }
 }

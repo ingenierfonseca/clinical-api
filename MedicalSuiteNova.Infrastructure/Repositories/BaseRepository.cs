@@ -78,16 +78,18 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task AddAsync(T t)
+        public async Task<T> AddAsync(T t)
         {
             await _context.Set<T>().AddAsync(t);
             await _context.SaveChangesAsync();
+            return t;
         }
 
-        public async Task UpdateAsync(T t)
+        public async Task<T> UpdateAsync(T t)
         {
             _context.Set<T>().Update(t);
             await _context.SaveChangesAsync();
+            return t;
         }
     }
 }

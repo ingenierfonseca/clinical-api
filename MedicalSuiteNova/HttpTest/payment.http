@@ -1,0 +1,15 @@
+@MedicalSuiteNova_HostAddress = http://localhost:5219
+
+GET {{MedicalSuiteNova_HostAddress}}/api/payment?pageNumber=1&pageSize=5
+Accept: application/json
+### Invoice
+POST {{MedicalSuiteNova_HostAddress}}/api/payment
+Accept: application/json
+Content-Type: application/json
+
+{
+  "CustomerId": 2,
+  "InvoiceId": 1,
+  "paymentTypeId": 1,
+  "Amount": 20
+}
