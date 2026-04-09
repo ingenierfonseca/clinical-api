@@ -16,6 +16,7 @@ namespace MedicalSuiteNova.Domain.Entities
         public string? Email { get; set; }
         [StringLength(500)]
         public string? Avatar { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
         public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();

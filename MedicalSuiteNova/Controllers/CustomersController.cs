@@ -32,6 +32,13 @@ namespace MedicalSuiteNova.Api.Controllers
             return Ok(patients);
         }
 
+        [HttpGet("dashboard")]
+        public async Task<IActionResult> GetDashboard()
+        {
+            var patients = await _patientRepository.GetDashboard();
+            return Ok(patients);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(Customer p)
         {
