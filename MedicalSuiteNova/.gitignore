@@ -15,6 +15,7 @@ out/
 
 # Visual Studio
 .vs/
+appsettings.Development.json
 
 # Rider / VS Code
 .idea/

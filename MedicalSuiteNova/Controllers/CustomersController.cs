@@ -42,6 +42,7 @@ namespace MedicalSuiteNova.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Customer p)
         {
+            p.CreatedAt = DateTime.Now;
             await _patientRepository.AddAsync(p);
             return Ok();
         }
