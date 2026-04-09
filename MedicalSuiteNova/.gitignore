@@ -1,0 +1,32 @@
+# =========================
+# .NET / C#
+# =========================
+bin/
+obj/
+
+# Publicación
+publish/
+out/
+
+# Archivos de usuario
+*.user
+*.suo
+*.userprefs
+
+# Visual Studio
+.vs/
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# OS
+.DS_Store
+Thumbs.db
