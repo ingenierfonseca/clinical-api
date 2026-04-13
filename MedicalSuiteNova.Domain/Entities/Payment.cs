@@ -1,9 +1,10 @@
 ﻿
+using MedicalSuiteNova.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class Payment
+    public class Payment : IEntity
     {
         public int Id { get; set; }
         public int InvoiceId { get; set; }
@@ -17,5 +18,6 @@ namespace MedicalSuiteNova.Domain.Entities
         public virtual Customer? Customer { get; set; }
         [ForeignKey("PaymentTypeId")]
         public virtual PaymentType? PaymentType { get; set; }
+        public object GetId() => Id;
     }
 }

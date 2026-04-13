@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MedicalSuiteNova.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class Appointment
+    public class Appointment : IEntity
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
-        public DateTime AppointmentDate { get; set; }
-        public int DoctorId { get; set; }
-        public int AppointmentTypeId { get; set; }
+        public required int CustomerId { get; set; }
+        public required DateTime AppointmentDate { get; set; }
+        public required int DoctorId { get; set; }
+        public required byte AppointmentTypeId { get; set; }
 
         [ForeignKey("CustomerId")]
         public virtual Customer? Patient { get; set; }
-        public virtual Doctor Doctor { get; set; }
-        public virtual AppointmentType AppointmentType { get; set; }
+        public virtual Doctor? Doctor { get; set; }
+        public virtual AppointmentType? AppointmentType { get; set; }
+
+        public object GetId() => Id;
     }
 }

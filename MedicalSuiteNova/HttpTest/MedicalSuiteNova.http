@@ -1,6 +1,6 @@
 @MedicalSuiteNova_HostAddress = http://localhost:5219
 
-GET {{MedicalSuiteNova_HostAddress}}/api/appointment?pageNumber=2&pageSize=5
+GET {{MedicalSuiteNova_HostAddress}}/api/appointment?pageNumber=1&pageSize=5
 Accept: application/json
 ### Appointment
 POST {{MedicalSuiteNova_HostAddress}}/api/appointment

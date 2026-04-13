@@ -1,6 +1,16 @@
-@MedicalSuiteNova_HostAddress = http://localhost:5219
+@MedicalSuiteNova_HostAddress = https://localhost:7209
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhZG1pbiIsInVuaXF1ZV9uYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3NzYwOTkwNjIsImV4cCI6MTc3NjcwMzg2MiwiaWF0IjoxNzc2MDk5MDYyLCJpc3MiOiJNZWRpY2FsU3VpdGVOb3ZhLkFQSSIsImF1ZCI6Ik1lZGljYWxTdWl0ZU5vdmEuQXBwIn0.WDiWMVhaNyzX0E5CrlTrBRMUnt3eX5MURXNjqXdbaqs
+ 
+### GET AUTH
+# @name login
+GET {{MedicalSuiteNova_HostAddress}}/api/auth
+Accept: application/json
+###
+@Token = {{login.response.body.token}}
 
+### GET ALL
 GET {{MedicalSuiteNova_HostAddress}}/api/invoice?pageNumber=1&pageSize=5
+Authorization: Bearer {{Token}}
 Accept: application/json
 ### Invoice
 POST {{MedicalSuiteNova_HostAddress}}/api/invoice
@@ -36,11 +46,11 @@ Content-Type: application/json
   ]
 }
 ### Invoice
-GET {{MedicalSuiteNova_HostAddress}}/api/invoice/5
+GET {{MedicalSuiteNova_HostAddress}}/api/invoice/1
 Accept: application/json
 
 ### Invoice Dashboard
-GET {{MedicalSuiteNova_HostAddress}}/api/invoice/dashboard?pageNumber=1&pageSize=5&search=henderson
+GET {{MedicalSuiteNova_HostAddress}}/api/invoice/dashboard?pageNumber=1&pageSize=5&search=
 Accept: application/json
 
 ### Invoice Dashboard
@@ -48,9 +58,33 @@ GET {{MedicalSuiteNova_HostAddress}}/api/invoice/dashboard-customers?pageNumber=
 Accept: application/json
 
 ### Invoice Customer
-GET {{MedicalSuiteNova_HostAddress}}/api/invoice/customer/1
+GET {{MedicalSuiteNova_HostAddress}}/api/invoice/customer/2
+Authorization: Bearer {{Token}}
 Accept: application/json
 
 ### Invoice Customer Pyments
 GET {{MedicalSuiteNova_HostAddress}}/api/invoice/customer/2/payments
 Accept: application/json
+
+
+### PUT Invoice
+PUT {{MedicalSuiteNova_HostAddress}}/api/invoice/2
+Authorization: Bearer {{Token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "customerId": 2,
+  "number": "FAC-2026-000001",
+  "issueDate": "2026-04-09T00:00:00",
+  "dueDate": "2026-04-09T03:12:26.203",
+  "subTotal": 400.00,
+  "taxTotal": 0.00,
+  "discountTotal": 0.00,
+  "total": 400.00,
+  "currencyId": 2,
+  "statusId": 2,
+  "paymentTermId": 1,
+  "createdAt": "2026-04-09T03:12:26.203",
+  "createdBy": ""
+}

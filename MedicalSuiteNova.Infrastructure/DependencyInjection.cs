@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MedicalSuiteNova.Application.Interfaces;
+using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Infrastructure.Persistence;
 using MedicalSuiteNova.Infrastructure.Repositories;
-using MedicalSuiteNova.Domain.Entities;
+using MedicalSuiteNova.Application.Interfaces;
 
 namespace MedicalSuiteNova.Infrastructure
 {
@@ -22,9 +22,14 @@ namespace MedicalSuiteNova.Infrastructure
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            services.AddScoped<IAppointmentTypeRepository, AppointmentTypeRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IInvoiceDetailRepository, InvoiceDetailRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
+            services.AddScoped<IDoctorRepository, DoctorRepository>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

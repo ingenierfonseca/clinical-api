@@ -1,0 +1,76 @@
+@MedicalSuiteNova_HostAddress = https://localhost:7209
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhZG1pbiIsInVuaXF1ZV9uYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3NzYwOTkwNjIsImV4cCI6MTc3NjcwMzg2MiwiaWF0IjoxNzc2MDk5MDYyLCJpc3MiOiJNZWRpY2FsU3VpdGVOb3ZhLkFQSSIsImF1ZCI6Ik1lZGljYWxTdWl0ZU5vdmEuQXBwIn0.WDiWMVhaNyzX0E5CrlTrBRMUnt3eX5MURXNjqXdbaqs
+ 
+### GET AUTH
+# @name login
+GET {{MedicalSuiteNova_HostAddress}}/api/auth
+Accept: application/json
+###
+@Token = {{login.response.body.token}}
+
+### GET APPOINTMENT
+GET {{MedicalSuiteNova_HostAddress}}/api/appointment?pageNumber=1&pageSize=5
+Authorization: Bearer {{Token}}
+Accept: application/json
+
+### POST APPOINTMENT
+POST {{MedicalSuiteNova_HostAddress}}/api/appointment 
+Authorization: Bearer {{Token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "CustomerId": 3,
+  "DoctorId": 1,
+  "AppointmentTypeId": 1,
+  "AppointmentDate": "2026-04-13T15:30:00"
+}
+
+### GET APPOINTMENT/ID
+GET {{MedicalSuiteNova_HostAddress}}/api/appointment/2
+Authorization: Bearer {{Token}}
+Accept: application/json
+
+### PUT APPOINTMENT
+PUT {{MedicalSuiteNova_HostAddress}}/api/appointment/2
+Authorization: Bearer {{Token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "CustomerId": 2,
+  "DoctorId": 1,
+  "AppointmentTypeId": 1,
+  "AppointmentDate": "2026-04-13T12:30:00"
+}
+
+###-----------------------------------------------------------------------------------------
+### GET APPOINTMENTTYPE
+GET {{MedicalSuiteNova_HostAddress}}/api/appointmenttype?pageNumber=1&pageSize=10
+Accept: application/json
+
+### POST APPOINTMENTTYPE
+POST {{MedicalSuiteNova_HostAddress}}/api/appointmenttype
+Accept: application/json
+Content-Type: application/json
+
+{
+  "Name": "Estética Dental",
+  "Description": "Blanqueamientos led, carillas o diseño de sonrisa."
+
+}
+### FIND APPOINTMENTTYPE
+GET {{MedicalSuiteNova_HostAddress}}/api/appointmenttype/8
+Accept: application/json
+
+### PUT APPOINTMENTTYPE
+PUT {{MedicalSuiteNova_HostAddress}}/api/appointmenttype
+Accept: application/json
+Content-Type: application/json
+
+{
+  "Id": 8,
+  "Name": "Estética Dental",
+  "Description": "Blanqueamientos led, carillas o diseño de sonrisa."
+
+}

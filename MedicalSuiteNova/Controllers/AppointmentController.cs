@@ -1,43 +1,55 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Responses;
-using MedicalSuiteNova.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalSuiteNova.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AppointmentController : ControllerBase
     {
-        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IAppointmentService _appointmentService;
 
-        public AppointmentController(IAppointmentRepository appointmentRepository)
+        public AppointmentController(IAppointmentService appointmentService)
         {
-            _appointmentRepository = appointmentRepository;
+            _appointmentService = appointmentService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResponse<AppointmentDto>>> Get(
+        public async Task<ActionResult<PagedResponse<AppointmentInfoDto>>> Get(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var appointments = await _appointmentRepository.GetAllPaginatedAsync(pageNumber, pageSize);
+            var appointments = await _appointmentService.GetAllAsync(pageNumber, pageSize);
             return Ok(appointments);
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var appointment = await _appointmentRepository.GetByIdAsync(id);
+            var appointment = await _appointmentService.FyndAsync(id);
             return Ok(appointment);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Appointment p)
+        public async Task<IActionResult> Post(AppointmentDto p)
         {
-            await _appointmentRepository.AddAsync(p);
-            return Ok();
+            var result = await _appointmentService.AddAsync(p);
+            if (!result.IsSuccess)
+                return BadRequest(result.ErrorMessage);
+            return Ok(result.Value);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Put(int id, AppointmentDto dto)
+        {
+            var result = await _appointmentService.UpdateAsync(id, dto);
+            if (!result.IsSuccess)
+                return BadRequest(result.ErrorMessage);
+            return Ok(result.Value);
         }
     }
 }

@@ -2,10 +2,9 @@
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
 
-namespace MedicalSuiteNova.Application.Interfaces
+namespace MedicalSuiteNova.Domain.Interfaces
 {
     public interface IPaymentRepository : IBaseRepository<Payment>
     {
-        public Task<Result<ResponsePaymentDto>> CreatePaymentAsync(Payment payment);
     }
 }

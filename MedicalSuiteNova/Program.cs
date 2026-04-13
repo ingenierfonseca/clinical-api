@@ -1,35 +1,35 @@
+using MedicalSuiteNova.Api.Extensions;
+using MedicalSuiteNova.Api.Middlewares;
+using MedicalSuiteNova.Api.Services;
+using MedicalSuiteNova.Application;
 using MedicalSuiteNova.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
+
+// Implementar Token
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
 // Add services to the container.
-
 builder.Services.AddControllers();
+builder.Services.AddCustomControllers();
+builder.Services.AddCustomCors(builder.Configuration);
 
-// Permitir conexion react local
-builder.Services.AddCors(options => {
-    options.AddPolicy("AllowReact", policy => {
-        policy.WithOrigins(
-            "http://localhost:5173",
-            "https://wonderful-glacier-0c92d611e.6.azurestaticapps.net"
-        )
-        .AllowAnyHeader()
-        .AllowAnyMethod();
-    });
-});
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
+// Middlewares
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
-
-// Permitir conexion react local
 app.UseCors("AllowReact");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

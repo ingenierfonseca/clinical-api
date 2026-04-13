@@ -1,7 +1,9 @@
 ﻿
+using MedicalSuiteNova.Domain.Interfaces;
+
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class InvoiceItem
+    public class InvoiceItem : IEntity
     {
         public int Id { get; set; }
         public int InvoiceId { get; set; }
@@ -15,5 +17,6 @@ namespace MedicalSuiteNova.Domain.Entities
         public decimal LineTotal { get; set; }
         public virtual Invoice Invoice { get; set; }
         //public virtual Service Service { get; set; }
+        public object GetId() => Id;
     }
 }

@@ -2,10 +2,10 @@
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
 
-namespace MedicalSuiteNova.Application.Interfaces
+namespace MedicalSuiteNova.Domain.Interfaces
 {
     public interface IAppointmentRepository : IBaseRepository<Appointment>
     {
-        Task<PagedResponse<AppointmentDto>> GetAllPaginatedAsync(int pageNumber, int pageSize);
+        Task<PagedResponse<AppointmentInfoDto>> GetAllPaginatedAsync(int pageNumber, int pageSize);
     }
 }

@@ -1,16 +1,14 @@
-﻿using MedicalSuiteNova.Application.Interfaces;
+﻿using AutoMapper;
 using MedicalSuiteNova.Domain.Entities;
+using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
-    public class PaymentTypeRepository : BaseRepository<PaymentType>
+    public class PaymentTypeRepository : BaseRepository<PaymentType>, IPaymentTypeRepository
     {
-        public PaymentTypeRepository(ApplicationDbContext context) : base(context) { }
+        public PaymentTypeRepository(ApplicationDbContext context, IMapper mapper) : base(context, mapper) { }
 
         public async Task<bool> IsValidPaymentTypeAsync(int paymentTypeId)
         {

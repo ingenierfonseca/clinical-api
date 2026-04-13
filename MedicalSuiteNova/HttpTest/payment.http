@@ -1,9 +1,9 @@
 @MedicalSuiteNova_HostAddress = http://localhost:5219
 
-GET {{MedicalSuiteNova_HostAddress}}/api/payment?pageNumber=1&pageSize=5
+GET {{MedicalSuiteNova_HostAddress}}/api/doctor?pageNumber=1&pageSize=5
 Accept: application/json
 ### Invoice
-POST {{MedicalSuiteNova_HostAddress}}/api/payment
+POST {{MedicalSuiteNova_HostAddress}}/api/doctor
 Accept: application/json
 Content-Type: application/json
 

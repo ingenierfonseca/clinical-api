@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MedicalSuiteNova.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class Customer
+    public class Customer : IEntity
     {
         public int Id { get; set; }
         [StringLength(50)]
@@ -21,6 +22,7 @@ namespace MedicalSuiteNova.Domain.Entities
         public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
         public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
+        public object GetId() => Id;
         public string getShortName()
         {
             return $"{FirstName.Split(' ', 2)[0].Trim()} {LastName.Split(' ', 2)[0].Trim()}";

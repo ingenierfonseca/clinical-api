@@ -1,10 +1,11 @@
 ﻿using MedicalSuiteNova.Domain.Dto.Responses;
 using System.Linq.Expressions;
 
-namespace MedicalSuiteNova.Application.Interfaces
+namespace MedicalSuiteNova.Domain.Interfaces
 {
     public interface IBaseRepository<T> where T : class
     {
+        Task<List<T>> GetAllAsync();
         Task<PagedResponse<T>> GetAllAsync(
             int pageNumber,
             int pageSize
@@ -24,7 +25,8 @@ namespace MedicalSuiteNova.Application.Interfaces
             int pageSize,
             Expression<Func<T, TDto>>[] includes
         ) where TDto : class;*/
-        Task<T?> GetByIdAsync(int id);
+        public Task<bool> ExistsAsync(object id);
+        Task<T?> FyndAsync(int id);
         Task<T> AddAsync(T patient);
         Task<T> UpdateAsync(T t);
     }

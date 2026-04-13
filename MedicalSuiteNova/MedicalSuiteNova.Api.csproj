@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MedicalSuiteNova.Application\MedicalSuiteNova.Application.csproj" />
     <ProjectReference Include="..\MedicalSuiteNova.Domain\MedicalSuiteNova.Domain.csproj" />
     <ProjectReference Include="..\MedicalSuiteNova.Infrastructure\MedicalSuiteNova.Infrastructure.csproj" />
   </ItemGroup>

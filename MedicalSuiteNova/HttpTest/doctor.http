@@ -1,0 +1,29 @@
+@MedicalSuiteNova_HostAddress = http://localhost:5219
+
+### GET Doctor
+GET {{MedicalSuiteNova_HostAddress}}/api/doctor?pageNumber=1&pageSize=5
+Accept: application/json
+### POST Doctor
+POST {{MedicalSuiteNova_HostAddress}}/api/doctor
+Accept: application/json
+Content-Type: application/json
+
+{
+  "FirstName": "Elia Melissa",
+  "LastName": "Fonseca García",
+  "Specialist": "Ortodoncia y Endodoncia",
+  "Phone": "82016448"
+}
+
+### PUT Doctor
+PUT {{MedicalSuiteNova_HostAddress}}/api/doctor
+Accept: application/json
+Content-Type: application/json
+{
+  "Id": 4,
+  "FirstName": "Samary Saraí",
+  "LastName": "Orozco García",
+  "Specialist": "Sistemas y Redes",
+  "Phone": "86422597",
+  "Age": 21
+}

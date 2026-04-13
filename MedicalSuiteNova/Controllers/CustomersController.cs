@@ -1,18 +1,20 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalSuiteNova.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CustomersController : ControllerBase
     {
-        private readonly ICustomerRepository _patientRepository;
+        private readonly ICustomerService _customerService;
 
-        public CustomersController(ICustomerRepository patientRepository)
+        public CustomersController(ICustomerService customerService)
         {
-            _patientRepository = patientRepository;
+            _customerService = customerService;
         }
 
         [HttpGet]
@@ -21,21 +23,21 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageSize = 10,
             [FromQuery] string search = "")
         {
-            var patients = await _patientRepository.GetAllPaginatedAsync(pageNumber, pageSize, search);
+            var patients = await _customerService.GetAllPaginatedAsync(pageNumber, pageSize, search);
             return Ok(patients);
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var patients = await _patientRepository.GetByIdAsync(id);
+            var patients = await _customerService.FyndAsync(id);
             return Ok(patients);
         }
 
         [HttpGet("dashboard")]
         public async Task<IActionResult> GetDashboard()
         {
-            var patients = await _patientRepository.GetDashboard();
+            var patients = await _customerService.GetDashboard();
             return Ok(patients);
         }
 
@@ -43,14 +45,14 @@ namespace MedicalSuiteNova.Api.Controllers
         public async Task<IActionResult> Post(Customer p)
         {
             p.CreatedAt = DateTime.Now;
-            await _patientRepository.AddAsync(p);
+            await _customerService.AddAsync(p);
             return Ok();
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Put(int id, Customer p)
         {
-            var customer = await _patientRepository.GetByIdAsync(id);
+            var customer = await _customerService.FyndAsync(id);
             if (customer == null)
                 return NotFound();
 
@@ -61,7 +63,7 @@ namespace MedicalSuiteNova.Api.Controllers
             customer.Phone = p.Phone;
             customer.Avatar = p.Avatar;
 
-            await _patientRepository.UpdateAsync(customer);
+            await _customerService.UpdateAsync(customer);
             return Ok();
         }
     }

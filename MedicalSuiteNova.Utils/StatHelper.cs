@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MedicalSuiteNova.Infrastructure.Util
+﻿
+namespace MedicalSuiteNova.Util
 {
     public static class StatHelper
     {

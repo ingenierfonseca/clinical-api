@@ -1,12 +1,11 @@
-﻿using MedicalSuiteNova.Domain.Dto;
-using MedicalSuiteNova.Domain.Dto.Responses;
+﻿using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
 
-namespace MedicalSuiteNova.Application.Interfaces
+namespace MedicalSuiteNova.Domain.Interfaces
 {
     public interface ICustomerRepository: IBaseRepository<Customer>
     {
+        public Task<bool> IsValidAsync(int patientId);
         Task<PagedResponse<Customer>> GetAllPaginatedAsync(int pageNumber, int pageSize, string search);
-        Task<List<CustomerDashboardDto>> GetDashboard();
     }
 }

@@ -1,11 +1,13 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
 namespace MedicalSuiteNova.Domain.Dto
 {
     public class InvoiceDto
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
-        public string CustomerName { get; set; }
         public string? Number { get; set; }
         public DateTime IssueDate { get; set; }
         public DateTime DueDate { get; set; }
@@ -18,6 +20,5 @@ namespace MedicalSuiteNova.Domain.Dto
         public byte PaymentTermId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public required string CreatedBy { get; set; }
-        public List<InvoiceItemDto>? Items { get; set; }
     }
 }

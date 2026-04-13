@@ -2,5 +2,6 @@
   <Project Path="MedicalSuiteNova.Application/MedicalSuiteNova.Application.csproj" />
   <Project Path="MedicalSuiteNova.Domain/MedicalSuiteNova.Domain.csproj" />
   <Project Path="MedicalSuiteNova.Infrastructure/MedicalSuiteNova.Infrastructure.csproj" />
+  <Project Path="MedicalSuiteNova.Utils/MedicalSuiteNova.Utils.csproj" Id="18debc90-6f92-4fa6-ab5c-e8fe744727dc" />
   <Project Path="MedicalSuiteNova/MedicalSuiteNova.Api.csproj" />
 </Solution>

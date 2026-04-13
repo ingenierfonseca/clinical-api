@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using MedicalSuiteNova.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class AppointmentType
+    public class AppointmentType : IEntity
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public byte Id { get; set; }
+        public required string Name { get; set; }
         public string Description { get; set; }
+        //public TimeOnly Time {  get; set; }
+        public object GetId() => Id;
     }
 }

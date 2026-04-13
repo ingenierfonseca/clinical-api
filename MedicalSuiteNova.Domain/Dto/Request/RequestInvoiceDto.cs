@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace MedicalSuiteNova.Domain.Dto.Request
 {
     public class RequestInvoiceDto
