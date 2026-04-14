@@ -70,7 +70,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
 
                     CountPaid = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId == (int)InvoiceStatusEnum.Pagada) : 0,
                     CountPending = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId == (int)InvoiceStatusEnum.Pendiente || i.StatusId == (int)InvoiceStatusEnum.PagoParcial) : 0,
-                    CountOverdue = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId != (int)InvoiceStatusEnum.Vencida && i.DueDate < hoy) : 0
+                    CountOverdue = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId != (int)InvoiceStatusEnum.Vencida && (i.StatusId != (int)InvoiceStatusEnum.Pagada && i.DueDate < hoy)) : 0
                 });
 
             return await GetAllAsync(pageNumber, pageSize, query);

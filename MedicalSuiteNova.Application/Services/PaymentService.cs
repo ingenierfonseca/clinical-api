@@ -12,7 +12,11 @@ namespace MedicalSuiteNova.Application.Services
 
         public async Task<Result<Payment>> CreatePaymentAsync(Payment payment)
         {
-            var invoice = await _uow.Invoices.FyndAsync(payment.InvoiceId);
+            var invoice = await _uow.Invoices.FirstOrDefaultAsync(
+                i => i.Id == payment.InvoiceId,
+                i => i.Payments
+            );
+            
 
             if (invoice == null)
                 return Result<Payment>.Failure("La factura no existe o no pertenece a esta clínica.");

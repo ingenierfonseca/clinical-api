@@ -26,6 +26,9 @@ namespace MedicalSuiteNova.Domain.Interfaces
             Expression<Func<T, TDto>>[] includes
         ) where TDto : class;*/
         public Task<bool> ExistsAsync(object id);
+        public Task<T?> FirstOrDefaultAsync(
+            Expression<Func<T, bool>> predicate,
+            params Expression<Func<T, object>>[] includes);
         Task<T?> FyndAsync(int id);
         Task<T> AddAsync(T patient);
         Task<T> UpdateAsync(T t);

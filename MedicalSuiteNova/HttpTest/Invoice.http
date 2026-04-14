@@ -1,6 +1,6 @@
 @MedicalSuiteNova_HostAddress = https://localhost:7209
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhZG1pbiIsInVuaXF1ZV9uYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3NzYwOTkwNjIsImV4cCI6MTc3NjcwMzg2MiwiaWF0IjoxNzc2MDk5MDYyLCJpc3MiOiJNZWRpY2FsU3VpdGVOb3ZhLkFQSSIsImF1ZCI6Ik1lZGljYWxTdWl0ZU5vdmEuQXBwIn0.WDiWMVhaNyzX0E5CrlTrBRMUnt3eX5MURXNjqXdbaqs
- 
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsInVuaXF1ZV9uYW1lIjoiYWRtaW4iLCJqdGkiOiI5NDYwMDljYy1kOGJjLTQwYzEtYjM2My1mYzZhZDljMDk3NzQiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3NzYxMzM2ODcsImV4cCI6MTc3NjczODQ4NywiaWF0IjoxNzc2MTMzNjg3LCJpc3MiOiIxMjMiLCJhdWQiOiIxMjMifQ.pevaCxuzd2sSRHBnq0aW_Hk1qiocXWOrCcffw3jTXO0
+
 ### GET AUTH
 # @name login
 GET {{MedicalSuiteNova_HostAddress}}/api/auth
@@ -68,14 +68,14 @@ Accept: application/json
 
 
 ### PUT Invoice
-PUT {{MedicalSuiteNova_HostAddress}}/api/invoice/2
+PUT {{MedicalSuiteNova_HostAddress}}/api/invoice/1
 Authorization: Bearer {{Token}}
 Accept: application/json
 Content-Type: application/json
 
 {
   "customerId": 2,
-  "number": "FAC-2026-000001",
+  "number": "FAC-2026-000002",
   "issueDate": "2026-04-09T00:00:00",
   "dueDate": "2026-04-09T03:12:26.203",
   "subTotal": 400.00,
@@ -83,7 +83,7 @@ Content-Type: application/json
   "discountTotal": 0.00,
   "total": 400.00,
   "currencyId": 2,
-  "statusId": 2,
+  "statusId": 5,
   "paymentTermId": 1,
   "createdAt": "2026-04-09T03:12:26.203",
   "createdBy": ""

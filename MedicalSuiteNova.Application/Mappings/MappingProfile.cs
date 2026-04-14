@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Entities;
 
@@ -20,7 +21,12 @@ namespace MedicalSuiteNova.Application.Mappings
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.InvoiceStatus.Name))
                 .ForMember(dest => dest.PaymentTerm, opt => opt.MapFrom(src => src.PaymentTerm.Name))
                 .ForMember(dest => dest.Total, opt => opt.MapFrom(src =>
-                    src.Total - src.Payments.Sum(p => p.Amount)));
+                    /*(src.StatusId == (int)InvoiceStatusEnum.Pendiente
+                    || src.StatusId == (int)InvoiceStatusEnum.PagoParcial
+                    || src.StatusId == (int)InvoiceStatusEnum.Vencida)
+                    ? src.Total - src.Payments.Sum(p => p.Amount)
+                    : */src.Total
+                ));
 
             CreateMap<InvoiceItem, InvoiceItemDto>().ReverseMap();
             CreateMap<AppointmentDto, Appointment>();
