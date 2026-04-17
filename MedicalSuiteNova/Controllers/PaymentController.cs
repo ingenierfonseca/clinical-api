@@ -29,7 +29,7 @@ namespace MedicalSuiteNova.Api.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var patients = await _paymentService.FyndAsync(id);
+            var patients = await _paymentService.FindAsync(id);
             return Ok(patients);
         }
 

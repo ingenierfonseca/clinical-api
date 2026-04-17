@@ -2,6 +2,7 @@
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Interfaces;
+using System.Linq.Expressions;
 
 namespace MedicalSuiteNova.Application.Services
 {
@@ -24,9 +25,18 @@ namespace MedicalSuiteNova.Application.Services
             return await _repository.GetAllAsync(pageNumber, pageSize);
         }
 
-        public async Task<T?> FyndAsync(int id)
+        public async Task<PagedResponse<Dto>> GetAllAsync<Dto>(int pageNumber, int pageSize, params Expression<Func<T, object>>[] includes) where Dto : class
         {
-            return await _repository.FyndAsync(id);
+
+            var pageData = await _repository.GetAllAsync(pageNumber, pageSize, includes);
+            var dtos = _mapper.Map<List<Dto>>(pageData.Data);
+
+            return new PagedResponse<Dto>(dtos, pageNumber, pageSize, pageData.TotalItems);
+        }
+
+        public async Task<T?> FindAsync(int id)
+        {
+            return await _repository.FindAsync(id);
         }
 
         public async Task<T> AddAsync(T t)
@@ -36,19 +46,24 @@ namespace MedicalSuiteNova.Application.Services
             return result;
         }
 
-        public async Task<T> UpdateAsync(T t)
+        public async Task<Dto> AddAsync<Dto>(Dto dto) where Dto: class
         {
-            var idValue = t.GetId();
-            if (idValue == null || idValue.ToString() == "0")
-                throw new ArgumentException("No se puede actualizar una entidad con Id 0 o null.");
+            var entity = await _repository.AddAsync(_mapper.Map<T>(dto));
+            await _uow.CompleteAsync();
+            return _mapper.Map<Dto>(entity);
+        }
 
-            var entity = await _repository.ExistsAsync(idValue);
-            if (!entity)
-                throw new KeyNotFoundException($"No se encontró la entidad con ID {idValue}.");
+        public async Task<Result<Dto>> UpdateAsync<Dto>(int id, Dto dto) where Dto : class
+        {
+            var t = await _repository.FindAsync(id)
+                ?? throw new KeyNotFoundException($"No se encontró la entidad con ID {id}.");
+
+            _mapper.Map(dto, t);
 
             var result = await _repository.UpdateAsync(t);
             await _uow.CompleteAsync();
-            return result;
+
+            return Result<Dto>.Success(_mapper.Map<Dto>(t));
         }
     }
 }

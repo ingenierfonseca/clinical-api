@@ -30,7 +30,7 @@ namespace MedicalSuiteNova.Api.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var patients = await _customerService.FyndAsync(id);
+            var patients = await _customerService.FindAsync(id);
             return Ok(patients);
         }
 
@@ -52,7 +52,8 @@ namespace MedicalSuiteNova.Api.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Put(int id, Customer p)
         {
-            var customer = await _customerService.FyndAsync(id);
+            //TODO
+            var customer = await _customerService.FindAsync(id);
             if (customer == null)
                 return NotFound();
 
@@ -63,7 +64,7 @@ namespace MedicalSuiteNova.Api.Controllers
             customer.Phone = p.Phone;
             customer.Avatar = p.Avatar;
 
-            await _customerService.UpdateAsync(customer);
+            await _customerService.UpdateAsync(id, customer);
             return Ok();
         }
     }

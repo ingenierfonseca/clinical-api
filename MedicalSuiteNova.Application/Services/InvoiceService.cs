@@ -137,7 +137,7 @@ namespace MedicalSuiteNova.Application.Services
 
         public async Task<Result<InvoiceDto>> UpdateAsync(int id, InvoiceDto dto)
         {
-            var invoice = await _uow.Invoices.FyndAsync(id);
+            var invoice = await _uow.Invoices.FindAsync(id);
             if (invoice == null)
                 return Result<InvoiceDto>.Failure($"No existe la factura con el Id {id}.");
 

@@ -28,6 +28,7 @@ namespace MedicalSuiteNova.Infrastructure
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
+            services.AddScoped<ITreatmentRepository, TreatmentRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

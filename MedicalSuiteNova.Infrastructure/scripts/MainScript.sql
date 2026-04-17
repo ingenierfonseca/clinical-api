@@ -25,7 +25,8 @@ GO
 create table AppointmentType(
 	Id TINYINT identity (1,1) primary key,
 	Name varchar(50) NOT NULL,
-	Description varchar(100)
+	Description varchar(100),
+	DurationMinutes INT
 )
 GO
 create table Appointment(
@@ -90,6 +91,20 @@ INSERT INTO PaymentType (Id, Name, Description) VALUES
 (2, 'Transferencia Bancaria', 'Transferencia directa a cuenta de la clínica'),
 (3, 'Cheque', 'Pago con cheque certificado o personal'),
 (4, 'Depósito Bancario', 'Depósito realizado en ventanilla o ATM');
+GO
+CREATE TABLE Treatment (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(150) NOT NULL,
+    Description NVARCHAR(500) NULL,
+	CurrencyId TINYINT NOT NULL,
+    Price DECIMAL(10,2) NOT NULL,
+    DurationMinutes INT NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
+    UpdatedAt DATETIME NULL,
+	CONSTRAINT FK_Treatment_Currency
+		FOREIGN KEY (CurrencyId) REFERENCES Currency(Id);
+);
 GO
 CREATE TABLE Invoice (
     Id INT PRIMARY KEY IDENTITY,

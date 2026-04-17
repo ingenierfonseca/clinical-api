@@ -30,7 +30,7 @@ namespace MedicalSuiteNova.Api.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var appointment = await _appointmentService.FyndAsync(id);
+            var appointment = await _appointmentService.FindAsync(id);
             return Ok(appointment);
         }
 

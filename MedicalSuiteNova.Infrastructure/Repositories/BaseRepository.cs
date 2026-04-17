@@ -62,12 +62,38 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             return new PagedResponse<TDto>(data, pageNumber, pageSize, totalRecords);
         }
 
+        public async Task<PagedResponse<T>> GetAllAsync(
+            int pageNumber,
+            int pageSize,
+            params Expression<Func<T, object>>[] includes
+        )
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            var totalRecords = await query.CountAsync();
+
+            var data = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResponse<T>(data, pageNumber, pageSize, totalRecords);
+        }
+
         public async Task<bool> ExistsAsync(object id)
         {
             return await _context.Set<T>().AnyAsync(e => EF.Property<object>(e, "Id").Equals(id));
         }
 
-        public async Task<T?> FyndAsync(int id)
+        public async Task<T?> FindAsync(int id)
         {
             var idProperty = typeof(T).GetProperty("Id");
 

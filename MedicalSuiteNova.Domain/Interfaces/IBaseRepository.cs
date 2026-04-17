@@ -20,16 +20,16 @@ namespace MedicalSuiteNova.Domain.Interfaces
             int pageSize,
             IQueryable<TDto> query
         ) where TDto : class;
-        /*Task<PagedResponse<TDto>> GetAllAsync<TDto>(
+        Task<PagedResponse<T>> GetAllAsync(
             int pageNumber,
             int pageSize,
-            Expression<Func<T, TDto>>[] includes
-        ) where TDto : class;*/
+            Expression<Func<T, object>>[] includes
+        );
         public Task<bool> ExistsAsync(object id);
         public Task<T?> FirstOrDefaultAsync(
             Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includes);
-        Task<T?> FyndAsync(int id);
+        Task<T?> FindAsync(int id);
         Task<T> AddAsync(T patient);
         Task<T> UpdateAsync(T t);
     }

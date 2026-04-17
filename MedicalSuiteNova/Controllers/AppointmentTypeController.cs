@@ -30,7 +30,7 @@ namespace MedicalSuiteNova.Api.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var appointment = await _appointmentTypeService.FyndAsync(id);
+            var appointment = await _appointmentTypeService.FindAsync(id);
             return Ok(appointment);
         }
 
@@ -41,10 +41,10 @@ namespace MedicalSuiteNova.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put(AppointmentType p)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Put(int id, AppointmentType p)
         {
-            var result = await _appointmentTypeService.UpdateAsync(p);
+            var result = await _appointmentTypeService.UpdateAsync(id, p);
             return Ok(result);
         }
     }

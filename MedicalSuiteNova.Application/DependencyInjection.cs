@@ -37,6 +37,7 @@ namespace MedicalSuiteNova.Application
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<IAppointmentTypeService, AppointmentTypeService>();
             services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<ITreatmentService, TreatmentService>();
 
             return services;
         }

@@ -26,7 +26,7 @@ namespace MedicalSuiteNova.Application.Services
 
         public async Task<Result<AppointmentDto>> UpdateAsync(int id, AppointmentDto dto)
         {
-            var appointment = await _uow.Appointments.FyndAsync(id);
+            var appointment = await _uow.Appointments.FindAsync(id);
 
             if (appointment == null)
                 return Result<AppointmentDto>.Failure($"La cita con ID {id} no fue encontrada.");

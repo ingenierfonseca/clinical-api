@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Update;
 using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Mappings
@@ -31,6 +32,12 @@ namespace MedicalSuiteNova.Application.Mappings
             CreateMap<InvoiceItem, InvoiceItemDto>().ReverseMap();
             CreateMap<AppointmentDto, Appointment>();
             CreateMap<Appointment, AppointmentDto>();
+            CreateMap<TreatmentDto, Treatment>();
+            CreateMap<Treatment, TreatmentDto>();
+            CreateMap<UpdateTreatmentDto, Treatment>();
+            CreateMap<Treatment, UpdateTreatmentDto>();
+            CreateMap<CurrencyDto, Currency>();
+            CreateMap<Currency, CurrencyDto>();
         }
     }
 }
