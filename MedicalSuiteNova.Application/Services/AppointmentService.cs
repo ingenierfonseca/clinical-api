@@ -45,13 +45,13 @@ namespace MedicalSuiteNova.Application.Services
 
         private async Task<Result<bool>> ValidateDependenciesAsync(AppointmentDto dto)
         {
-            if (!await _uow.Customers.IsValidAsync(dto.CustomerId))
+            if (!await _uow.Customers.ExistsAsync(dto.CustomerId))
                 return Result<bool>.Failure("El Paciente no es válido.");
 
-            if (!await _uow.Doctors.IsValidAsync(dto.DoctorId))
+            if (!await _uow.Doctors.ExistsAsync(dto.DoctorId))
                 return Result<bool>.Failure("El Doctor no es válido.");
 
-            if (!await _uow.AppointmentTypes.IsValidAsync(dto.AppointmentTypeId))
+            if (!await _uow.AppointmentTypes.ExistsAsync(dto.AppointmentTypeId))
                 return Result<bool>.Failure("El Tipo de cita no es válido.");
 
             return Result<bool>.Success(true);

@@ -5,8 +5,8 @@ using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Interfaces
 {
-    public interface ITreatmentService: IBaseService<Treatment>
+    public interface IPaymentTermService: IBaseService<PaymentTerm>
     {
-        public Task<Result<TreatmentDto>> CreateAsync(TreatmentDto dto);
+        public Task<Result<PaymentTermDto>> CreateAsync(PaymentTermDto dto);
     }
 }

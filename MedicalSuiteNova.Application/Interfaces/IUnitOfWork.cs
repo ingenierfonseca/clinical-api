@@ -13,6 +13,9 @@ namespace MedicalSuiteNova.Application.Interfaces
         IAppointmentTypeRepository AppointmentTypes { get; }
         IDoctorRepository Doctors { get; }
         ITreatmentRepository Treatments { get; }
+        IExchangeRateRepository ExchangeRates { get; }
+        ICurrencyRepository Currencies { get; }
+        IPaymentTermRepository PaymentTerms { get; }
 
         Task<int> CompleteAsync();
         Task BeginTransactionAsync();

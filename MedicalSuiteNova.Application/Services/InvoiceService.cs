@@ -6,6 +6,8 @@ using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
+using MedicalSuiteNova.Utils;
+using Microsoft.VisualBasic;
 
 namespace MedicalSuiteNova.Application.Services
 {
@@ -70,10 +72,21 @@ namespace MedicalSuiteNova.Application.Services
 
         public async Task<Result<ResponseInvoiceDto>> CreateInvoiceAsync(RequestInvoiceDto dto)
         {
-            if (!await _uow.Customers.IsValidAsync(dto.CustomerId))
-            {
+            if (!await _uow.Customers.ExistsAsync(dto.CustomerId))
                 return Result<ResponseInvoiceDto>.Failure("El paciente no existe o no pertenece a esta clínica.");
-            }
+
+            if (!await _uow.Currencies.ExistsAsync(dto.CurrencyId))
+                return Result<ResponseInvoiceDto>.Failure("No se encontro el CurrencyId");
+
+            var term = await _uow.PaymentTerms.FindAsync(dto.PaymentTermId);
+            if (term == null)
+                return Result<ResponseInvoiceDto>.Failure("No se encontro el PaymentTermId");
+
+            var validateDate = DateTimeHelper.ValidateIssueDate(dto.IssueDate);
+            if (!validateDate.isValid)
+                return Result<ResponseInvoiceDto>.Failure(validateDate.message);
+
+            DateTime dueDate = dto.IssueDate.AddDays(term.DaysToDue);
 
             try
             {
@@ -86,7 +99,7 @@ namespace MedicalSuiteNova.Application.Services
                     PaymentTermId = dto.PaymentTermId,
                     Number = await GenerateInvoiceNumberAsync(),
                     IssueDate = dto.IssueDate,
-                    DueDate = DateTime.UtcNow,
+                    DueDate = dueDate,
                     CreatedBy = dto.CreatedBy,
                     CreatedAt = DateTime.UtcNow,
                     Items = new List<InvoiceItem>()
@@ -97,24 +110,40 @@ namespace MedicalSuiteNova.Application.Services
 
                 foreach (var itemDto in dto.Items)
                 {
-                    var tax = itemDto.Tax / 100;
-                    var lineTax = (itemDto.UnitPrice * itemDto.Quantity * tax);
-                    var lineTotal = (itemDto.UnitPrice * itemDto.Quantity) + lineTax;
+                    var treatment = await _uow.Treatments.FindAsync(x => x.Name == itemDto.Description);
+                    if (treatment == null)
+                        return Result<ResponseInvoiceDto>.Failure($"No se puede procesar la Factura el Tratamiento {itemDto.Description} no existe o no pertenece a esta clínica.");
+
+                    //var tax = itemDto.Tax / 100;
+                    //var lineTax = (treatment.Price * itemDto.Quantity * tax);
+                    decimal effectivePrice = treatment.Price;
+                    if (invoice.CurrencyId != treatment.CurrencyId)
+                    {
+                        var exchangeRate = await _uow.ExchangeRates.GetLatestRate(
+                            fromCurrencyId: treatment.CurrencyId,
+                            toCurrencyId: invoice.CurrencyId);
+
+                        if (exchangeRate == 0)
+                            throw new Exception("No se encontró un tipo de cambio configurado para esta conversión.");
+
+                        effectivePrice = treatment.Price * exchangeRate;
+                    }
+
+                    var lineTotal = (effectivePrice * itemDto.Quantity) - itemDto.Tax;
 
                     var detail = new InvoiceItem
                     {
-                        ProductId = itemDto.ProductId,
                         Description = itemDto.Description,
                         Quantity = itemDto.Quantity,
-                        UnitPrice = itemDto.UnitPrice,
-                        TaxAmount = lineTax,
+                        UnitPrice = effectivePrice,
+                        TaxAmount = itemDto.Tax,
                         LineTotal = lineTotal
                     };
 
                     invoice.Items!.Add(detail);
 
-                    runningSubTotal += itemDto.UnitPrice * itemDto.Quantity;
-                    runningTax += lineTax;
+                    runningSubTotal += effectivePrice * itemDto.Quantity;
+                    runningTax += lineTotal;
                 }
 
                 invoice.SubTotal = runningSubTotal;
@@ -144,7 +173,7 @@ namespace MedicalSuiteNova.Application.Services
             if (invoice.StatusId == (int)InvoiceStatusEnum.Pagada || invoice.StatusId == (int)InvoiceStatusEnum.Anulada || invoice.StatusId == (int)InvoiceStatusEnum.Reembolsada)
                 return Result<InvoiceDto>.Failure("La factura ya no se puede modificar.");
 
-            if (!await _uow.Customers.IsValidAsync(dto.CustomerId))
+            if (!await _uow.Customers.ExistsAsync(dto.CustomerId))
                 return Result<InvoiceDto>.Failure("El paciente no existe o no pertenece a esta clínica.");
             
             _mapper.Map(dto,  invoice);

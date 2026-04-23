@@ -38,6 +38,9 @@ namespace MedicalSuiteNova.Application.Mappings
             CreateMap<Treatment, UpdateTreatmentDto>();
             CreateMap<CurrencyDto, Currency>();
             CreateMap<Currency, CurrencyDto>();
+            CreateMap<PaymentTermDto, PaymentTerm>();
+            CreateMap<PaymentTerm, PaymentTermDto>();
+            CreateMap<UpdatePaymentTermDto, PaymentTerm>();
         }
     }
 }

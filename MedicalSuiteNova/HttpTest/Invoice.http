@@ -1,5 +1,5 @@
 @MedicalSuiteNova_HostAddress = https://localhost:7209
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsInVuaXF1ZV9uYW1lIjoiYWRtaW4iLCJqdGkiOiI5NDYwMDljYy1kOGJjLTQwYzEtYjM2My1mYzZhZDljMDk3NzQiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3NzYxMzM2ODcsImV4cCI6MTc3NjczODQ4NywiaWF0IjoxNzc2MTMzNjg3LCJpc3MiOiIxMjMiLCJhdWQiOiIxMjMifQ.pevaCxuzd2sSRHBnq0aW_Hk1qiocXWOrCcffw3jTXO0
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsInVuaXF1ZV9uYW1lIjoiYWRtaW4iLCJqdGkiOiI3ZTMxZDIyMS1mNGJlLTQ1NjAtOWYwYi04MzFmZjE5M2E0ZTkiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3NzY3Mzg4NjYsImV4cCI6MTc3NzM0MzY2NiwiaWF0IjoxNzc2NzM4ODY2LCJpc3MiOiIxMjMiLCJhdWQiOiIxMjMifQ.I7B3E6VZbqgBp0Mf09qkigGpJ8DWSo14IqdXLpwzXag
 
 ### GET AUTH
 # @name login
@@ -14,32 +14,26 @@ Authorization: Bearer {{Token}}
 Accept: application/json
 ### Invoice
 POST {{MedicalSuiteNova_HostAddress}}/api/invoice
+Authorization: Bearer {{Token}}
 Accept: application/json
 Content-Type: application/json
 
 {
-  "CustomerId": 1,
+  "CustomerId": 2,
   "CurrencyId": 1,
+  "PaymentTermId": 2,
+  "IssueDate": "2026-04-01T00:00:00",
   "CreatedBy": "ingenierfonseca",
   "Items": [
     {
-      "Description": "Extracción Molar",
+      "Description": "Limpieza dental",
       "Quantity": 2,
-      "UnitPrice": 600,
       "Discount": 0,
       "TaxAmount": "15"
     },
     {
-      "Description": "Calsa Molar",
+      "Description": "Extracción dent",
       "Quantity": 4,
-      "UnitPrice": 500,
-      "Discount": 0,
-      "TaxAmount": "15"
-    },
-    {
-      "Description": "Limpieza General",
-      "Quantity": 1,
-      "UnitPrice": 700,
       "Discount": 0,
       "TaxAmount": "15"
     }

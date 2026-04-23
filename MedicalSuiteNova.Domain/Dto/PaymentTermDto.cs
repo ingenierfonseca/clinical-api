@@ -1,14 +1,11 @@
 ﻿
-using MedicalSuiteNova.Domain.Interfaces;
-
-namespace MedicalSuiteNova.Domain.Entities
+namespace MedicalSuiteNova.Domain.Dto
 {
-    public class PaymentTerm : IEntity
+    public class PaymentTermDto
     {
         public byte Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int DaysToDue { get; set; }
-        public object GetId() => Id;
     }
 }

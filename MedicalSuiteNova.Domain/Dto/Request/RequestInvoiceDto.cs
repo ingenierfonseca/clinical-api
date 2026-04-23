@@ -9,7 +9,6 @@ namespace MedicalSuiteNova.Domain.Dto.Request
         public byte StatusId { get; set; }
         public byte PaymentTermId { get; set; }
         public DateTime IssueDate { get; set; }
-        public DateTime DueDate { get; set; }
-        public required List<InvoiceItemDto> Items { get; set; }
+        public required List<RequestInvoiceItemDto> Items { get; set; }
     }
 }

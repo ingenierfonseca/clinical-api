@@ -1,0 +1,19 @@
+@MedicalSuiteNova_HostAddress = https://localhost:7209
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsInVuaXF1ZV9uYW1lIjoiYWRtaW4iLCJqdGkiOiI3ZTMxZDIyMS1mNGJlLTQ1NjAtOWYwYi04MzFmZjE5M2E0ZTkiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3NzY3Mzg4NjYsImV4cCI6MTc3NzM0MzY2NiwiaWF0IjoxNzc2NzM4ODY2LCJpc3MiOiIxMjMiLCJhdWQiOiIxMjMifQ.I7B3E6VZbqgBp0Mf09qkigGpJ8DWSo14IqdXLpwzXag
+
+### GET AUTH
+# @name login
+GET {{MedicalSuiteNova_HostAddress}}/api/auth
+Accept: application/json
+###
+@Token = {{login.response.body.token}}
+
+### GET ALL
+GET {{MedicalSuiteNova_HostAddress}}/api/treatment?pageNumber=1&pageSize=5
+Authorization: Bearer {{Token}}
+Accept: application/json
+
+### GET ALL AVTIVE
+GET {{MedicalSuiteNova_HostAddress}}/api/treatment/active?pageNumber=1&pageSize=5
+Authorization: Bearer {{Token}}
+Accept: application/json

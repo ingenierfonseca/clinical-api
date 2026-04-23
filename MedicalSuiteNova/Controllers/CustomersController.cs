@@ -23,22 +23,22 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageSize = 10,
             [FromQuery] string search = "")
         {
-            var patients = await _customerService.GetAllPaginatedAsync(pageNumber, pageSize, search);
-            return Ok(patients);
+            var items = await _customerService.GetAllPaginatedAsync(pageNumber, pageSize, search);
+            return Ok(items);
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var patients = await _customerService.FindAsync(id);
-            return Ok(patients);
+            var item = await _customerService.FindAsync(id);
+            return Ok(item);
         }
 
         [HttpGet("dashboard")]
         public async Task<IActionResult> GetDashboard()
         {
-            var patients = await _customerService.GetDashboard();
-            return Ok(patients);
+            var items = await _customerService.GetDashboard();
+            return Ok(items);
         }
 
         [HttpPost]

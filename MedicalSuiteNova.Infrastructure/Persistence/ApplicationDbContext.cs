@@ -23,6 +23,7 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
         public DbSet<PaymentTerm> PaymentTerms => Set<PaymentTerm>();
         public DbSet<PaymentType> PaymentTypes => Set<PaymentType>();
         public DbSet<Treatment> Treatments => Set<Treatment>();
+        public DbSet<ExchangeRate> ExchangeRates => Set<ExchangeRate>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,6 +40,7 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
             modelBuilder.Entity<PaymentTerm>().ToTable("PaymentTerm");
             modelBuilder.Entity<PaymentType>().ToTable("PaymentType");
             modelBuilder.Entity<Treatment>().ToTable("Treatment");
+            modelBuilder.Entity<ExchangeRate>().ToTable("ExchangeRates");
             base.OnModelCreating(modelBuilder);
         }
     }

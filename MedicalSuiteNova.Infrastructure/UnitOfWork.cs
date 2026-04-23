@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Entities;
 using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Infrastructure.Persistence;
 using MedicalSuiteNova.Infrastructure.Repositories;
@@ -24,6 +23,9 @@ namespace MedicalSuiteNova.Infrastructure
             AppointmentTypes = new AppointmentTypeRepository(_context, mapper);
             Doctors = new DoctorRepository(_context, mapper);
             Treatments = new TreatmentRepository(_context, mapper);
+            ExchangeRates = new ExchangeRateRepository(_context, mapper);
+            Currencies = new CurrencyRepository(_context, mapper);
+            PaymentTerms = new PaymentTermRepository(_context, mapper);
         }
 
         public IPaymentRepository Payments { get; private set; }
@@ -34,6 +36,9 @@ namespace MedicalSuiteNova.Infrastructure
         public IAppointmentTypeRepository AppointmentTypes { get; private set; }
         public IDoctorRepository Doctors { get; private set; }
         public ITreatmentRepository Treatments { get; private set; }
+        public IExchangeRateRepository ExchangeRates { get; private set; }
+        public ICurrencyRepository Currencies { get; private set; }
+        public IPaymentTermRepository PaymentTerms { get; private set; }
 
         public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
 

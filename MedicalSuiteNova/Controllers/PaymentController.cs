@@ -22,15 +22,15 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var patients = await _paymentService.GetAllAsync(pageNumber, pageSize);
-            return Ok(patients);
+            var items = await _paymentService.GetAllAsync(pageNumber, pageSize);
+            return Ok(items);
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var patients = await _paymentService.FindAsync(id);
-            return Ok(patients);
+            var item = await _paymentService.FindAsync(id);
+            return Ok(item);
         }
 
         [HttpPost]

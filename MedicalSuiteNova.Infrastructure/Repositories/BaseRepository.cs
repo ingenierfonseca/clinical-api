@@ -65,6 +65,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
         public async Task<PagedResponse<T>> GetAllAsync(
             int pageNumber,
             int pageSize,
+            Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includes
         )
         {
@@ -76,6 +77,11 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                 {
                     query = query.Include(include);
                 }
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
             }
 
             var totalRecords = await query.CountAsync();
@@ -103,6 +109,28 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             var convertedId = Convert.ChangeType(id, idProperty.PropertyType);
 
             return await _context.Set<T>().FindAsync(convertedId);
+        }
+
+        public async Task<T?> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().Where(predicate).FirstOrDefaultAsync();
+        }
+
+        public async Task<TResult?> GetFirstMappedAsync<TResult>(
+            Expression<Func<T, bool>> predicate,
+            Expression<Func<T, object>> orderBy,
+            Expression<Func<T, TResult>> selector)
+        {
+            return await _context.Set<T>()
+                .Where(predicate)
+                .OrderByDescending(orderBy)
+                .Select(selector)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().AnyAsync(predicate);
         }
 
         public async Task<T?> FirstOrDefaultAsync(

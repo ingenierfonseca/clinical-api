@@ -71,14 +71,15 @@ GO
 CREATE TABLE PaymentTerm (
     Id TINYINT PRIMARY KEY,
     Name varchar(50) NOT NULL,
-	Description varchar(100)
+	Description varchar(100),
+    DaysToDue INT NOT NULL DEFAULT 0
 );
 GO
-INSERT INTO PaymentTerm (Id, Name, Description) VALUES 
-(1, 'Contado', 'Pago inmediato al recibir la factura' ),
-(2, 'Neto 15 días', 'Plazo de 15 días para cancelar'),
-(3, 'Neto 30 días', 'Plazo de 30 días para cancelar'),
-(4, 'Abono Recurrente', 'Se descuenta de saldo a favor previo');
+INSERT INTO PaymentTerm (Id, Name, Description, DaysToDue) VALUES 
+(1, 'Contado', 'Pago inmediato al recibir la factura', 0),
+(2, 'Neto 15 días', 'Plazo de 15 días para cancelar', 15),
+(3, 'Neto 30 días', 'Plazo de 30 días para cancelar', 30),
+(4, 'Abono Recurrente', 'Se descuenta de saldo a favor previo', 0);
 GO
 CREATE TABLE PaymentType (
     Id TINYINT PRIMARY KEY,
@@ -159,4 +160,26 @@ CREATE TABLE Payment (
         FOREIGN KEY (CustomerId) REFERENCES Customer(Id),
 	CONSTRAINT FK_Payment_PaymentMethod
         FOREIGN KEY (PaymentTypeId) REFERENCES PaymentType(Id)
-);*/
+);
+GO
+CREATE TABLE ExchangeRates (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    FromCurrencyId TINYINT NOT NULL, -- Moneda origen (ej: USD)
+    ToCurrencyId TINYINT NOT NULL,   -- Moneda destino (ej: CRC)
+    Rate DECIMAL(18, 6) NOT NULL, -- El factor de conversión
+    RateDate DATETIME NOT NULL DEFAULT GETDATE(), -- Cuándo se registró
+    IsActive BIT DEFAULT 1,       -- Para desactivar tasas erróneas
+    Source NVARCHAR(50),          -- Opcional: Banco Central, Manual, Reuters, etc.
+    
+    CONSTRAINT FK_FromCurrency FOREIGN KEY (FromCurrencyId) REFERENCES Currency(Id),
+    CONSTRAINT FK_ToCurrency FOREIGN KEY (ToCurrencyId) REFERENCES Currency(Id)
+);
+GO
+-- Índice para búsquedas rápidas por fecha y monedas
+CREATE INDEX IX_ExchangeRates_Lookup ON ExchangeRates (FromCurrencyId, ToCurrencyId, RateDate DESC);
+GO
+INSERT INTO ExchangeRates (FromCurrencyId, ToCurrencyId, Rate, RateDate, IsActive, Source)
+VALUES (2, 1, 36.550000, GETDATE(), 1, 'Manual/Banco Central');
+INSERT INTO ExchangeRates (FromCurrencyId, ToCurrencyId, Rate, RateDate, IsActive, Source)
+VALUES (1, 2, 0.027360, GETDATE(), 1, 'Manual/Banco Central');
+*/

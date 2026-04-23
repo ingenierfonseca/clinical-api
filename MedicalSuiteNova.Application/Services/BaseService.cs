@@ -25,10 +25,14 @@ namespace MedicalSuiteNova.Application.Services
             return await _repository.GetAllAsync(pageNumber, pageSize);
         }
 
-        public async Task<PagedResponse<Dto>> GetAllAsync<Dto>(int pageNumber, int pageSize, params Expression<Func<T, object>>[] includes) where Dto : class
+        public async Task<PagedResponse<Dto>> GetAllAsync<Dto>(
+            int pageNumber, 
+            int pageSize,
+            Expression<Func<T, bool>> predicate,
+            params Expression<Func<T, object>>[] includes) where Dto : class
         {
 
-            var pageData = await _repository.GetAllAsync(pageNumber, pageSize, includes);
+            var pageData = await _repository.GetAllAsync(pageNumber, pageSize, predicate, includes);
             var dtos = _mapper.Map<List<Dto>>(pageData.Data);
 
             return new PagedResponse<Dto>(dtos, pageNumber, pageSize, pageData.TotalItems);

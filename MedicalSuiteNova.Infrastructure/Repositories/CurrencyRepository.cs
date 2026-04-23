@@ -6,8 +6,8 @@ using MedicalSuiteNova.Infrastructure.Persistence;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
-    public class AppointmentTypeRepository: BaseRepository<AppointmentType>, IAppointmentTypeRepository
+    internal class CurrencyRepository: BaseRepository<Currency>, ICurrencyRepository
     {
-        public AppointmentTypeRepository(ApplicationDbContext context, IMapper mapper) : base(context, mapper) {}
+        public CurrencyRepository(ApplicationDbContext context, IMapper mapper): base(context, mapper) { }
     }
 }
