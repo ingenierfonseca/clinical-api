@@ -27,6 +27,7 @@ var app = builder.Build();
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseCors("AllowReact");
+app.UseStaticFiles();//para poder mostrar las imagenes
 
 app.UseAuthentication();
 app.UseAuthorization();

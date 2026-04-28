@@ -20,18 +20,28 @@ namespace MedicalSuiteNova.Application.Services
             _repository = repository;
         }
 
-        public async Task<PagedResponse<T>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<PagedResponse<TDto>> GetAllAsync<TDto>(int pageNumber, int pageSize) where TDto : class
+            => await GetAllAsync<TDto>(pageNumber, pageSize, null, null);
+
+        public async Task<PagedResponse<TDto>> GetAllAsync<TDto>(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate) where TDto : class
+            => await GetAllAsync<TDto>(pageNumber, pageSize, predicate, null);
+
+        public async Task<PagedResponse<TDto>> GetAllAsync<TDto>(
+            int pageNumber, 
+            int pageSize,
+            Expression<Func<T, bool>>? predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            params Expression<Func<T, object>>[] includes
+        ) where TDto : class
         {
-            return await _repository.GetAllAsync(pageNumber, pageSize);
-        }
-
-        public async Task<PagedResponse<Dto>> GetAllAsync<Dto>(int pageNumber, int pageSize, params Expression<Func<T, object>>[] includes) where Dto : class
-        {
-
-            var pageData = await _repository.GetAllAsync(pageNumber, pageSize, includes);
-            var dtos = _mapper.Map<List<Dto>>(pageData.Data);
-
-            return new PagedResponse<Dto>(dtos, pageNumber, pageSize, pageData.TotalItems);
+            var result = await _repository.GetAllAsync<TDto>(
+                pageNumber: pageNumber,
+                pageSize: pageSize,
+                predicate: predicate,
+                orderBy: orderBy, 
+                includes: includes
+            );
+            return result;
         }
 
         public async Task<T?> FindAsync(int id)

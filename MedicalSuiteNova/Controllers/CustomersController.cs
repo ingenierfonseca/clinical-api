@@ -1,4 +1,6 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
+using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,22 +25,27 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageSize = 10,
             [FromQuery] string search = "")
         {
-            var patients = await _customerService.GetAllPaginatedAsync(pageNumber, pageSize, search);
-            return Ok(patients);
+            var items = await _customerService.GetAllAsync<CustomerDto>(
+                pageNumber, 
+                pageSize,
+                a => search != string.Empty && a.FirstName.Contains(search) || a.LastName.Contains(search),
+                query => query.OrderBy(a => a.FirstName)
+            );
+            return Ok(items);
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var patients = await _customerService.FindAsync(id);
-            return Ok(patients);
+            var item = await _customerService.FindAsync(id);
+            return Ok(item);
         }
 
         [HttpGet("dashboard")]
         public async Task<IActionResult> GetDashboard()
         {
-            var patients = await _customerService.GetDashboard();
-            return Ok(patients);
+            var items = await _customerService.GetDashboard();
+            return Ok(items);
         }
 
         [HttpPost]
@@ -47,6 +54,22 @@ namespace MedicalSuiteNova.Api.Controllers
             p.CreatedAt = DateTime.Now;
             await _customerService.AddAsync(p);
             return Ok();
+        }
+
+        [HttpPost("bulk-import")]
+        public async Task<IActionResult> BulkImport([FromBody] List<CustomerImportDto> dtos)
+        {
+            if (dtos == null || dtos.Count == 0) return BadRequest("No hay datos para importar.");
+
+            var result = await _customerService.BulkImport(dtos);
+            return Ok(result);
+        }
+
+        [HttpPost("{id}/upload-avatar")]
+        public async Task<IActionResult> UploadAvatar(int id, IFormFile file)
+        {
+            var result = await _customerService.UploadAvatarAsync(id, file);
+            return result.IsSuccess ? Ok(result) : BadRequest(new { message = result.ErrorMessage });
         }
 
         [HttpPut("{id:int}")]

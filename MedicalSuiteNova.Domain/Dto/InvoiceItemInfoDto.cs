@@ -5,7 +5,7 @@ namespace MedicalSuiteNova.Domain.Dto
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
-        public string CustomerName { get; set; }
+        public required string CustomerName { get; set; }
         public string? Number { get; set; }
         public DateTime IssueDate { get; set; }
         public DateTime DueDate { get; set; }

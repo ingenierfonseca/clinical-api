@@ -8,11 +8,15 @@ namespace MedicalSuiteNova.Application.Interfaces
         IPaymentRepository Payments { get; }
         IPaymentTypeRepository PaymentTypes { get; }
         IInvoiceRepository Invoices { get; }
+        IInvoiceDetailRepository InvoicesDetail { get; }
         ICustomerRepository Customers { get; }
         IAppointmentRepository Appointments { get; }
         IAppointmentTypeRepository AppointmentTypes { get; }
         IDoctorRepository Doctors { get; }
         ITreatmentRepository Treatments { get; }
+        IExchangeRateRepository ExchangeRates { get; }
+        ICurrencyRepository Currencies { get; }
+        IPaymentTermRepository PaymentTerms { get; }
 
         Task<int> CompleteAsync();
         Task BeginTransactionAsync();

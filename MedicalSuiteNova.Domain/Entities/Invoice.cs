@@ -24,11 +24,11 @@ namespace MedicalSuiteNova.Domain.Entities
         [ForeignKey("CustomerId")]
         public virtual Customer? Patient { get; set; }
         [ForeignKey("CurrencyId")]
-        public virtual Currency Currency { get; set; }
+        public virtual Currency? Currency { get; set; }
         [ForeignKey("StatusId")]
-        public virtual InvoiceStatus InvoiceStatus { get; set; }
+        public virtual InvoiceStatus? InvoiceStatus { get; set; }
         [ForeignKey("PaymentTermId")]
-        public virtual PaymentTerm PaymentTerm { get; set; }
+        public virtual PaymentTerm? PaymentTerm { get; set; }
         public virtual ICollection<InvoiceItem>? Items { get; set; }
         public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public object GetId() => Id;

@@ -24,7 +24,7 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var appointments = await _appointmentTypeService.GetAllAsync(pageNumber, pageSize);
+            var appointments = await _appointmentTypeService.GetAllAsync<AppointmentTypeDto>(pageNumber, pageSize);
             return Ok(appointments);
         }
 

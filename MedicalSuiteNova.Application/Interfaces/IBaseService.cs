@@ -7,12 +7,24 @@ namespace MedicalSuiteNova.Application.Interfaces
 {
     public interface IBaseService<T> where T : class, IEntity
     {
-        Task<PagedResponse<T>> GetAllAsync( int pageNumber, int pageSize);
-        Task<PagedResponse<Dto>> GetAllAsync<Dto>(int pageNumber, int pageSize, Expression<Func<T, object>>[] includes) where Dto : class;
-        //Task<PagedResponse<T>> GetAllAsync( int pageNumber, int pageSize, string search);
+        /*Task<PagedResponse<T>> GetAllAsync( int pageNumber, int pageSize);
+
+        Task<PagedResponse<Dto>> GetAllAsync<Dto>(
+            int pageNumber, 
+            int pageSize,
+            Expression<Func<T, bool>> predicate,
+            Expression<Func<T, object>>[] includes) where Dto : class;*/
+        Task<PagedResponse<TDto>> GetAllAsync<TDto>(int pageNumber, int pageSize) where TDto : class;
+        Task<PagedResponse<TDto>> GetAllAsync<TDto>(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate) where TDto : class;
+        Task<PagedResponse<TDto>> GetAllAsync<TDto>(int pageNumber, int pageSize, Expression<Func<T, bool>>? predicate, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy, params Expression<Func<T, object>>[] includes) where TDto : class;
+
+
         Task<T?> FindAsync(int id);
+
         Task<T> AddAsync(T patient);
-        public Task<Dto> AddAsync<Dto>(Dto dto) where Dto : class;
+
+        Task<Dto> AddAsync<Dto>(Dto dto) where Dto : class;
+
         Task<Result<Dto>> UpdateAsync<Dto>(int id, Dto t) where Dto : class;
     }
 }

@@ -1,12 +1,12 @@
-﻿using MedicalSuiteNova.Domain.Interfaces;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
+using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper.QueryableExtensions;
-using AutoMapper;
-using MedicalSuiteNova.Application.Enums;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
@@ -17,13 +17,6 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
         public async Task<bool> IsValidInvoiceAsync(int invoiceId)
         {
             return await _context.Invoices.AnyAsync(p => p.Id == invoiceId);
-        }
-
-        public IQueryable<InvoiceItemInfoDto> GetInvoicesAsQueryable()
-        {
-            return _context.Set<Invoice>()
-                .OrderByDescending(a => a.CreatedAt)
-                .ProjectTo<InvoiceItemInfoDto>(_mapper.ConfigurationProvider).AsQueryable();
         }
 
         public async Task<InvoiceItemInfoDto?> GetByIdDtoAsync(int id)
@@ -49,7 +42,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                     Age = c.Age,
 
                     // El balance es la suma de (Total Factura - Suma de Pagos de esa factura)
-                    /*Balance = c.Invoices.Any() ? c.Invoices.Sum(i => i.Total - (decimal)i.Payments.Sum(p => p.Amount)) : 0,*/
+                    //Balance = c.Invoices.Any() ? c.Invoices.Sum(i => i.Total - (decimal)i.Payments.Sum(p => p.Amount)) : 0,
                     // Agrupamos las facturas por moneda para obtener balances separados
                     Balances = c.Invoices
                     .GroupBy(i => new { i.Currency.Symbol, i.Currency.Code })
@@ -92,9 +85,9 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                 .SelectMany(i => i.Payments, (invoice, payment) => new PaymentDetailDTO
                 {
                     Id = payment.Id,
-                    InvoiceNumber = invoice.Number,
+                    InvoiceNumber = invoice.Number!,
                     Amount = payment.Amount,
-                    PaymentTypeName = payment.PaymentType.Name,
+                    PaymentTypeName = payment.PaymentType!.Name,
                     Date = payment.Date
                 })
                 .ToListAsync();

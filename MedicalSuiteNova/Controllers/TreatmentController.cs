@@ -26,21 +26,33 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var appointments = await _treatmentService.GetAllAsync<TreatmentDto>(pageNumber, pageSize, new Expression<Func<Treatment, object>>[] { x => x.Currency });
-            return Ok(appointments);
+            var items = await _treatmentService.GetAllAsync<TreatmentDto>(pageNumber, pageSize, null, null, new Expression<Func<Treatment, object>>[] { x => x.Currency });
+            return Ok(items);
+        }
+
+        [HttpGet("active")]
+        public async Task<ActionResult<PagedResponse<TreatmentDto>>> GetActive(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
+        {
+            var items = await _treatmentService.GetAllAsync<TreatmentDto>(
+                pageNumber,
+                pageSize,
+                x => x.IsActive == true, null);
+            return Ok(items);
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var appointment = await _treatmentService.FindAsync(id);
-            return Ok(appointment);
+            var item = await _treatmentService.FindAsync(id);
+            return Ok(item);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(TreatmentDto p)
         {
-            var result = await _treatmentService.AddAsync(p);
+            var result = await _treatmentService.CreateAsync(p);
             return Ok(result);
         }
 
