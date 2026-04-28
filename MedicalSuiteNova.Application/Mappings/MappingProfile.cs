@@ -32,6 +32,10 @@ namespace MedicalSuiteNova.Application.Mappings
             CreateMap<InvoiceItem, InvoiceItemDto>().ReverseMap();
             CreateMap<AppointmentDto, Appointment>();
             CreateMap<Appointment, AppointmentDto>();
+            CreateMap<AppointmentTypeDto, AppointmentType>();
+            CreateMap<AppointmentType, AppointmentTypeDto>();
+            CreateMap<UpdateAppointmentTypeDto, AppointmentType>();
+            CreateMap<AppointmentType, UpdateAppointmentTypeDto>();
             CreateMap<TreatmentDto, Treatment>();
             CreateMap<Treatment, TreatmentDto>();
             CreateMap<UpdateTreatmentDto, Treatment>();

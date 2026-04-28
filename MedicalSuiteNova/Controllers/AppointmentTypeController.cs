@@ -1,6 +1,7 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
+using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Responses;
-using MedicalSuiteNova.Domain.Entities;
+using MedicalSuiteNova.Domain.Dto.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResponse<AppointmentType>>> Get(
+        public async Task<ActionResult<PagedResponse<AppointmentTypeDto>>> Get(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
@@ -35,14 +36,14 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(AppointmentType p)
+        public async Task<IActionResult> Post(AppointmentTypeDto p)
         {
             var result = await _appointmentTypeService.AddAsync(p);
             return Ok(result);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Put(int id, AppointmentType p)
+        public async Task<IActionResult> Put(int id, UpdateAppointmentTypeDto p)
         {
             var result = await _appointmentTypeService.UpdateAsync(id, p);
             return Ok(result);
