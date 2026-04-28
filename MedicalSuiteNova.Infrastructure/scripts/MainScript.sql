@@ -143,8 +143,12 @@ CREATE TABLE InvoiceItem (
     TaxAmount DECIMAL(18,2) NOT NULL,
 	Discount DECIMAL(18,2) NOT NULL,
     LineTotal DECIMAL(18,2) NOT NULL,
+    OriginalCurrencyId TINYINT NOT NULL,
+    OriginalPrice decimal(18, 2) NOT NULL,
 	CONSTRAINT FK_InvoiceDetail_Invoice
-        FOREIGN KEY (InvoiceId) REFERENCES Invoice(Id)
+        FOREIGN KEY (InvoiceId) REFERENCES Invoice(Id),
+    CONSTRAINT FK_InvoiceItem_Currency
+        FOREIGN KEY (OriginalCurrencyId) REFERENCES Currency(Id)
 );
 GO
 CREATE TABLE Payment (

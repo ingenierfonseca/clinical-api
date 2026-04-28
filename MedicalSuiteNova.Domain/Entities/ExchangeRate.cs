@@ -12,12 +12,12 @@ namespace MedicalSuiteNova.Domain.Entities
         public decimal Rate { get; set; }
         public DateTime RateDate { get; set; }
         public bool IsActive { get; set; }
-        public string Source {  get; set; }
+        public string? Source {  get; set; }
 
         [ForeignKey("FromCurrencyId")]
-        public virtual Currency FromCurrency { get; set; }
+        public virtual Currency? FromCurrency { get; set; }
         [ForeignKey("ToCurrencyId")]
-        public virtual Currency ToCurrency { get; set; }
+        public virtual Currency? ToCurrency { get; set; }
 
         public object GetId() => Id;
     }

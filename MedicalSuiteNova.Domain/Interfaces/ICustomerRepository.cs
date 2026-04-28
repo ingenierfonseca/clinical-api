@@ -5,6 +5,5 @@ namespace MedicalSuiteNova.Domain.Interfaces
 {
     public interface ICustomerRepository: IBaseRepository<Customer>
     {
-        Task<PagedResponse<Customer>> GetAllPaginatedAsync(int pageNumber, int pageSize, string search);
     }
 }

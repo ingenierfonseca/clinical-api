@@ -1,6 +1,7 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Update;
+using MedicalSuiteNova.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,7 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var items = await _exchangeRateService.GetAllAsync(pageNumber, pageSize);
+            var items = await _exchangeRateService.GetAllAsync<ExchangeRate>(pageNumber, pageSize);
             return Ok(items);
         }
 

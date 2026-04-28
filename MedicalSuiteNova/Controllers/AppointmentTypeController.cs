@@ -1,4 +1,5 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
+using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -19,11 +20,11 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResponse<AppointmentType>>> Get(
+        public async Task<ActionResult<PagedResponse<AppointmentTypeDto>>> Get(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var appointments = await _appointmentTypeService.GetAllAsync(pageNumber, pageSize);
+            var appointments = await _appointmentTypeService.GetAllAsync<AppointmentTypeDto>(pageNumber, pageSize);
             return Ok(appointments);
         }
 

@@ -10,7 +10,7 @@ namespace MedicalSuiteNova.Infrastructure
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-        private IDbContextTransaction _transaction;
+        private IDbContextTransaction? _transaction;
 
         public UnitOfWork(ApplicationDbContext context, IMapper mapper)
         {
@@ -18,6 +18,7 @@ namespace MedicalSuiteNova.Infrastructure
             Payments = new PaymentRepository(_context, mapper);
             PaymentTypes = new PaymentTypeRepository(_context, mapper);
             Invoices = new InvoiceRepository(_context, mapper);
+            InvoicesDetail = new InvoiceDetailRepository(_context, mapper);
             Customers = new CustomerRepository(_context, mapper);
             Appointments = new AppointmentRepository(_context, mapper);
             AppointmentTypes = new AppointmentTypeRepository(_context, mapper);
@@ -31,6 +32,7 @@ namespace MedicalSuiteNova.Infrastructure
         public IPaymentRepository Payments { get; private set; }
         public IPaymentTypeRepository PaymentTypes { get; private set; }
         public IInvoiceRepository Invoices { get; private set; }
+        public IInvoiceDetailRepository InvoicesDetail { get; private set; }
         public ICustomerRepository Customers { get; private set; }
         public IAppointmentRepository Appointments { get; private set; }
         public IAppointmentTypeRepository AppointmentTypes { get; private set; }
@@ -46,16 +48,21 @@ namespace MedicalSuiteNova.Infrastructure
 
         public async Task CommitTransactionAsync()
         {
-            await _transaction.CommitAsync();
+            await _transaction!.CommitAsync();
             _transaction.Dispose();
         }
 
         public async Task RollbackTransactionAsync()
         {
-            await _transaction.RollbackAsync();
+            await _transaction!.RollbackAsync();
             _transaction.Dispose();
         }
 
-        public void Dispose() => _context.Dispose();
+        public void Dispose()
+        {
+            _transaction?.Dispose();
+            _context.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }

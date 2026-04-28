@@ -6,33 +6,26 @@ namespace MedicalSuiteNova.Domain.Interfaces
     public interface IBaseRepository<T> where T : class
     {
         Task<List<T>> GetAllAsync();
-        Task<PagedResponse<T>> GetAllAsync(
-            int pageNumber,
-            int pageSize
-        );
+        Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate);
+        Task<PagedResponse<TDto>> GetAllAsync<TDto>(int page, int size, Expression<Func<T, bool>> predicate) where TDto : class;
         Task<PagedResponse<TDto>> GetAllAsync<TDto>(
             int pageNumber,
             int pageSize,
-            Expression<Func<T, TDto>> selector
+            Expression<Func<T, bool>>? predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            params Expression<Func<T, object>>[] includes
         ) where TDto : class;
-        Task<PagedResponse<TDto>> GetAllAsync<TDto>(
-            int pageNumber,
-            int pageSize,
-            IQueryable<TDto> query
-        ) where TDto : class;
-        Task<PagedResponse<T>> GetAllAsync(
-            int pageNumber,
-            int pageSize,
-            Expression<Func<T, bool>> predicate,
-            Expression<Func<T, object>>[] includes
-        );
-        public Task<bool> ExistsAsync(object id);
-        public Task<T?> FirstOrDefaultAsync(
+
+        Task<PagedResponse<TDto>> GetAllAsync<TDto>(int pageNumber, int pageSize, IQueryable<TDto> query) where TDto : class;
+        Task<bool> ExistsAsync(object id);
+        Task<T?> FirstOrDefaultAsync(
             Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includes);
         Task<T?> FindAsync(int id);
-        public Task<T?> FindAsync(Expression<Func<T, bool>> predicate);
-        public Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+        Task<T?> FindAsync(Expression<Func<T, bool>> predicate);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+
+        Task AddRangeAsync(IEnumerable<T> entities);
         Task<T> AddAsync(T patient);
         Task<T> UpdateAsync(T t);
     }

@@ -23,7 +23,7 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var invoices = await _invoiceService.GetAllPaginatedAsync(pageNumber, pageSize);
+            var invoices = await _invoiceService.GetAllAsync<InvoiceItemInfoDto>(pageNumber, pageSize, null, query => query.OrderBy(a => a.CreatedAt));
             return Ok(invoices);
         }
 
@@ -77,7 +77,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Put(int id, InvoiceDto dto)
+        public async Task<IActionResult> Put(int id, RequestInvoiceDto dto)
         {
             var result = await _invoiceService.UpdateAsync(id, dto);
 

@@ -1,13 +1,16 @@
 ﻿
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace MedicalSuiteNova.Application.Interfaces
 {
     public interface ICustomerService : IBaseService<Customer>
     {
-        public Task<List<CustomerDashboardDto>> GetDashboard();
-        public Task<PagedResponse<Customer>> GetAllPaginatedAsync(int pageNumber, int pageSize, string search);
+        Task<List<CustomerDashboardDto>> GetDashboard();
+        Task<ResponseImportResult> BulkImport(List<CustomerImportDto> dtos);
+        Task<Result<string>> UploadAvatarAsync(int id, IFormFile file);
     }
 }

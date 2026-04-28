@@ -23,7 +23,7 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var items = await _currencyService.GetAllAsync(pageNumber, pageSize);
+            var items = await _currencyService.GetAllAsync<CurrencyDto>(pageNumber, pageSize);
             return Ok(items);
         }
 
@@ -32,7 +32,7 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var items = await _currencyService.GetAllAsync(
+            var items = await _currencyService.GetAllAsync<CurrencyDto>(
                 pageNumber, 
                 pageSize/*, 
                 x => x.IsActive == true, null*/);

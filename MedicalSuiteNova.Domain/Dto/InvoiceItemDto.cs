@@ -12,5 +12,7 @@ namespace MedicalSuiteNova.Domain.Dto
         public decimal Discount { get; set; }
         public decimal Tax { get; set; }
         public decimal LineTotal { get; set; }
+        public decimal OriginalPrice { get; set; }
+        public byte OriginalCurrencyId { get; set; }
     }
 }

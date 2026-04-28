@@ -23,7 +23,7 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var items = await _paymentTermService.GetAllAsync(pageNumber, pageSize);
+            var items = await _paymentTermService.GetAllAsync<PaymentTermDto>(pageNumber, pageSize);
             return Ok(items);
         }
 

@@ -11,7 +11,7 @@ namespace MedicalSuiteNova.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public byte Id { get; set; }
         public required string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public TimeOnly Time {  get; set; }
         public object GetId() => Id;
     }
