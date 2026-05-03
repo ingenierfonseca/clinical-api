@@ -48,6 +48,10 @@ namespace MedicalSuiteNova.Application.Mappings
             CreateMap<Customer, CustomerDto>();
             CreateMap<CustomerInvoiceDashboardDto, Customer>();
             CreateMap<Customer, CustomerInvoiceDashboardDto>();
+            CreateMap<DoctorDto, Doctor>();
+            CreateMap<Doctor, DoctorDto>();
+            CreateMap<UpdateDoctorDto, Doctor>();
+            CreateMap<Doctor, UpdateDoctorDto>();
         }
     }
 }
