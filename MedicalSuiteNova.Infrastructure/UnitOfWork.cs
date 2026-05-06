@@ -24,6 +24,11 @@ namespace MedicalSuiteNova.Infrastructure
             AppointmentTypes = new AppointmentTypeRepository(_context, mapper);
             Doctors = new DoctorRepository(_context, mapper);
             Treatments = new TreatmentRepository(_context, mapper);
+            TreatmentPlanTemplates = new TreatmentPlanTemplateRepository(_context, mapper);
+            TreatmentsPlanTemplateItems = new TreatmentPlanTemplateItemRepository(_context, mapper);
+            SessionPlanMaster = new SessionPlanMasterRepository(_context, mapper);
+            SessionPlanDetails = new SessionPlanDetailRepository(_context, mapper);
+            ClinicalSessions = new ClinicalSessionRepository(_context, mapper);
             ExchangeRates = new ExchangeRateRepository(_context, mapper);
             Currencies = new CurrencyRepository(_context, mapper);
             PaymentTerms = new PaymentTermRepository(_context, mapper);
@@ -38,6 +43,11 @@ namespace MedicalSuiteNova.Infrastructure
         public IAppointmentTypeRepository AppointmentTypes { get; private set; }
         public IDoctorRepository Doctors { get; private set; }
         public ITreatmentRepository Treatments { get; private set; }
+        public ITreatmentPlanTemplateRepository TreatmentPlanTemplates { get; private set; }
+        public ITreatmentPlanTemplateItemRepository TreatmentsPlanTemplateItems { get; private set; }
+        public IClinicalSessionRepository ClinicalSessions { get; private set; }
+        public ISessionPlanMasterRepository SessionPlanMaster { get; private set; }
+        public ISessionPlanDetailRepository SessionPlanDetails { get; private set; }
         public IExchangeRateRepository ExchangeRates { get; private set; }
         public ICurrencyRepository Currencies { get; private set; }
         public IPaymentTermRepository PaymentTerms { get; private set; }

@@ -7,10 +7,8 @@ using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Services
 {
-    public class TreatmentService: BaseService<Treatment>, ITreatmentService
+    public class TreatmentService(IUnitOfWork uow, IMapper mapper) : BaseService<Treatment>(uow, mapper, uow.Treatments), ITreatmentService
     {
-        public TreatmentService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper, uow.Treatments) { }
-
         public async Task<Result<TreatmentDto>> CreateAsync(TreatmentDto dto)
         {
             var exist = await _uow.Treatments.AnyAsync(x => x.Name == dto.Name);

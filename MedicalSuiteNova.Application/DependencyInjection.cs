@@ -38,6 +38,9 @@ namespace MedicalSuiteNova.Application
             services.AddScoped<IAppointmentTypeService, AppointmentTypeService>();
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<ITreatmentService, TreatmentService>();
+            services.AddScoped<ITreatmentPlanTemplateService, TreatmentPlanTemplateService>();
+            services.AddScoped<IClinicalSessionService, ClinicalSessionService>();
+            services.AddScoped<ISessionPlanMasterService, SessionPlanMasterService>();
             services.AddScoped<IPaymentTermService, PaymentTermService>();
             services.AddScoped<IExchangeRateService, ExchangeRateService>();
             services.AddScoped<ICurrencyService, CurrencyService>();

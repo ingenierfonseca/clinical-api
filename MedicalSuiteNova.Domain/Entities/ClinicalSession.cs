@@ -4,24 +4,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class Payment : IEntity
+    public class ClinicalSession: IEntity
     {
         public int Id { get; set; }
-        public int InvoiceId { get; set; }
         public int CustomerId { get; set; }
-        public decimal Amount { get; set; }
+        public int DoctorId { get; set; }
         public DateTime Date {  get; set; }
-        public byte PaymentTypeId { get; set; }
-
-        [ForeignKey("InvoiceId")]
-        public virtual Invoice? Invoice { get; set; }
+        public string? ReasonForVisit { get; set; }
+        public string? ClinicalNotes { get; set; }
 
         [ForeignKey("CustomerId")]
         public virtual Customer? Customer { get; set; }
 
-        [ForeignKey("PaymentTypeId")]
-        public virtual PaymentType? PaymentType { get; set; }
-
+        [ForeignKey("DoctorId")]
+        public virtual Doctor? Doctor { get; set; }
         public object GetId() => Id;
     }
 }

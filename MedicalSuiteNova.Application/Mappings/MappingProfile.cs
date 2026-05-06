@@ -39,10 +39,20 @@ namespace MedicalSuiteNova.Application.Mappings
             CreateMap<AppointmentType, UpdateAppointmentTypeDto>();
             CreateMap<TreatmentDto, Treatment>();
             CreateMap<Treatment, TreatmentDto>();
+            CreateMap<TreatmentPlanTemplate, TreatmentPlanTemplateDto>();
+            CreateMap<TreatmentPlanTemplateItem, TreatmentPlanTemplateItemDto>();
+            CreateMap<ClinicalSession, ClinicalSessionDto>();
+            CreateMap<ClinicalSessionDto, ClinicalSession>();
+            CreateMap<SessionPlanMaster, SessionPlanMasterDto>();
+            CreateMap<SessionPlanMasterDto, SessionPlanMaster>();
+            CreateMap<SessionPlanDetail, SessionPlanDetailDto>();
+            CreateMap<SessionPlanDetailDto, SessionPlanDetail>();
             CreateMap<UpdateTreatmentDto, Treatment>();
             CreateMap<Treatment, UpdateTreatmentDto>();
             CreateMap<CurrencyDto, Currency>();
             CreateMap<Currency, CurrencyDto>();
+            CreateMap<Payment, PaymentDto>();
+            CreateMap<PaymentDto, Payment>();
             CreateMap<PaymentTermDto, PaymentTerm>();
             CreateMap<PaymentTerm, PaymentTermDto>();
             CreateMap<UpdatePaymentTermDto, PaymentTerm>();
@@ -50,9 +60,9 @@ namespace MedicalSuiteNova.Application.Mappings
             CreateMap<Customer, CustomerDto>();
             CreateMap<CustomerInvoiceDashboardDto, Customer>();
             CreateMap<Customer, CustomerInvoiceDashboardDto>();
-            CreateMap<DoctorDto, Doctor>();
+            //CreateMap<DoctorDto, Doctor>();
             CreateMap<Doctor, DoctorDto>();
-            CreateMap<UpdateDoctorDto, Doctor>();
+            //CreateMap<UpdateDoctorDto, Doctor>();
             CreateMap<Doctor, UpdateDoctorDto>();
         }
     }

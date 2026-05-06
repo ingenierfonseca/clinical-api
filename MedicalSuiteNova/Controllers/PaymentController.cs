@@ -1,5 +1,5 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Entities;
+using MedicalSuiteNova.Domain.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +22,7 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var items = await _paymentService.GetAllAsync<Payment>(pageNumber, pageSize);
+            var items = await _paymentService.GetAllAsync<PaymentDto>(pageNumber, pageSize);
             return Ok(items);
         }
 
@@ -34,7 +34,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Payment p)
+        public async Task<IActionResult> Post(PaymentDto p)
         {
             var result = await _paymentService.CreatePaymentAsync(p);
             if (!result.IsSuccess)

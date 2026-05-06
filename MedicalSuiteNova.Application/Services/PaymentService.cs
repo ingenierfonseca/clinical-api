@@ -1,42 +1,42 @@
 ﻿using AutoMapper;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
+using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Services
 {
-    public class PaymentService: BaseService<Payment>, IPaymentService
+    public class PaymentService(IUnitOfWork uow, IMapper mapper) : BaseService<Payment>(uow, mapper, uow.Payments), IPaymentService
     {
-        public PaymentService(IUnitOfWork uow, IMapper mapper): base(uow, mapper, uow.Payments) {}
-
-        public async Task<Result<Payment>> CreatePaymentAsync(Payment payment)
+        public async Task<Result<PaymentDto>> CreatePaymentAsync(PaymentDto dto)
         {
             var invoice = await _uow.Invoices.FirstOrDefaultAsync(
-                i => i.Id == payment.InvoiceId,
+                i => i.Id == dto.InvoiceId,
                 i => i.Payments
             );
             
 
             if (invoice == null)
-                return Result<Payment>.Failure("La factura no existe o no pertenece a esta clínica.");
+                return Result<PaymentDto>.Failure("La factura no existe o no pertenece a esta clínica.");
 
-            if (invoice.CustomerId != payment.CustomerId)
-                return Result<Payment>.Failure("La factura no pertenece al cliente especificado.");
+            if (invoice.CustomerId != dto.CustomerId)
+                return Result<PaymentDto>.Failure("La factura no pertenece al cliente especificado.");
 
-            if (!await _uow.PaymentTypes.IsValidPaymentTypeAsync(payment.PaymentTypeId))
-                return Result<Payment>.Failure("El tipo de pago no es válido.");
+            if (!await _uow.PaymentTypes.IsValidPaymentTypeAsync(dto.PaymentTypeId))
+                return Result<PaymentDto>.Failure("El tipo de pago no es válido.");
 
             decimal saldoPendiente = invoice.Total - invoice.Payments.Sum(p => p.Amount);
 
-            if (payment.Amount > saldoPendiente)
-                return Result<Payment>.Failure($"El monto excede el saldo pendiente ({saldoPendiente}).");
+            if (dto.Amount > saldoPendiente)
+                return Result<PaymentDto>.Failure($"El monto excede el saldo pendiente ({saldoPendiente}).");
 
-            if (payment.Date == DateTime.MinValue)
-                payment.Date = DateTime.Now;
+            if (dto.Date == DateTime.MinValue)
+                dto.Date = DateTime.Now;
 
             try
             {
+                var payment = _mapper.Map<Payment>(dto);
                 await _uow.BeginTransactionAsync();
                 var result = await _uow.Payments.AddAsync(payment);
 
@@ -56,12 +56,12 @@ namespace MedicalSuiteNova.Application.Services
                 await _uow.CompleteAsync();
                 await _uow.CommitTransactionAsync();
 
-                return Result<Payment>.Success(result);
+                return Result<PaymentDto>.Success(_mapper.Map<PaymentDto>(result));
             }
             catch (Exception)
             {
                 await _uow.RollbackTransactionAsync();
-                return Result<Payment>.Failure("Ocurrió un error inesperado al procesar el pago.");
+                return Result<PaymentDto>.Failure("Ocurrió un error inesperado al procesar el pago.");
             }
         }
     }

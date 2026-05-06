@@ -23,6 +23,11 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
         public DbSet<PaymentTerm> PaymentTerms => Set<PaymentTerm>();
         public DbSet<PaymentType> PaymentTypes => Set<PaymentType>();
         public DbSet<Treatment> Treatments => Set<Treatment>();
+        public DbSet<TreatmentPlanTemplate> TreatmentPlanTemplates => Set<TreatmentPlanTemplate>();
+        public DbSet<TreatmentPlanTemplateItem> TreatmentPlanTemplateItems => Set<TreatmentPlanTemplateItem>();
+        public DbSet<ClinicalSession> ClinicalSessions => Set<ClinicalSession>();
+        public DbSet<SessionPlanMaster> SessionPlanMasters => Set<SessionPlanMaster>();
+        public DbSet<SessionPlanDetail> SessionPlanDetails => Set<SessionPlanDetail>();
         public DbSet<ExchangeRate> ExchangeRates => Set<ExchangeRate>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,6 +45,11 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
             modelBuilder.Entity<PaymentTerm>().ToTable("PaymentTerm");
             modelBuilder.Entity<PaymentType>().ToTable("PaymentType");
             modelBuilder.Entity<Treatment>().ToTable("Treatment");
+            modelBuilder.Entity<TreatmentPlanTemplate>().ToTable("TreatmentPlanTemplate");
+            modelBuilder.Entity<TreatmentPlanTemplateItem>().ToTable("TreatmentPlanTemplateItem");
+            modelBuilder.Entity<ClinicalSession>().ToTable("ClinicalSession");
+            modelBuilder.Entity<SessionPlanMaster>().ToTable("SessionPlanMaster");
+            modelBuilder.Entity<SessionPlanDetail>().ToTable("SessionPlanDetail");
             modelBuilder.Entity<ExchangeRate>().ToTable("ExchangeRates");
             base.OnModelCreating(modelBuilder);
         }

@@ -6,7 +6,7 @@ using MedicalSuiteNova.Infrastructure.Persistence;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
-    public class TreatmentRepository(ApplicationDbContext context, IMapper mapper) : BaseRepository<Treatment>(context, mapper), ITreatmentRepository
+    public class TreatmentPlanTemplateRepository(ApplicationDbContext context, IMapper mapper) : BaseRepository<TreatmentPlanTemplate>(context, mapper), ITreatmentPlanTemplateRepository
     {
     }
 }
