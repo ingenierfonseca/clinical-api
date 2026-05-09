@@ -6,10 +6,8 @@ using MedicalSuiteNova.Infrastructure.Persistence;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
-    public class ExchangeRateRepository: BaseRepository<ExchangeRate>, IExchangeRateRepository
+    public class ExchangeRateRepository(ApplicationDbContext context, IMapper mapper) : BaseRepository<ExchangeRate>(context, mapper), IExchangeRateRepository
     {
-        public ExchangeRateRepository(ApplicationDbContext context, IMapper mapper) : base(context, mapper) { }
-
         public async Task<decimal> GetLatestRate(int fromCurrencyId, int toCurrencyId)
         {
             return await GetFirstMappedAsync(

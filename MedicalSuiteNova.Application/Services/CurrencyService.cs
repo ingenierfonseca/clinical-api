@@ -5,8 +5,7 @@ using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Services
 {
-    public class CurrencyService:BaseService<Currency>, ICurrencyService
+    public class CurrencyService(IUnitOfWork uow, IMapper mapper) : BaseService<Currency>(uow, mapper, uow.Currencies), ICurrencyService
     {
-        public CurrencyService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper, uow.Currencies) { }
     }
 }

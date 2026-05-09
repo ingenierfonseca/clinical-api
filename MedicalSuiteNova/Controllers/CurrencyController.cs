@@ -47,7 +47,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(PaymentTermDto p)
+        public async Task<IActionResult> Post(CurrencyDto p)
         {
             var result = await _currencyService.AddAsync(p);
             //if (!result.IsSuccess)

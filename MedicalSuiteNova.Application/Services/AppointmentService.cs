@@ -7,10 +7,8 @@ using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Services
 {
-    public class AppointmentService: BaseService<Appointment>, IAppointmentService
+    public class AppointmentService(IUnitOfWork uow, IMapper mapper) : BaseService<Appointment>(uow, mapper, uow.Appointments), IAppointmentService
     {
-        public AppointmentService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper, uow.Appointments) { }
-
         public async Task<Result<AppointmentDto>> AddAsync(AppointmentDto dto)
         {
             var validation = await ValidateDependenciesAsync(dto);

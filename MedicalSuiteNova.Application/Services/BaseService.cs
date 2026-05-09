@@ -70,7 +70,7 @@ namespace MedicalSuiteNova.Application.Services
 
             _mapper.Map(dto, t);
 
-            var result = await _repository.UpdateAsync(t);
+            await _repository.UpdateAsync(t);
             await _uow.CompleteAsync();
 
             return Result<Dto>.Success(_mapper.Map<Dto>(t));
