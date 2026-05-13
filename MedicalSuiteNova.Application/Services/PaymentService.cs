@@ -31,27 +31,42 @@ namespace MedicalSuiteNova.Application.Services
             if (dto.Amount > saldoPendiente)
                 return Result<PaymentDto>.Failure($"El monto excede el saldo pendiente ({saldoPendiente}).");
 
-            if (dto.Date == DateTime.MinValue)
-                dto.Date = DateTime.Now;
-
+            await _uow.BeginTransactionAsync();
             try
             {
                 var payment = _mapper.Map<Payment>(dto);
-                await _uow.BeginTransactionAsync();
+                payment.Date = dto.Date == DateTime.MinValue ? DateTime.Now : dto.Date;
                 var result = await _uow.Payments.AddAsync(payment);
+                await _uow.CompleteAsync();
 
                 // Actualizar estado de factura
                 if (saldoPendiente - payment.Amount <= 0)
                     invoice.StatusId = (int)InvoiceStatusEnum.Pagada;
                 else
-                {
-                    if (invoice.IssueDate < DateTime.Now)
-                        invoice.StatusId = (int)InvoiceStatusEnum.Vencida;
-                    else
-                        invoice.StatusId = (int)InvoiceStatusEnum.PagoParcial;
-                }
+                    invoice.StatusId = (int)InvoiceStatusEnum.PagoParcial;
 
                 await _uow.Invoices.UpdateAsync(invoice);
+
+                // 4. LOGICA DEL LEDGER (Qué afectó en la cuenta)
+                // Obtenemos el último saldo del paciente para calcular el nuevo
+                var currentBalance = await _uow.Ledger.GetLastBalanceByCustomerIdAsync(invoice.CustomerId);
+
+                var ledgerEntry = new CustomerAccountLedger
+                {
+                    CustomerId = invoice.CustomerId,
+                    TransactionType = "PAYMENT",
+                    ReferenceId = invoice.Id,
+                    ReferenceTable = "Invoice",
+                    Amount = payment.Amount,
+                    CurrencyId = invoice.CurrencyId,
+                    //ExchangeRate = payment.ExchangeRate,
+                    BalanceAfter = currentBalance - payment.Amount,
+                    Description = $"Abono a Factura #{invoice.Id} via {payment.PaymentType?.Name}",
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "Test"
+                };
+
+                await _uow.Ledger.AddAsync(ledgerEntry);
 
                 await _uow.CompleteAsync();
                 await _uow.CommitTransactionAsync();

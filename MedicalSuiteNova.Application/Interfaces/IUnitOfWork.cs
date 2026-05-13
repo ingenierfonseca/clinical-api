@@ -8,6 +8,7 @@ namespace MedicalSuiteNova.Application.Interfaces
         IPaymentRepository Payments { get; }
         IPaymentTypeRepository PaymentTypes { get; }
         IInvoiceRepository Invoices { get; }
+        ICustomerAccountLedgerRepository Ledger {  get; }
         IInvoiceDetailRepository InvoicesDetail { get; }
         ICustomerRepository Customers { get; }
         IAppointmentRepository Appointments { get; }

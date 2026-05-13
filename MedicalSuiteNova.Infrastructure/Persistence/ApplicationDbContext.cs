@@ -18,6 +18,7 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
         public DbSet<Invoice> Invoices => Set<Invoice>();
         public DbSet<InvoiceItem> InvoiceDetails => Set<InvoiceItem>();
         public DbSet<Payment> Payments => Set<Payment>();
+        public DbSet<CustomerAccountLedger> CustomerAccounts => Set<CustomerAccountLedger>();
         public DbSet<Currency> Currencies => Set<Currency>();
         public DbSet<InvoiceStatus> InvoiceStatus => Set<InvoiceStatus>();
         public DbSet<PaymentTerm> PaymentTerms => Set<PaymentTerm>();
@@ -40,6 +41,7 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
             modelBuilder.Entity<Invoice>().ToTable("Invoice");
             modelBuilder.Entity<InvoiceItem>().ToTable("InvoiceItem");
             modelBuilder.Entity<Payment>().ToTable("Payment");
+            modelBuilder.Entity<CustomerAccountLedger>().ToTable("CustomerAccountLedger");
             modelBuilder.Entity<Currency>().ToTable("Currency");
             modelBuilder.Entity<InvoiceStatus>().ToTable("InvoiceStatus");
             modelBuilder.Entity<PaymentTerm>().ToTable("PaymentTerm");

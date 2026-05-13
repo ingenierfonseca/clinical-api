@@ -15,5 +15,6 @@ namespace MedicalSuiteNova.Domain.Dto
         public string? Currency { get; set; }
         public string? Status { get; set; }
         public string? PaymentTerm { get; set; }
+        public decimal PendingBalance { get; set; }
     }
 }

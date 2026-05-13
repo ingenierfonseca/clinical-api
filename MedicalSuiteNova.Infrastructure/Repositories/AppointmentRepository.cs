@@ -8,10 +8,8 @@ using System.Linq.Expressions;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
-    public class AppointmentRepository: BaseRepository<Appointment>, IAppointmentRepository
+    public class AppointmentRepository(ApplicationDbContext context, IMapper mapper) : BaseRepository<Appointment>(context, mapper), IAppointmentRepository
     {
-        public AppointmentRepository(ApplicationDbContext context, IMapper mapper): base(context, mapper) {}
-
         public async Task<PagedResponse<AppointmentInfoDto>> GetAllPaginatedAsync(int pageNumber, int pageSize)
         {
             /*var query = _context.Appointments

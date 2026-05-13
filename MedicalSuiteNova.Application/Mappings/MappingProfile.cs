@@ -26,7 +26,8 @@ namespace MedicalSuiteNova.Application.Mappings
                     || src.StatusId == (int)InvoiceStatusEnum.Vencida)
                     ? src.Total - src.Payments.Sum(p => p.Amount)
                     : */src.Total
-                ));
+                ))
+                .ForMember(dest => dest.PendingBalance, opt => opt.MapFrom(src => src.Total - src.Payments.Sum(p => p.Amount)));
 
             CreateMap<InvoiceItem, InvoiceItemDto>().ReverseMap();
             CreateMap<AppointmentDto, Appointment>();
