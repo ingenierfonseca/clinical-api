@@ -10,6 +10,7 @@ namespace MedicalSuiteNova.Domain.Entities
         public byte CategoryId { get; set; }
         public required string Complexity {  get; set; }
         public int EstimatedDurationMonths { get; set; }
+        public byte CurrencyId { get; set; }
         public decimal BasePrice { get; set; }
         public int Version { get; set; }
         public bool IsActive { get; set; }
@@ -18,6 +19,7 @@ namespace MedicalSuiteNova.Domain.Entities
         public object GetId() => Id;
 
         public virtual TreatmentCategory? Category { get; set; }
+        public virtual Currency? Currency { get; set; }
         public virtual ICollection<TreatmentPlanTemplateItem>? Items { get; set; }
     }
 }

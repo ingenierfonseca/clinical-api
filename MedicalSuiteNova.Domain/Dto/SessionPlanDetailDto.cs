@@ -9,5 +9,6 @@ namespace MedicalSuiteNova.Domain.Dto
         public required string Status { get; set; }
         public DateTime CompletedAt { get; set; }
         public virtual SessionPlanMasterDto? SessionPlanMaster { get; set; }
+        public virtual TreatmentPlanTemplateItemDto? TemplateItem { get; set; }
     }
 }

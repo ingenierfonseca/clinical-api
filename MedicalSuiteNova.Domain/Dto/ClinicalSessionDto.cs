@@ -3,7 +3,7 @@ namespace MedicalSuiteNova.Domain.Dto
 {
     public class ClinicalSessionDto
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int CustomerId { get; set; }
         public int DoctorId { get; set; }
         public DateTime Date { get; set; }

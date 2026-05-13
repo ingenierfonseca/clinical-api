@@ -7,6 +7,7 @@ namespace MedicalSuiteNova.Domain.Dto
         public required string Title { get; set; }
         public required string Description { get; set; }
         public byte CategoryId { get; set; }
+        public byte CurrencyId { get; set; }
         public required string Complexity { get; set; }
         public int EstimatedDurationMonths { get; set; }
         public decimal BasePrice { get; set; }
@@ -14,5 +15,6 @@ namespace MedicalSuiteNova.Domain.Dto
         public bool IsActive { get; set; }
 
         public virtual List<TreatmentPlanTemplateItemDto>? Items { get; set; }
+        public virtual CurrencyDto? Currency { get; set; }
     }
 }

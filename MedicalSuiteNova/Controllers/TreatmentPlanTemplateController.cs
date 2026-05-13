@@ -38,7 +38,7 @@ namespace MedicalSuiteNova.Api.Controllers
             var items = await _treatmentPlanService.GetAllAsync<TreatmentPlanTemplateDto>(
                 pageNumber,
                 pageSize,
-                x => x.IsActive == true, null, new Expression<Func<TreatmentPlanTemplate, object>>[] { x => x.Items! });
+                x => x.IsActive == true, null, x => x.Items!, x => x.Currency!);
             return Ok(items);
         }
 

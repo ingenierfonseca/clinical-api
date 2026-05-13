@@ -10,15 +10,8 @@ namespace MedicalSuiteNova.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/session-plan-treatment")]
-    public class SessionPlanTreatmentController : Controller
+    public class SessionPlanTreatmentController(ISessionPlanMasterService _sessionPlaService) : Controller
     {
-        private readonly ISessionPlanMasterService _sessionPlaService;
-
-        public SessionPlanTreatmentController(ISessionPlanMasterService sessionPlaService)
-        {
-            _sessionPlaService = sessionPlaService;
-        }
-
         [HttpGet]
         public async Task<ActionResult<PagedResponse<SessionPlanMasterDto>>> Get(
             [FromQuery] int pageNumber = 1,

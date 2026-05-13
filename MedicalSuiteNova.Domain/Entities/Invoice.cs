@@ -30,7 +30,7 @@ namespace MedicalSuiteNova.Domain.Entities
         [ForeignKey("PaymentTermId")]
         public virtual PaymentTerm? PaymentTerm { get; set; }
         public virtual ICollection<InvoiceItem>? Items { get; set; }
-        public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+        public virtual ICollection<Payment> Payments { get; set; } = [];
         public object GetId() => Id;
     }
 }

@@ -132,6 +132,7 @@ CREATE TABLE [dbo].[TreatmentPlanTemplate](
     -- Clasificación
     [CategoryId] [tinyint] NOT NULL, -- 'Ortodoncia', 'Cirugía', etc.
     [Complexity] [nvarchar](20) NULL, -- 'Baja', 'Media', 'Alta'
+    [CurrencyId] TINYINT NOT NULL,
     -- Parámetros del Plan
     [EstimatedDurationMonths] [int] NULL,
     [BasePrice] [decimal](10, 2) NULL, -- Precio sugerido del paquete completo
@@ -141,6 +142,7 @@ CREATE TABLE [dbo].[TreatmentPlanTemplate](
     [CreatedAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [CreatedBy] [int] NOT NULL, -- ID del Usuario/Doctor
     CONSTRAINT [FK_TreatmentPlanTemplate_Category] FOREIGN KEY([CategoryId]) REFERENCES [dbo].[TreatmentCategory]([Id]),
+    CONSTRAINT FK_TreatmentPlanTemplate_Currency FOREIGN KEY (CurrencyId) REFERENCES Currency(Id),
 );
 GO
 INSERT INTO [dbo].[TreatmentPlanTemplate] 

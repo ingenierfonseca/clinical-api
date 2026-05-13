@@ -11,6 +11,7 @@ namespace MedicalSuiteNova.Domain.Entities
         public required string Status { get; set; }
         public DateTime CompletedAt { get; set; }
         public virtual SessionPlanMaster? SessionPlanMaster { get; set; }
+        public virtual TreatmentPlanTemplateItem? TemplateItem { get; set; }
         public object GetId() => Id;
     }
 }

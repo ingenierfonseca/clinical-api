@@ -26,6 +26,18 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             return await _dbSet.ToListAsync();
         }
 
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (includes != null)
+                foreach (var include in includes) query = query.Include(include);
+
+            if (predicate != null) query = query.Where(predicate);
+
+            return await query.ToListAsync();
+        }
+
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
         {
             IQueryable<T> query = _dbSet;
