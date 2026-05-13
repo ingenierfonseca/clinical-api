@@ -1,5 +1,6 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Dto.Update;
 using Microsoft.AspNetCore.Authorization;
@@ -38,7 +39,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(SessionPlanMasterDto p)
+        public async Task<IActionResult> Post(RequestSessionPlanMaster p)
         {
             var result = await _sessionPlaService.AddAsync(p);
 

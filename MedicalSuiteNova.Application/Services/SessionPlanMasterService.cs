@@ -49,7 +49,7 @@ namespace MedicalSuiteNova.Application.Services
             {
                 session.StartDate = DateTime.UtcNow;
                 session.EndDate = session.StartDate.AddMonths(template.EstimatedDurationMonths);
-                //session.CurrencyId = template.CurrencyId;
+                session.CurrencyId = template.CurrencyId;
                 session.TotalEstimatedPrice += template.BasePrice;
 
                 foreach (var detail in template.Items!)
@@ -82,7 +82,7 @@ namespace MedicalSuiteNova.Application.Services
                     CurrencyId = session.CurrencyId,
                     //ExchangeRate = payment.ExchangeRate,
                     BalanceAfter = currentBalance - session.TotalEstimatedPrice,
-                    Description = $"Aceptacion de plan de tratamiento #{session.Id}",
+                    Description = $"Aceptacion de plan de tratamiento {request.Name}",
                     CreatedAt = DateTime.Now,
                     CreatedBy = "Test"
                 };
