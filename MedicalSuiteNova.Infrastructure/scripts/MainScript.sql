@@ -93,6 +93,41 @@ INSERT INTO PaymentType (Id, Name, Description) VALUES
 (3, 'Cheque', 'Pago con cheque certificado o personal'),
 (4, 'Depósito Bancario', 'Depósito realizado en ventanilla o ATM');
 GO
+CREATE TABLE [dbo].[CustomerAccountLedger] (
+    [Id] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    [CustomerId] [int] NOT NULL,
+    
+    -- Tipo de Movimiento
+    -- 'CHARGE': Aumenta la deuda (Aceptación de plan, cuota mensual, recargos)
+    -- 'PAYMENT': Disminuye la deuda (Abonos vinculados a facturas)
+    -- 'CREDIT_NOTE': Ajustes a favor del paciente (Descuentos posteriores)
+    [TransactionType] [nvarchar](20) NOT NULL, 
+
+    -- Trazabilidad: Permite saber exactamente qué originó el movimiento
+    [ReferenceId] [bigint] NOT NULL, 
+    [ReferenceTable] [nvarchar](50) NOT NULL, -- Ej: 'SessionPlanMaster', 'Invoices'
+
+    -- Importes y Moneda
+    [Amount] [decimal](18, 4) NOT NULL, 
+    [CurrencyId] [TINYINT] NOT NULL, -- FK a tu tabla Currencies
+    [ExchangeRate] [decimal](18, 6) NOT NULL DEFAULT 1.0, 
+
+    -- Snapshot de Saldo
+    -- Es vital guardar el saldo acumulado en cada registro para reportes rápidos
+    [BalanceAfter] [decimal](18, 4) NOT NULL, 
+
+    [Description] [nvarchar](500) NULL,
+    [CreatedAt] [datetime] NOT NULL DEFAULT GETDATE(),
+    [CreatedBy] [nvarchar](100) NULL, -- Auditoría de quién generó el movimiento
+
+    -- Relaciones
+    CONSTRAINT [FK_CustomerLedger_Customer] FOREIGN KEY([CustomerId]) REFERENCES [dbo].[Customer]([Id]),
+    CONSTRAINT [FK_CustomerLedger_Currency] FOREIGN KEY([CurrencyId]) REFERENCES [dbo].[Currency]([Id])
+);
+
+-- Índice para consultas rápidas de estado de cuenta por paciente
+CREATE INDEX [IX_Ledger_Customer_Date] ON [dbo].[CustomerAccountLedger] ([CustomerId], [CreatedAt] DESC);
+GO
 CREATE TABLE Treatment (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Name NVARCHAR(150) NOT NULL,

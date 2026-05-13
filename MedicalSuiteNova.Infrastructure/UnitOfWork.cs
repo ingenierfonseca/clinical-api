@@ -18,6 +18,7 @@ namespace MedicalSuiteNova.Infrastructure
             Payments = new PaymentRepository(_context, mapper);
             PaymentTypes = new PaymentTypeRepository(_context, mapper);
             Invoices = new InvoiceRepository(_context, mapper);
+            Ledger = new CustomerAccountLedgerRepository(_context, mapper);
             InvoicesDetail = new InvoiceDetailRepository(_context, mapper);
             Customers = new CustomerRepository(_context, mapper);
             Appointments = new AppointmentRepository(_context, mapper);
@@ -37,6 +38,7 @@ namespace MedicalSuiteNova.Infrastructure
         public IPaymentRepository Payments { get; private set; }
         public IPaymentTypeRepository PaymentTypes { get; private set; }
         public IInvoiceRepository Invoices { get; private set; }
+        public ICustomerAccountLedgerRepository Ledger { get; private set; }
         public IInvoiceDetailRepository InvoicesDetail { get; private set; }
         public ICustomerRepository Customers { get; private set; }
         public IAppointmentRepository Appointments { get; private set; }
