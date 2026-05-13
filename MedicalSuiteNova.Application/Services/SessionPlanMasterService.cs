@@ -68,6 +68,27 @@ namespace MedicalSuiteNova.Application.Services
                 var result = await _uow.SessionPlanMaster.AddAsync(session);
                 await _uow.CompleteAsync();
 
+                // LOGICA DEL LEDGER (Qué afectó en la cuenta)
+                // Obtenemos el último saldo del paciente para calcular el nuevo
+                var currentBalance = await _uow.Ledger.GetLastBalanceByCustomerIdAsync(clinicalSession.CustomerId);
+
+                var ledgerEntry = new CustomerAccountLedger
+                {
+                    CustomerId = clinicalSession.CustomerId,
+                    TransactionType = "CHARGE",
+                    ReferenceId = session.Id,
+                    ReferenceTable = "SessionPlanMaster",
+                    Amount = session.TotalEstimatedPrice,
+                    CurrencyId = session.CurrencyId,
+                    //ExchangeRate = payment.ExchangeRate,
+                    BalanceAfter = currentBalance - session.TotalEstimatedPrice,
+                    Description = $"Aceptacion de plan de tratamiento #{session.Id}",
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = "Test"
+                };
+
+                await _uow.Ledger.AddAsync(ledgerEntry);
+
                 /*if (request.DownPayment > 0)
                 {
                     var invoice = new Invoice
