@@ -1,12 +1,13 @@
 ﻿
 using MedicalSuiteNova.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
     public class SessionPlanMaster: IEntity
     {
-        public int Id { get; set; }
-        public int SessionId { get; set; }
+        public long Id { get; set; }
+        public long SessionId { get; set; }
         public required string Name { get; set; }
         public required string Status { get; set; }
         public DateTime StartDate { get; set; }
@@ -16,8 +17,12 @@ namespace MedicalSuiteNova.Domain.Entities
         public string? Comments { get; set; }
         public virtual ICollection<SessionPlanDetail>? Items { get; set; }
 
+        [ForeignKey("CurrencyId")]
         public virtual Currency? Currency { get; set; }
+
+        [ForeignKey("SessionId")]
         public virtual ClinicalSession? ClinicalSession { get; set; }
+
         public object GetId() => Id;
     }
 }

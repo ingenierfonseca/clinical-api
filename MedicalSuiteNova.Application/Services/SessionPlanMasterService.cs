@@ -35,6 +35,7 @@ namespace MedicalSuiteNova.Application.Services
                 CurrencyId = request.CurrencyId,
                 TotalEstimatedPrice = 0,
                 Status = PlanStatus.Pending,
+                Comments = request.Comments,
 
                 // Datos de financiamiento (vienen del request basado en lo que pidió la Dra)
                 /*IsFinanced = request.IsFinanced,
@@ -83,7 +84,7 @@ namespace MedicalSuiteNova.Application.Services
                     //ExchangeRate = payment.ExchangeRate,
                     BalanceAfter = currentBalance - session.TotalEstimatedPrice,
                     Description = $"Aceptacion de plan de tratamiento {request.Name}",
-                    CreatedAt = DateTime.Now,
+                    CreatedAt = DateTime.UtcNow,
                     CreatedBy = "Test"
                 };
 

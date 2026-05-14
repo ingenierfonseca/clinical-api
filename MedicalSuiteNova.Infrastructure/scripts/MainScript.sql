@@ -239,24 +239,27 @@ CREATE TABLE [dbo].[ClinicalSession] (
 );
 GO
 CREATE TABLE [dbo].[SessionPlanMaster](
-    [Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    [PatientId] [int] NOT NULL, -- Tu tabla de pacientes
-    [DoctorId] [int] NOT NULL,  -- Tu tabla de doctores
-    [TemplateId] [int] NULL,    -- Opcional, por si es un plan manual
+    [Id] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    [SessionId] [bigint] NOT NULL,
+	[Name] [nvarchar](150) NOT NULL,
     [Status] [nvarchar](20) NOT NULL DEFAULT 'En Proceso', -- 'Pendiente', 'Completado', 'Suspendido'
     [StartDate] [datetime] NOT NULL DEFAULT GETDATE(),
     [EndDate] [datetime] NULL,
-    [TotalEstimatedPrice] [decimal](10, 2) NOT NULL
+    [TotalEstimatedPrice] [decimal](10, 2) NOT NULL,
+    [CurrencyId] [tinyint] NOT NULL,
+	[Comments] [nvarchar](300) NULL,
+    CONSTRAINT [FK_SessionPlanMaster_ClinicalSession] FOREIGN KEY([SessionId]) REFERENCES [dbo].[ClinicalSession] ([Id]),
+    CONSTRAINT [FK_SessionPlanMaster_Currency] FOREIGN KEY([CurrencyId]) REFERENCES [dbo].[Currency] ([Id])
 );
-
-CREATE TABLE [dbo].[PatientPlanDetail](
-    [Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    [PatientPlanMasterId] [int] NOT NULL,
+GO
+CREATE TABLE [dbo].[SessionPlanDetail](
+    [Id] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    [SessionPlanMasterId] [bigint] NOT NULL,
     [TreatmentPlanTemplateItemId] [int] NOT NULL, -- Relación con tu tabla existente
     [Status] [nvarchar](20) NOT NULL DEFAULT 'Pendiente', -- 'Pendiente', 'En Proceso', 'Completo'
     [CompletedAt] [datetime] NULL,
     [Comments] [nvarchar](max) NULL, -- Notas clínicas de este paso
-    CONSTRAINT [FK_Detail_Master] FOREIGN KEY([PatientPlanMasterId]) REFERENCES [dbo].[PatientPlanMaster]([Id]),
+    CONSTRAINT [FK_Detail_Master] FOREIGN KEY([SessionPlanMasterId]) REFERENCES [dbo].[SessionPlanMaster]([Id]),
     CONSTRAINT [FK_Detail_Treatment] FOREIGN KEY([TreatmentPlanTemplateItemId]) REFERENCES [dbo].[TreatmentPlanTemplateItem]([Id])
 );
 GO
