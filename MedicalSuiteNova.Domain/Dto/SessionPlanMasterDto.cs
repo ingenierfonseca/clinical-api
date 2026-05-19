@@ -3,8 +3,8 @@ namespace MedicalSuiteNova.Domain.Dto
 {
     public class SessionPlanMasterDto
     {
-        public int Id { get; set; }
-        public int SessionId { get; set; }
+        public long Id { get; set; }
+        public long SessionId { get; set; }
         public required string Name { get; set; }
         public required string Status { get; set; }
         public DateTime StartDate { get; set; }

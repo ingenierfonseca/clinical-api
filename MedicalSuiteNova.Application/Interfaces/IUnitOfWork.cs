@@ -13,6 +13,7 @@ namespace MedicalSuiteNova.Application.Interfaces
         ICustomerRepository Customers { get; }
         IAppointmentRepository Appointments { get; }
         IAppointmentTypeRepository AppointmentTypes { get; }
+        IClinicalVisitsRepository ClinicalVisits { get; }
         IDoctorRepository Doctors { get; }
         ITreatmentRepository Treatments { get; }
         ITreatmentPlanTemplateRepository TreatmentPlanTemplates { get; }

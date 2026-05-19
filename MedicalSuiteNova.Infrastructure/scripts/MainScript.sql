@@ -4,13 +4,18 @@ CREATE DATABASE ClinicalSuiteNovaDB
 USE ClinicalSuiteNovaDB
 CREATE TABLE [dbo].[Customer](
 	[Id] [int] identity(1,1) primary key,
-	[FirstName] [nchar](50) NOT NULL,
-	[LastName] [nchar](50) NOT NULL,
+    [DNI] NVARCHAR(20) NOT NULL,
+	[FirstName] [NVARCHAR](50) NOT NULL,
+	[LastName] [NVARCHAR](50) NOT NULL,
 	Age TINYINT,
-	[Phone] [nchar](15),
-	Email nchar(60),
-	Avatar nchar(500),
-	CreatedAt DATETIME DEFAULT GETDATE()
+	[Phone] [NVARCHAR](15),
+	Email NVARCHAR(60),
+	Avatar NVARCHAR(500),
+    [Balance] DECIMAL(18,2) NOT NULL DEFAULT 0,
+	CreatedAt DATETIME DEFAULT GETDATE(),
+    [CurrencyId] TINYINT NULL,
+    CONSTRAINT UQ_Customer_DNI UNIQUE ([DNI]),
+    CONSTRAINT FK_Customer_Currency FOREIGN KEY (CurrencyId) REFERENCES Currency(Id)
 )
 GO
 create table Doctor(
@@ -19,7 +24,7 @@ create table Doctor(
 	LastName varchar(50) NOT NULL,
 	Age TINYINT,
 	Specialist varchar(100) NOT NULL,
-	[Phone] [nchar](15)
+	[Phone] [NVARCHAR](15)
 )
 GO
 create table AppointmentType(
@@ -30,7 +35,7 @@ create table AppointmentType(
 )
 GO
 create table Appointment(
-	Id integer identity (1,1) primary key,
+	Id bigint identity (1,1) primary key,
 	CustomerId integer,
 	AppointmentDate DateTime,
 	DoctorId integer,
@@ -41,6 +46,18 @@ create table Appointment(
         FOREIGN KEY (DoctorId) REFERENCES Doctor(Id),
 	CONSTRAINT FK_Appointment_AppointmentType
         FOREIGN KEY (AppointmentTypeId) REFERENCES AppointmentType(Id)
+)
+GO
+CREATE TABLE [dbo].[ClinicalVisits] (
+    [Id] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    [CustomerId] [int] NOT NULL,
+    [VisitDate] [datetime] NOT NULL DEFAULT GETDATE(),
+    [AppointmentId] [bigint] NULL,
+    [DoctorId] [int] NOT NULL,
+    [Notes] [nvarchar](300) NULL,
+    CONSTRAINT [FK_Visits_Customer] FOREIGN KEY([CustomerId]) REFERENCES [dbo].[Customer]([Id]),
+    CONSTRAINT [FK_Visits_Doctor] FOREIGN KEY([DoctorId]) REFERENCES [dbo].[Doctor]([Id]),
+    CONSTRAINT [FK_Visits_Appointment] FOREIGN KEY([AppointmentId]) REFERENCES [Appointment]([Id])
 )
 GO
 CREATE TABLE InvoiceStatus (
@@ -241,6 +258,7 @@ GO
 CREATE TABLE [dbo].[SessionPlanMaster](
     [Id] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
     [SessionId] [bigint] NOT NULL,
+    [CustomerId] [int] NOT NULL,
 	[Name] [nvarchar](150) NOT NULL,
     [Status] [nvarchar](20) NOT NULL DEFAULT 'En Proceso', -- 'Pendiente', 'Completado', 'Suspendido'
     [StartDate] [datetime] NOT NULL DEFAULT GETDATE(),
@@ -249,7 +267,8 @@ CREATE TABLE [dbo].[SessionPlanMaster](
     [CurrencyId] [tinyint] NOT NULL,
 	[Comments] [nvarchar](300) NULL,
     CONSTRAINT [FK_SessionPlanMaster_ClinicalSession] FOREIGN KEY([SessionId]) REFERENCES [dbo].[ClinicalSession] ([Id]),
-    CONSTRAINT [FK_SessionPlanMaster_Currency] FOREIGN KEY([CurrencyId]) REFERENCES [dbo].[Currency] ([Id])
+    CONSTRAINT [FK_SessionPlanMaster_Currency] FOREIGN KEY([CurrencyId]) REFERENCES [dbo].[Currency] ([Id]),
+    CONSTRAINT [FK_SessionPlanMaster_Customer] FOREIGN KEY([CustomerId]) REFERENCES [dbo].[Customer] ([Id])
 );
 GO
 CREATE TABLE [dbo].[SessionPlanDetail](
@@ -311,6 +330,7 @@ CREATE TABLE Payment (
     Id INT PRIMARY KEY IDENTITY,
     InvoiceId INT NOT NULL,
 	CustomerId INT NOT NULL,
+    CurrencyId TINYINT NOT NULL,
     Amount DECIMAL(18,2) NOT NULL,
     Date DATETIME NOT NULL,
     PaymentTypeId TINYINT, -- Cash, Card, Transfer
@@ -319,7 +339,9 @@ CREATE TABLE Payment (
 	CONSTRAINT FK_Payment_Customer
         FOREIGN KEY (CustomerId) REFERENCES Customer(Id),
 	CONSTRAINT FK_Payment_PaymentMethod
-        FOREIGN KEY (PaymentTypeId) REFERENCES PaymentType(Id)
+        FOREIGN KEY (PaymentTypeId) REFERENCES PaymentType(Id),
+    CONSTRAINT FK_Payment_Currency
+        FOREIGN KEY (CurrencyId) REFERENCES Currency(Id)
 );
 GO
 CREATE TABLE ExchangeRates (

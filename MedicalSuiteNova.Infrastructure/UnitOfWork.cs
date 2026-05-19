@@ -23,6 +23,7 @@ namespace MedicalSuiteNova.Infrastructure
             Customers = new CustomerRepository(_context, mapper);
             Appointments = new AppointmentRepository(_context, mapper);
             AppointmentTypes = new AppointmentTypeRepository(_context, mapper);
+            ClinicalVisits = new ClinicalVisitsRepository(_context, mapper);
             Doctors = new DoctorRepository(_context, mapper);
             Treatments = new TreatmentRepository(_context, mapper);
             TreatmentPlanTemplates = new TreatmentPlanTemplateRepository(_context, mapper);
@@ -43,6 +44,7 @@ namespace MedicalSuiteNova.Infrastructure
         public ICustomerRepository Customers { get; private set; }
         public IAppointmentRepository Appointments { get; private set; }
         public IAppointmentTypeRepository AppointmentTypes { get; private set; }
+        public IClinicalVisitsRepository ClinicalVisits { get; private set; }
         public IDoctorRepository Doctors { get; private set; }
         public ITreatmentRepository Treatments { get; private set; }
         public ITreatmentPlanTemplateRepository TreatmentPlanTemplates { get; private set; }

@@ -2,54 +2,88 @@
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Services
 {
-    public class PaymentService(IUnitOfWork uow, IMapper mapper) : BaseService<Payment>(uow, mapper, uow.Payments), IPaymentService
+    public class PaymentService(IUnitOfWork uow, IMapper mapper, IInvoiceService invoiceService) : BaseService<Payment>(uow, mapper, uow.Payments), IPaymentService
     {
-        public async Task<Result<PaymentDto>> CreatePaymentAsync(PaymentDto dto)
+        public async Task<Result<PaymentDto>> CreatePaymentAsync(PaymentRequest request)
         {
-            var invoice = await _uow.Invoices.FirstOrDefaultAsync(
-                i => i.Id == dto.InvoiceId,
-                i => i.Payments
-            );
-            
-
-            if (invoice == null)
-                return Result<PaymentDto>.Failure("La factura no existe o no pertenece a esta clínica.");
-
-            if (invoice.CustomerId != dto.CustomerId)
-                return Result<PaymentDto>.Failure("La factura no pertenece al cliente especificado.");
-
-            if (!await _uow.PaymentTypes.IsValidPaymentTypeAsync(dto.PaymentTypeId))
+            if (!await _uow.PaymentTypes.IsValidPaymentTypeAsync(request.PaymentTypeId))
                 return Result<PaymentDto>.Failure("El tipo de pago no es válido.");
 
-            decimal saldoPendiente = invoice.Total - invoice.Payments.Sum(p => p.Amount);
+            var currentBalance = await _uow.Ledger.GetLastBalanceByCustomerIdAsync(request.CustomerId);
 
-            if (dto.Amount > saldoPendiente)
-                return Result<PaymentDto>.Failure($"El monto excede el saldo pendiente ({saldoPendiente}).");
+            // CORRECCIÓN DEL BUG: El monto no puede ser mayor a lo que debe actualmente
+            if (request.Amount > currentBalance)
+                return Result<PaymentDto>.Failure($"El monto (${request.Amount}) excede el saldo pendiente actual (${currentBalance}).");
+
+            // Usamos el Change Tracker cargando al cliente para actualizar su saldo al final
+            var customer = await _uow.Customers.FindAsync(request.CustomerId);
+            if (customer == null)
+                return Result<PaymentDto>.Failure("El cliente no existe o no pertenece a esta clínica.");
+
+            Invoice? invoice;
+
+            if (request.OperationTypeId == (int)OperationTypeEnum.PagoFactura)
+            {
+                invoice = await _uow.Invoices.FindAsync(request.InvoiceId);
+
+                if (invoice == null)
+                    return Result<PaymentDto>.Failure("La factura no existe o no pertenece a esta clínica.");
+
+                if (invoice.CustomerId != request.CustomerId)
+                    return Result<PaymentDto>.Failure("La factura no pertenece al cliente especificado.");
+            }
+            else if (request.OperationTypeId == (int)OperationTypeEnum.AbonoSaldo)
+            {
+                var invoiceNumber = await invoiceService.GenerateInvoiceNumberAsync();
+
+                invoice = new Invoice
+                {
+                    CustomerId = request.CustomerId,
+                    SubTotal = request.Amount,
+                    Total = request.Amount,
+                    Number = invoiceNumber,
+                    IssueDate = DateTime.UtcNow,
+                    DueDate = DateTime.UtcNow,
+                    CurrencyId = request.CurrencyId,
+                    StatusId = (int)InvoiceStatusEnum.Pendiente,
+                    PaymentTermId = 1, // Pago inmediato
+                    CreatedBy = "System"
+                };
+
+                await _uow.Invoices.AddAsync(invoice);
+            }
+            else
+            {
+                return Result<PaymentDto>.Failure("El tipo de transacción no está soportado.");
+            }
 
             await _uow.BeginTransactionAsync();
             try
             {
-                var payment = _mapper.Map<Payment>(dto);
-                payment.Date = dto.Date == DateTime.MinValue ? DateTime.Now : dto.Date;
-                var result = await _uow.Payments.AddAsync(payment);
-                await _uow.CompleteAsync();
+                if (invoice.Id == 0)
+                {
+                    await _uow.CompleteAsync();
+                }
 
-                // Actualizar estado de factura
-                if (saldoPendiente - payment.Amount <= 0)
-                    invoice.StatusId = (int)InvoiceStatusEnum.Pagada;
-                else
-                    invoice.StatusId = (int)InvoiceStatusEnum.PagoParcial;
-
+                invoice.StatusId = (int)InvoiceStatusEnum.Pagada;
                 await _uow.Invoices.UpdateAsync(invoice);
 
-                // 4. LOGICA DEL LEDGER (Qué afectó en la cuenta)
-                // Obtenemos el último saldo del paciente para calcular el nuevo
-                var currentBalance = await _uow.Ledger.GetLastBalanceByCustomerIdAsync(invoice.CustomerId);
+                var payment = new Payment
+                {
+                    InvoiceId = invoice.Id,
+                    CustomerId = request.CustomerId,
+                    CurrencyId = request.CurrencyId,
+                    Amount = request.Amount,
+                    PaymentTypeId = request.PaymentTypeId,
+                    Date = request.Date == DateTime.MinValue ? DateTime.UtcNow : request.Date.ToUniversalTime()
+                };
+                var result = await _uow.Payments.AddAsync(payment);
 
                 var ledgerEntry = new CustomerAccountLedger
                 {
@@ -59,24 +93,27 @@ namespace MedicalSuiteNova.Application.Services
                     ReferenceTable = "Invoice",
                     Amount = payment.Amount,
                     CurrencyId = invoice.CurrencyId,
-                    //ExchangeRate = payment.ExchangeRate,
                     BalanceAfter = currentBalance - payment.Amount,
-                    Description = $"Abono a Factura #{invoice.Id} via {payment.PaymentType?.Name}",
-                    CreatedAt = DateTime.Now,
-                    CreatedBy = "Test"
+                    Description = $"Abono a Factura #{invoice.Number} de forma exitosa.",
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = "System"
                 };
-
                 await _uow.Ledger.AddAsync(ledgerEntry);
+
+                customer.Balance = ledgerEntry.BalanceAfter;
+                await _uow.Customers.UpdateAsync(customer);
 
                 await _uow.CompleteAsync();
                 await _uow.CommitTransactionAsync();
 
                 return Result<PaymentDto>.Success(_mapper.Map<PaymentDto>(result));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await _uow.RollbackTransactionAsync();
-                return Result<PaymentDto>.Failure("Ocurrió un error inesperado al procesar el pago.");
+                // Loguear internamente el error real para soporte técnico antes de enmascarar la respuesta
+                Console.WriteLine($"[ClinicalSuiteNova Error]: {ex.Message} -> {ex.InnerException?.Message}");
+                return Result<PaymentDto>.Failure("Ocurrió un error inesperado al procesar y asentar el pago.");
             }
         }
     }

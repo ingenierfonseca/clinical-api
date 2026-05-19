@@ -240,7 +240,7 @@ namespace MedicalSuiteNova.Application.Services
             return Result<(List<InvoiceItem>, decimal, decimal)>.Success((processedItems, runningSubTotal, runningTax));
         }
 
-        private async Task<string> GenerateInvoiceNumberAsync()
+        public async Task<string> GenerateInvoiceNumberAsync()
         {
 
             var invoices = await _uow.Invoices.GetAllAsync();

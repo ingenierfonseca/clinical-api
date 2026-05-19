@@ -20,7 +20,8 @@ namespace MedicalSuiteNova.Domain.Interfaces
         Task<PagedResponse<TDto>> GetAllAsync<TDto>(int pageNumber, int pageSize, IQueryable<TDto> query) where TDto : class;
         Task<bool> ExistsAsync(object id);
         Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
-        Task<T?> FindAsync(int id);
+        Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IQueryable<T>> include);
+        Task<T?> FindAsync(object id);
         Task<T?> FindAsync(Expression<Func<T, bool>> predicate);
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 

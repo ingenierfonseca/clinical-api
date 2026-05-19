@@ -47,10 +47,12 @@ namespace MedicalSuiteNova.Application.Services
             var stopwatch = Stopwatch.StartNew();
             var response = new ResponseImportResult { TotalRows = dtos.Count };
 
-            var combinaciones = dtos.Select(x => (x.FirstName + x.LastName).ToLower()).ToList();
-            var fullNamesExists = await _uow.Customers.GetAllAsync(p => combinaciones.Contains((p.FirstName.Trim() + p.LastName.Trim()).ToLower()));
+            //var combinaciones = dtos.Select(x => (x.FirstName + x.LastName).ToLower()).ToList();
+            //var fullNamesExists = await _uow.Customers.GetAllAsync(p => combinaciones.Contains((p.FirstName.Trim() + p.LastName.Trim()).ToLower()));
+            var dniList = dtos.Select(x => (x.DNI).ToLower()).ToList();
+            var dniExists = await _uow.Customers.GetAllAsync(p => dniList.Contains(p.DNI.ToLower()));
 
-            var setExists = fullNamesExists
+            var setExists = dniExists
                 .Select(p => (p.FirstName.Trim() + p.LastName.Trim()).ToLower())
                 .ToHashSet();
 
@@ -61,12 +63,23 @@ namespace MedicalSuiteNova.Application.Services
             {
                 index++;
 
+                var DNI = d.DNI.Trim();
                 var firstName = d.FirstName?.Trim();
                 var lastName = d.LastName?.Trim();
                 var email = d.Email?.Trim();
                 var phone = d.Phone?.Trim();
 
                 var llave = (firstName + lastName).ToLower();
+
+                if (string.IsNullOrWhiteSpace(DNI))
+                {
+                    response.Errors.Add(new RowError
+                    {
+                        RowNumber = index,
+                        ErrorMessage = "DNI vacío"
+                    });
+                    continue;
+                }
 
                 if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
                 {
@@ -113,13 +126,14 @@ namespace MedicalSuiteNova.Application.Services
                     response.Errors.Add(new RowError
                     {
                         RowNumber = index,
-                        ErrorMessage = $"El cliente {d.FirstName} {d.LastName} ya existe en el sistema."
+                        ErrorMessage = $"El cliente {d.DNI} ya existe en el sistema."
                     });
                 }
                 else
                 {
                     newCustomers.Add(new Customer
                     {
+                        DNI = DNI,
                         FirstName = firstName,
                         LastName = lastName,
                         Age = d.Age,

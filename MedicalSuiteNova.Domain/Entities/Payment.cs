@@ -9,6 +9,7 @@ namespace MedicalSuiteNova.Domain.Entities
         public int Id { get; set; }
         public int InvoiceId { get; set; }
         public int CustomerId { get; set; }
+        public byte CurrencyId { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date {  get; set; }
         public byte PaymentTypeId { get; set; }
@@ -21,6 +22,9 @@ namespace MedicalSuiteNova.Domain.Entities
 
         [ForeignKey("PaymentTypeId")]
         public virtual PaymentType? PaymentType { get; set; }
+
+        [ForeignKey("CurrencyId")]
+        public virtual Currency? Currency { get; set; }
 
         public object GetId() => Id;
     }

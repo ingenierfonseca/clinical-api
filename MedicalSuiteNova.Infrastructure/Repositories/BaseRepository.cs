@@ -94,7 +94,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             return await _dbSet.AnyAsync(e => EF.Property<object>(e, "Id").Equals(id));
         }
 
-        public async Task<T?> FindAsync(int id)
+        public async Task<T?> FindAsync(object id)
         {
             var idProperty = typeof(T).GetProperty("Id");
 
@@ -136,6 +136,18 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
 
             foreach (var include in includes)
                 query = query.Include(include);
+
+            return await query.FirstOrDefaultAsync(predicate);
+        }
+
+        public async Task<T?> FirstOrDefaultAsync(
+            Expression<Func<T, bool>> predicate,
+            Func<IQueryable<T>, IQueryable<T>> include)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (include != null)
+                query = include(query);
 
             return await query.FirstOrDefaultAsync(predicate);
         }

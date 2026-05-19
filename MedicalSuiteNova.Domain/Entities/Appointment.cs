@@ -5,7 +5,7 @@ namespace MedicalSuiteNova.Domain.Entities
 {
     public class Appointment : IEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public required int CustomerId { get; set; }
         public required DateTime AppointmentDate { get; set; }
         public required int DoctorId { get; set; }

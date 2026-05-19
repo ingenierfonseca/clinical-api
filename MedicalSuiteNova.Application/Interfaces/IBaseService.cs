@@ -20,6 +20,7 @@ namespace MedicalSuiteNova.Application.Interfaces
 
 
         Task<T?> FindAsync(int id);
+        Task<Dto?> FirstOrDefaultAsync<Dto>(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IQueryable<T>> include);
 
         Task<T> AddAsync(T patient);
 

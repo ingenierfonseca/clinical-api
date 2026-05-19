@@ -36,6 +36,7 @@ namespace MedicalSuiteNova.Application.Mappings
             CreateMap<Appointment, AppointmentInfoDto>();
             CreateMap<AppointmentTypeDto, AppointmentType>();
             CreateMap<AppointmentType, AppointmentTypeDto>();
+            CreateMap<ClinicalVisits, ClinicalVisitsDto>();
             CreateMap<UpdateAppointmentTypeDto, AppointmentType>();
             CreateMap<AppointmentType, UpdateAppointmentTypeDto>();
             CreateMap<TreatmentDto, Treatment>();

@@ -8,6 +8,7 @@ namespace MedicalSuiteNova.Domain.Entities
     {
         public long Id { get; set; }
         public long SessionId { get; set; }
+        public int CustomerId { get; set; }
         public required string Name { get; set; }
         public required string Status { get; set; }
         public DateTime StartDate { get; set; }

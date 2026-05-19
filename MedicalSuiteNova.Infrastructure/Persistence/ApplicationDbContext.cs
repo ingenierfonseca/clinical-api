@@ -15,6 +15,7 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
         public DbSet<Doctor> Doctors => Set<Doctor>();
         public DbSet<Appointment> Appointments => Set<Appointment>();
         public DbSet<AppointmentType> AppointmentTypes => Set<AppointmentType>();
+        public DbSet<ClinicalVisits> ClinicalVisits => Set<ClinicalVisits>();
         public DbSet<Invoice> Invoices => Set<Invoice>();
         public DbSet<InvoiceItem> InvoiceDetails => Set<InvoiceItem>();
         public DbSet<Payment> Payments => Set<Payment>();
@@ -38,6 +39,7 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
             modelBuilder.Entity<Doctor>().ToTable("Doctor");
             modelBuilder.Entity<Appointment>().ToTable("Appointment");
             modelBuilder.Entity<AppointmentType>().ToTable("AppointmentType");
+            modelBuilder.Entity<ClinicalVisits>().ToTable("ClinicalVisits");
             modelBuilder.Entity<Invoice>().ToTable("Invoice");
             modelBuilder.Entity<InvoiceItem>().ToTable("InvoiceItem");
             modelBuilder.Entity<Payment>().ToTable("Payment");

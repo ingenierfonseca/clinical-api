@@ -1,5 +1,6 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,7 +35,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(PaymentDto p)
+        public async Task<IActionResult> Post(PaymentRequest p)
         {
             var result = await _paymentService.CreatePaymentAsync(p);
             if (!result.IsSuccess)

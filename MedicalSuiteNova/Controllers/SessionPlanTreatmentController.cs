@@ -5,6 +5,7 @@ using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Dto.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalSuiteNova.Api.Controllers
 {
@@ -34,7 +35,19 @@ namespace MedicalSuiteNova.Api.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var item = await _sessionPlaService.FindAsync(id);
+            var item = await _sessionPlaService.FirstOrDefaultAsync<SessionPlanMasterDto>
+            (
+                s => s.Id == id, 
+                q => q.Include(s => s.Items)!
+                    .ThenInclude(i => i.TemplateItem)
+            );
+            return Ok(item);
+        }
+
+        [HttpGet("treatment-history/{id:int}")]
+        public async Task<IActionResult> GetByCustomer(int id)
+        {
+            var item = await _sessionPlaService.GetByCustomer(id);
             return Ok(item);
         }
 
@@ -42,6 +55,17 @@ namespace MedicalSuiteNova.Api.Controllers
         public async Task<IActionResult> Post(RequestSessionPlanMaster p)
         {
             var result = await _sessionPlaService.AddAsync(p);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(result);
+        }
+
+        [HttpPost("change-status")]
+        public async Task<IActionResult> ChangeStatus(RequestStatusSessionPlanMaster s)
+        {
+            var result = await _sessionPlaService.ChangeStatus(s);
 
             if (!result.IsSuccess)
                 return BadRequest(new { message = result.ErrorMessage });

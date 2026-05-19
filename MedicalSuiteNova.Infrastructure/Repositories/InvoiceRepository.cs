@@ -34,24 +34,27 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             var query = _context.Set<Customer>()
                 .Where(a => search != string.Empty && a.FirstName.Contains(search) || a.LastName.Contains(search))
                 .OrderByDescending(a => a.Invoices.Select(i => i.StatusId).FirstOrDefault())
+                .Include(a => a.Currency)
                 .Select(c => new CustomerInvoiceDashboardDto
                 {
                     Id = c.Id,
                     Avatar = c.Avatar,
                     FullName = c.FirstName.Trim() + " " + c.LastName.Trim(),
                     Age = c.Age,
+                    Balance = c.Balance,
+                    Currency = c.Currency!.Symbol ?? "",
 
                     // El balance es la suma de (Total Factura - Suma de Pagos de esa factura)
                     //Balance = c.Invoices.Any() ? c.Invoices.Sum(i => i.Total - (decimal)i.Payments.Sum(p => p.Amount)) : 0,
                     // Agrupamos las facturas por moneda para obtener balances separados
-                    Balances = c.Invoices
+                    /*Balances = c.Invoices
                     .GroupBy(i => new { i.Currency.Symbol, i.Currency.Code })
                     .Select(g => new CurrencyBalanceDto
                     {
                         Symbol = g.Key.Symbol,
                         Code = g.Key.Code,
                         Amount = g.Sum(i => i.Total - i.Payments.Sum(p => p.Amount))
-                    }).ToList(),
+                    }).ToList(),*/
 
                     // Buscamos la fecha máxima de todos los pagos de todas sus facturas
                     LastPayment = c.Invoices.SelectMany(i => i.Payments).Any()
@@ -59,7 +62,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                     : null, // El cast a nullable evita errores si no hay pagos
 
                     // Buscamos la fecha máxima de todas las visitas
-                    LastVisit = c.Appointments.Max(p => p.AppointmentDate),
+                    LastVisit = c.ClinicalVisits.Max(p => p.VisitDate),
 
                     CountPaid = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId == (int)InvoiceStatusEnum.Pagada) : 0,
                     CountPending = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId == (int)InvoiceStatusEnum.Pendiente || i.StatusId == (int)InvoiceStatusEnum.PagoParcial) : 0,

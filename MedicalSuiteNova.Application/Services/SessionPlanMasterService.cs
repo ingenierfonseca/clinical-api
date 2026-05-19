@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using DocumentFormat.OpenXml.Office2016.Excel;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
@@ -13,9 +14,13 @@ namespace MedicalSuiteNova.Application.Services
     {
         public async Task<Result<SessionPlanMasterDto>> AddAsync(RequestSessionPlanMaster request)
         {
-            var clinicalSession = await _uow.ClinicalSessions.FindAsync(request.SessionId);
+            var clinicalSession = await _uow.ClinicalSessions.FirstOrDefaultAsync(c => c.Id == request.SessionId, c => c.Customer!);
             if (clinicalSession == null)
                 return Result<SessionPlanMasterDto>.Failure("El SessionId no es válido.");
+
+            var customer = clinicalSession.Customer;
+            if (customer == null)
+                return Result<SessionPlanMasterDto>.Failure("El CustomerId no es válido.");
 
             if (!await _uow.Currencies.ExistsAsync(request.CurrencyId))
                 return Result<SessionPlanMasterDto>.Failure("El CurrencyId no es válido.");
@@ -31,6 +36,7 @@ namespace MedicalSuiteNova.Application.Services
             SessionPlanMaster session = new()
             {
                 SessionId = request.SessionId,
+                CustomerId = clinicalSession.CustomerId,
                 Name = request.Name,
                 CurrencyId = request.CurrencyId,
                 TotalEstimatedPrice = 0,
@@ -69,8 +75,6 @@ namespace MedicalSuiteNova.Application.Services
                 var result = await _uow.SessionPlanMaster.AddAsync(session);
                 await _uow.CompleteAsync();
 
-                // LOGICA DEL LEDGER (Qué afectó en la cuenta)
-                // Obtenemos el último saldo del paciente para calcular el nuevo
                 var currentBalance = await _uow.Ledger.GetLastBalanceByCustomerIdAsync(clinicalSession.CustomerId);
 
                 var ledgerEntry = new CustomerAccountLedger
@@ -82,7 +86,7 @@ namespace MedicalSuiteNova.Application.Services
                     Amount = session.TotalEstimatedPrice,
                     CurrencyId = session.CurrencyId,
                     //ExchangeRate = payment.ExchangeRate,
-                    BalanceAfter = currentBalance - session.TotalEstimatedPrice,
+                    BalanceAfter = currentBalance + session.TotalEstimatedPrice,
                     Description = $"Aceptacion de plan de tratamiento {request.Name}",
                     CreatedAt = DateTime.UtcNow,
                     CreatedBy = "Test"
@@ -90,63 +94,76 @@ namespace MedicalSuiteNova.Application.Services
 
                 await _uow.Ledger.AddAsync(ledgerEntry);
 
-                /*if (request.DownPayment > 0)
+                customer.CurrencyId = session.CurrencyId;
+                customer.Balance = ledgerEntry.BalanceAfter;
+
+                var visitEntry = new ClinicalVisits
                 {
-                    var invoice = new Invoice
-                    {
-                        CustomerId = request.CustomerId,
-                        IssueDate = DateTime.UtcNow,
-                        CurrencyId = request.CurrencyId,
-                        ExchangeRate = await _exchangeService.GetCurrentRate(),
-                        TotalAmount = request.DownPayment,
-                        Status = "Pagada", // Al ser prima inicial en el acto
-                        Items = new List<InvoiceItem>
-                        {
-                            new()
-                            {
-                                Description = $"Prima inicial - Plan: {request.Name}",
-                                Quantity = 1,
-                                UnitPrice = request.DownPayment,
-                                Subtotal = request.DownPayment
-                            }
-                        }
-                    };
+                    CustomerId = clinicalSession.CustomerId,
+                    DoctorId = clinicalSession.DoctorId,
+                    VisitDate = DateTime.UtcNow,
+                    Notes = request.Comments
+                };
 
-                    var savedInvoice = await _uow.Invoices.AddAsync(invoice);
-                    await _uow.CompleteAsync();
+                await _uow.ClinicalVisits.AddAsync(visitEntry);
 
-                    // 5. REGISTRAR EN EL LEDGER (El "Gran Libro")
-                    // Cargo: El paciente ahora debe la prima
-                    await _uow.Ledger.AddAsync(new PatientAccountLedger
-                    {
-                        PatientId = request.PatientId,
-                        TransactionType = "CHARGE",
-                        ReferenceId = savedPlan.Id,
-                        Amount = request.DownPayment,
-                        Description = $"Cargo por prima inicial de plan"
-                    });
-
-                    // Abono: El paciente pagó la prima (referencia a la factura)
-                    await _uow.Ledger.AddAsync(new PatientAccountLedger
-                    {
-                        PatientId = request.PatientId,
-                        TransactionType = "PAYMENT",
-                        ReferenceId = savedInvoice.Id,
-                        Amount = request.DownPayment,
-                        Description = $"Pago de prima inicial - Factura #{savedInvoice.Id}"
-                    });
-
-                    await _uow.CompleteAsync();
-                }*/
-
+                await _uow.CompleteAsync();
                 await _uow.CommitTransactionAsync();
                 return Result<SessionPlanMasterDto>.Success(_mapper.Map<SessionPlanMasterDto>(result));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await _uow.RollbackTransactionAsync();
                 return Result<SessionPlanMasterDto>.Failure("Ocurrió un error inesperado al procesar el plan.");
             }
+        }
+
+        public async Task<Result<SessionPlanMasterDto>> ChangeStatus(RequestStatusSessionPlanMaster request)
+        {
+            var session = await _uow.SessionPlanMaster.FirstOrDefaultAsync(s => s.Id == request.Id, s => s.Items!);
+            if (session == null)
+                return Result<SessionPlanMasterDto>.Failure("El Id no es válido.");
+            
+            var item = session.Items!.FirstOrDefault(i => i.Id == request.ItemId);
+            if (item == null)
+                return Result<SessionPlanMasterDto>.Failure("El ItemId no es válido.");
+
+            if (!PlanStatus.AllStatus().Contains(request.Status))
+                return Result<SessionPlanMasterDto>.Failure("El Status no es válido.");
+
+            try
+            {
+                item.Status = request.Status;
+                if (request.Status == PlanStatus.Completed)
+                {
+                    item.CompletedAt = DateTime.UtcNow;
+                }
+
+                bool allCompleted = session.Items!.All(i => i.Status == PlanStatus.Completed);
+                bool allPending = session.Items!.All(i => i.Status == PlanStatus.Pending);
+
+                if (allCompleted)
+                    session.Status = PlanStatus.Completed;
+                else if (allPending)
+                    session.Status = PlanStatus.Pending;
+                else
+                    session.Status = PlanStatus.InProcess;
+                
+                await _uow.SessionPlanMaster.UpdateAsync(session);
+                await _uow.CompleteAsync();
+
+                return Result<SessionPlanMasterDto>.Success(_mapper.Map<SessionPlanMasterDto>(session));
+            }
+            catch (Exception)
+            {
+                return Result<SessionPlanMasterDto>.Failure("Ocurrió un error inesperado al cambiar el estado.");
+            }
+        }
+
+        public async Task<List<SessionPlanMasterDto>> GetByCustomer(int id)
+        {
+            var data = await _uow.SessionPlanMaster.GetAllAsync(t => t.CustomerId == id);
+            return _mapper.Map<List<SessionPlanMasterDto>>(data);
         }
     }
 }

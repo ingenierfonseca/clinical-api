@@ -30,7 +30,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             {
                 Id = a.Id,
                 AppointmentDate = a.AppointmentDate,
-                PatientName = a.Patient!.getShortName(),
+                PatientName = a.Patient!.GetShortName(),
                 DoctorName = a.Doctor!.getShortName(),
                 TypeName = a.AppointmentType!.Name
             };

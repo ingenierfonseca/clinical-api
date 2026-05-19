@@ -49,6 +49,12 @@ namespace MedicalSuiteNova.Application.Services
             return await _repository.FindAsync(id);
         }
 
+        public async Task<Dto?> FirstOrDefaultAsync<Dto>(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IQueryable<T>> include)
+        {
+            var entity = await _repository.FirstOrDefaultAsync(predicate, include);
+            return _mapper.Map<Dto>(entity);
+        }
+
         public async Task<T> AddAsync(T t)
         {
             var result = await _repository.AddAsync(t);

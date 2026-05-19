@@ -8,5 +8,10 @@ namespace MedicalSuiteNova.Application.Enums
         public const string Completed = "Completado";   //Todos los ítems del PatientPlanDetail han sido ejecutados y finalizados.
         public const string Suspended = "Suspendido";   //El tratamiento se pausó (ej. el paciente se fue de viaje o debe sanar una cirugía antes de seguir)
         public const string Cancelled = "Cancelado";    //El paciente decidió no continuar con ese plan específico.
+
+        public static List<string> AllStatus()
+        {
+            return [Pending, InProcess, Completed, Suspended, Cancelled];
+        }
     }
 }
