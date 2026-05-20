@@ -18,17 +18,27 @@ namespace MedicalSuiteNova.Domain.Entities
         public byte CurrencyId { get; set; }
         public byte StatusId { get; set; }
         public byte PaymentTermId { get; set; }
+        //public long ReferenceId { get; set; }
+        //public required string ReferenceTable { get; set; }
+        public long? SessionPlanMasterId { get; set; }
+        public string? OriginType { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public required string CreatedBy { get; set; }
 
         [ForeignKey("CustomerId")]
         public virtual Customer? Patient { get; set; }
+
         [ForeignKey("CurrencyId")]
         public virtual Currency? Currency { get; set; }
+
         [ForeignKey("StatusId")]
         public virtual InvoiceStatus? InvoiceStatus { get; set; }
+
         [ForeignKey("PaymentTermId")]
         public virtual PaymentTerm? PaymentTerm { get; set; }
+
+        [ForeignKey("SessionPlanMasterId")]
+        public virtual SessionPlanMaster? SessionPlanMaster { get; set; }
         public virtual ICollection<InvoiceItem>? Items { get; set; }
         public virtual ICollection<Payment> Payments { get; set; } = [];
         public object GetId() => Id;

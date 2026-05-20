@@ -23,6 +23,7 @@ namespace MedicalSuiteNova.Domain.Entities
 
         [ForeignKey("SessionId")]
         public virtual ClinicalSession? ClinicalSession { get; set; }
+        public ICollection<Invoice>? Invoices { get; set; }
 
         public object GetId() => Id;
     }

@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using MedicalSuiteNova.Application.Constants;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
@@ -67,34 +68,21 @@ namespace MedicalSuiteNova.Application.Services
 
             DateTime dueDate = validation.Value.DueDate;
 
+            await _uow.BeginTransactionAsync();
             try
             {
-                await _uow.BeginTransactionAsync();
-                var invoice = new Invoice
-                {
-                    CustomerId = dto.CustomerId,
-                    CurrencyId = dto.CurrencyId,
-                    StatusId = dto.StatusId,
-                    PaymentTermId = dto.PaymentTermId,
-                    Number = await GenerateInvoiceNumberAsync(),
-                    IssueDate = dto.IssueDate,
-                    DueDate = dueDate,
-                    CreatedBy = "",//dto.CreatedBy,
-                    CreatedAt = DateTime.UtcNow,
-                    Items = []
-                };
-
                 var detailsResult = await ProcessInvoiceDetailsAsync(dto.Items, dto.CurrencyId);
 
-                if (!detailsResult.IsSuccess) return Result<ResponseInvoiceDto>.Failure(detailsResult.ErrorMessage);
+                if (!detailsResult.IsSuccess) 
+                    return Result<ResponseInvoiceDto>.Failure(detailsResult.ErrorMessage);
 
-                invoice.Items = detailsResult.Value.Items;
-                invoice.SubTotal = detailsResult.Value.SubTotal;
-                invoice.TaxTotal = detailsResult.Value.Tax;
-                invoice.Total = invoice.SubTotal + invoice.TaxTotal;
+                var invoice = await CreateBalanceInvoiceAsync(dto.CustomerId, dto.CurrencyId,
+                    dto.StatusId,  dto.PaymentTermId, detailsResult.Value.SubTotal,
+                    detailsResult.Value.Tax, dto.IssueDate, dueDate, "FAC", detailsResult.Value.Items);
 
                 var result = await AddAsync(invoice);
 
+                await _uow.CompleteAsync();
                 await _uow.CommitTransactionAsync();
 
                 return Result<ResponseInvoiceDto>.Success(ResponseInvoiceDto.ToDto(result));
@@ -137,31 +125,30 @@ namespace MedicalSuiteNova.Application.Services
 
             DateTime dueDate = validation.Value.DueDate;
 
+            await _uow.BeginTransactionAsync();
             try
             {
-                await _uow.BeginTransactionAsync();
-                invoice.CustomerId = dto.CustomerId;
+                var detailsResult = await ProcessInvoiceDetailsAsync(dto.Items, dto.CurrencyId);
+
+                if (!detailsResult.IsSuccess) return Result<ResponseInvoiceDto>.Failure(detailsResult.ErrorMessage);
+
                 invoice.CurrencyId = dto.CurrencyId;
                 invoice.StatusId = dto.StatusId;
                 invoice.PaymentTermId = dto.PaymentTermId;
                 invoice.IssueDate = dto.IssueDate;
                 invoice.DueDate = dueDate;
-                invoice.Items = [];
-
-                var detailsResult = await ProcessInvoiceDetailsAsync(dto.Items, dto.CurrencyId);
-
-                if (!detailsResult.IsSuccess) return Result<ResponseInvoiceDto>.Failure(detailsResult.ErrorMessage);
-
                 invoice.Items = detailsResult.Value.Items;
                 invoice.SubTotal = detailsResult.Value.SubTotal;
                 invoice.TaxTotal = detailsResult.Value.Tax;
                 invoice.Total = invoice.SubTotal + invoice.TaxTotal;
 
                 await _uow.InvoicesDetail.DeleteByInvoiceIdAsync(id);
-                var result = await _uow.Invoices.UpdateAsync(invoice);
+                await _uow.Invoices.UpdateAsync(invoice);
+
+                await _uow.CompleteAsync();
                 await _uow.CommitTransactionAsync();
 
-                return Result<ResponseInvoiceDto>.Success(ResponseInvoiceDto.ToDto(result));
+                return Result<ResponseInvoiceDto>.Success(ResponseInvoiceDto.ToDto(invoice));
             }
             catch (Exception)
             {
@@ -183,9 +170,9 @@ namespace MedicalSuiteNova.Application.Services
             if (term == null)
                 return Result<(DateTime, string)>.Failure("No se encontró el PaymentTermId.");
 
-            var dateValidation = DateTimeHelper.ValidateIssueDate(dto.IssueDate);
-            if (!dateValidation.isValid)
-                return Result<(DateTime, string)>.Failure(dateValidation.message);
+            var (isValid, message) = DateTimeHelper.ValidateIssueDate(dto.IssueDate);
+            if (!isValid)
+                return Result<(DateTime, string)>.Failure(message);
 
             DateTime dueDate = dto.IssueDate.AddDays(term.DaysToDue);
             return Result<(DateTime, string)>.Success((dueDate, string.Empty));
@@ -194,60 +181,150 @@ namespace MedicalSuiteNova.Application.Services
         private async Task<Result<(List<InvoiceItem> Items, decimal SubTotal, decimal Tax)>> ProcessInvoiceDetailsAsync(
             IEnumerable<RequestInvoiceItemDto> itemsDto, byte invoiceCurrencyId)
         {
-            var processedItems = new List<InvoiceItem>();
-            decimal runningSubTotal = 0;
-            decimal runningTax = 0;
+            var items = itemsDto.ToList();
 
-            foreach (var itemDto in itemsDto)
+            var descriptions = items
+                .Select(x => x.Description.Trim())
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            var treatments = await _uow.Treatments.GetAllAsync(
+                x => descriptions.Contains(x.Name));
+
+            var treatmentDictionary = treatments.ToDictionary(
+                x => x.Name,
+                StringComparer.OrdinalIgnoreCase);
+
+            var missingTreatments = descriptions
+                .Where(x => !treatmentDictionary.ContainsKey(x))
+                .ToList();
+
+            if (missingTreatments.Count > 0)
             {
-                var treatment = await _uow.Treatments.FindAsync(x => x.Name == itemDto.Description);
-                if (treatment == null)
-                    return Result<(List<InvoiceItem>, decimal, decimal)>.Failure(
-                        $"No se puede procesar la Factura: el Tratamiento {itemDto.Description} no existe.");
+                return Result<(List<InvoiceItem>, decimal, decimal)>
+                    .Failure(
+                        $"No se pueden procesar los siguientes tratamientos porque no existen: {string.Join(", ", missingTreatments)}.");
+            }
+
+            var processedItems = new List<InvoiceItem>(items.Count);
+            decimal subTotal = 0m;
+            decimal taxTotal = 0m;
+
+            var exchangeRateCache = new Dictionary<(byte From, byte To), decimal>();
+
+            foreach (var item in items)
+            {
+                var treatment = treatmentDictionary[item.Description];
 
                 decimal effectivePrice = treatment.Price;
 
                 // Lógica de conversión de moneda
                 if (invoiceCurrencyId != treatment.CurrencyId)
                 {
-                    var exchangeRate = await _uow.ExchangeRates.GetLatestRate(
-                        fromCurrencyId: treatment.CurrencyId,
-                        toCurrencyId: invoiceCurrencyId);
+                    var rateKey = (treatment.CurrencyId, invoiceCurrencyId);
 
-                    if (exchangeRate == 0)
-                        return Result<(List<InvoiceItem>, decimal, decimal)>.Failure(
-                            $"No hay tipo de cambio para convertir de la moneda del tratamiento a la de la factura.");
+                    if (!exchangeRateCache.TryGetValue(rateKey, out var exchangeRate))
+                    {
+                        exchangeRate = await _uow.ExchangeRates.GetLatestRate(
+                            fromCurrencyId: treatment.CurrencyId,
+                            toCurrencyId: invoiceCurrencyId);
 
-                    effectivePrice = treatment.Price * exchangeRate;
+                        if (exchangeRate <= 0)
+                        {
+                            return Result<(List<InvoiceItem>, decimal, decimal)>
+                                .Failure(
+                                    $"No existe tipo de cambio configurado de moneda {treatment.CurrencyId} a {invoiceCurrencyId}.");
+                        }
+
+                        exchangeRateCache[rateKey] = exchangeRate;
+                    }
+
+                    effectivePrice *= exchangeRate;
                 }
 
-                var lineTotal = (effectivePrice * itemDto.Quantity);
-                runningSubTotal += effectivePrice;
-                runningTax += itemDto.Tax;
+                var lineTotal = effectivePrice * item.Quantity;
+                subTotal += lineTotal;
+                taxTotal += item.Tax;
 
                 processedItems.Add(new InvoiceItem
                 {
-                    Description = itemDto.Description,
-                    Quantity = itemDto.Quantity,
+                    Description = item.Description,
+                    Quantity = item.Quantity,
                     UnitPrice = effectivePrice,
-                    TaxAmount = itemDto.Tax,
+                    TaxAmount = item.Tax,
                     LineTotal = lineTotal,
                     OriginalCurrencyId = treatment.CurrencyId,
                     OriginalPrice = treatment.Price
                 });
             }
 
-            return Result<(List<InvoiceItem>, decimal, decimal)>.Success((processedItems, runningSubTotal, runningTax));
+            return Result<(List<InvoiceItem>, decimal, decimal)>.Success((processedItems, subTotal, taxTotal));
+        }
+
+        public async Task<Invoice> CreateBalanceInvoicePlanAsync(string planName, int customerId, byte currencyId, decimal amount)
+        {
+            var items = new List<InvoiceItem>
+            {
+                new ()
+                {
+                    Description = $"{planName}",
+                    Quantity = 1,
+                    UnitPrice = amount,
+                    LineTotal = amount,
+                    OriginalCurrencyId = currencyId,
+                    OriginalPrice = amount
+                }
+            };
+            return await CreateBalanceInvoiceAsync(
+                customerId, 
+                currencyId, 
+                (int)InvoiceStatusEnum.Pendiente, 
+                1,
+                amount, 
+                0, 
+                DateTime.UtcNow, 
+                DateTime.UtcNow, 
+                "PLAN", 
+                items
+            );
+        }
+
+        private async Task<Invoice> CreateBalanceInvoiceAsync(
+            int customerId, 
+            byte currencyId, 
+            byte statusId, 
+            byte paymentTermId, 
+            decimal subTotal, 
+            decimal tax,
+            DateTime issueDate, 
+            DateTime dueDate, 
+            string originType,
+            IReadOnlyCollection<InvoiceItem> items)
+        {
+            var invoiceNumber = await GenerateInvoiceNumberAsync();
+
+            return new Invoice
+            {
+                CustomerId = customerId,
+                CurrencyId = currencyId,
+                StatusId = statusId,
+                PaymentTermId = paymentTermId,
+                Number = invoiceNumber,
+                IssueDate = issueDate,
+                DueDate = dueDate,
+                SubTotal = subTotal,
+                TaxTotal = tax,
+                Total = subTotal + tax,
+                CreatedBy = AuditConstants.CreatedBy,
+                CreatedAt = DateTime.UtcNow,
+                OriginType = originType,
+                Items = [.. items]
+            };
         }
 
         public async Task<string> GenerateInvoiceNumberAsync()
         {
-
-            var invoices = await _uow.Invoices.GetAllAsync();
-            var lastInvoice = invoices
-                .OrderByDescending(i => i.Id)
-                .Select(i => i.Number)
-                .First();
+            var lastInvoice = await _uow.Invoices.GetLastInvoiceNumberAsync();
 
             int nextNumber = 1;
 
@@ -261,7 +338,8 @@ namespace MedicalSuiteNova.Application.Services
             }
 
             int currentYear = DateTime.Now.Year;
-            return $"FAC-{currentYear}-{nextNumber.ToString().PadLeft(6, '0')}";// Ejemplo: FAC-000001
+            // Ejemplo: FAC-000001
+            return $"FAC-{currentYear}-{nextNumber.ToString().PadLeft(6, '0')}";
         }
     }
 }

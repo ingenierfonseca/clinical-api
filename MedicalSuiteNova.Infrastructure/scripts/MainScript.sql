@@ -297,6 +297,8 @@ CREATE TABLE Invoice (
     StatusId TINYINT NOT NULL,
     CreatedAt DATETIME DEFAULT GETDATE(),
 	CreatedBy VARCHAR(50),
+    [OriginType] [nvarchar](20) NULL,
+	[SessionPlanMasterId] [bigint] NULL,
 	CONSTRAINT FK_Invoice_Customer
         FOREIGN KEY (CustomerId) REFERENCES Customer(Id),
 	CONSTRAINT FK_Invoice_InvoiceStatus
@@ -304,8 +306,14 @@ CREATE TABLE Invoice (
 	CONSTRAINT FK_Invoice_Currency
 		FOREIGN KEY (CurrencyId) REFERENCES Currency(Id),
 	CONSTRAINT FK_Invoice_PaymentTerm
-		FOREIGN KEY (PaymentTermId) REFERENCES PaymentTerm(Id)
+		FOREIGN KEY (PaymentTermId) REFERENCES PaymentTerm(Id),
+    CONSTRAINT [FK_Invoice_SessionPlanMaster_SessionPlanMasterId] FOREIGN KEY([SessionPlanMasterId])
+        REFERENCES [dbo].[SessionPlanMaster] ([Id])
 );
+GO
+CREATE NONCLUSTERED INDEX IX_Invoice_SessionPlanMasterId 
+ON Invoice(SessionPlanMasterId) 
+WHERE SessionPlanMasterId IS NOT NULL;
 GO
 CREATE TABLE InvoiceItem (
     Id INT PRIMARY KEY IDENTITY,

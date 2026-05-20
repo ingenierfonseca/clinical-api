@@ -6,9 +6,10 @@ namespace MedicalSuiteNova.Domain.Interfaces
 {
     public interface IInvoiceRepository : IBaseRepository<Invoice>
     {
-        public Task<InvoiceItemInfoDto?> GetByIdDtoAsync(int id);
-        public Task<PagedResponse<CustomerInvoiceDashboardDto>> GetAllDashboardPaginatedAsync(int pageNumber, int pageSize, string search);
-        public Task<List<InvoiceInfoDto>> GetInvoicesByCustomerAsync(int id);
-        public Task<List<PaymentDetailDTO>> GetPaymentsByCustomer(int id);
+        Task<InvoiceItemInfoDto?> GetByIdDtoAsync(int id);
+        Task<PagedResponse<CustomerInvoiceDashboardDto>> GetAllDashboardPaginatedAsync(int pageNumber, int pageSize, string search);
+        Task<List<InvoiceInfoDto>> GetInvoicesByCustomerAsync(int id);
+        Task<List<PaymentDetailDTO>> GetPaymentsByCustomer(int id);
+        Task<string> GetLastInvoiceNumberAsync();
     }
 }

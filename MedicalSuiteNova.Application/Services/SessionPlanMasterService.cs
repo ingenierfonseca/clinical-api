@@ -1,6 +1,5 @@
 ﻿
 using AutoMapper;
-using DocumentFormat.OpenXml.Office2016.Excel;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
@@ -10,7 +9,7 @@ using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Services
 {
-    public class SessionPlanMasterService(IUnitOfWork uow, IMapper mapper) : BaseService<SessionPlanMaster>(uow, mapper, uow.SessionPlanMaster), ISessionPlanMasterService
+    public class SessionPlanMasterService(IUnitOfWork uow, IMapper mapper, IInvoiceService invoiceService) : BaseService<SessionPlanMaster>(uow, mapper, uow.SessionPlanMaster), ISessionPlanMasterService
     {
         public async Task<Result<SessionPlanMasterDto>> AddAsync(RequestSessionPlanMaster request)
         {
@@ -75,6 +74,14 @@ namespace MedicalSuiteNova.Application.Services
                 var result = await _uow.SessionPlanMaster.AddAsync(session);
                 await _uow.CompleteAsync();
 
+                var invoice = await invoiceService.CreateBalanceInvoicePlanAsync(
+                    session.Name, 
+                    clinicalSession.CustomerId,
+                    session.CurrencyId,
+                    session.TotalEstimatedPrice
+                );
+                await _uow.Invoices.AddAsync(invoice);
+
                 var currentBalance = await _uow.Ledger.GetLastBalanceByCustomerIdAsync(clinicalSession.CustomerId);
 
                 var ledgerEntry = new CustomerAccountLedger
@@ -111,7 +118,7 @@ namespace MedicalSuiteNova.Application.Services
                 await _uow.CommitTransactionAsync();
                 return Result<SessionPlanMasterDto>.Success(_mapper.Map<SessionPlanMasterDto>(result));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await _uow.RollbackTransactionAsync();
                 return Result<SessionPlanMasterDto>.Failure("Ocurrió un error inesperado al procesar el plan.");

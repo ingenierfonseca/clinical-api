@@ -14,14 +14,9 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
     {
         public InvoiceRepository(ApplicationDbContext context, IMapper mapper) : base(context, mapper) { }
 
-        public async Task<bool> IsValidInvoiceAsync(int invoiceId)
-        {
-            return await _context.Invoices.AnyAsync(p => p.Id == invoiceId);
-        }
-
         public async Task<InvoiceItemInfoDto?> GetByIdDtoAsync(int id)
         {
-            return await _context.Invoices
+            return await _dbSet
                 .Where(a => a.Id == id)
                 .ProjectTo<InvoiceItemInfoDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
@@ -74,7 +69,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
 
         public async Task<List<InvoiceInfoDto>> GetInvoicesByCustomerAsync(int id)
         {
-            return await _context.Invoices
+            return await _dbSet
                 .Where(a => a.CustomerId == id)
                 .OrderByDescending(a => a.IssueDate)
                 .ProjectTo<InvoiceInfoDto>(_mapper.ConfigurationProvider)
@@ -83,7 +78,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
 
         public async Task<List<PaymentDetailDTO>> GetPaymentsByCustomer(int id)
         {
-            return await _context.Invoices
+            return await _dbSet
                 .Where(a => a.CustomerId == id)
                 .SelectMany(i => i.Payments, (invoice, payment) => new PaymentDetailDTO
                 {
@@ -94,6 +89,14 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                     Date = payment.Date
                 })
                 .ToListAsync();
+        }
+
+        public async Task<string> GetLastInvoiceNumberAsync()
+        {
+            return await _dbSet
+                .OrderByDescending(i => i.Id)
+                .Select(i => i.Number)
+                .FirstAsync()?? string.Empty;
         }
     }
 }

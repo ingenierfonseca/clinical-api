@@ -26,7 +26,7 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var items = await _treatmentService.GetAllAsync<TreatmentDto>(pageNumber, pageSize, null, null, new Expression<Func<Treatment, object>>[] { x => x.Currency });
+            var items = await _treatmentService.GetAllAsync<TreatmentDto>(pageNumber, pageSize, null, null,  x => x.Currency!);
             return Ok(items);
         }
 

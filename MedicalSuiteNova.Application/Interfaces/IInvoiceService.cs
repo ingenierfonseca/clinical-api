@@ -14,6 +14,7 @@ namespace MedicalSuiteNova.Application.Interfaces
         Task<List<InvoiceInfoDto>> GetInvoicesByCustomerAsync(int id);
         Task<List<PaymentDetailDTO>> GetPaymentsByCustomer(int id);
         Task<Result<ResponseInvoiceDto>> UpdateAsync(int id, RequestInvoiceDto dto);
+        Task<Invoice> CreateBalanceInvoicePlanAsync(string planName, int customerId, byte currencyId, decimal amount);
         Task<string> GenerateInvoiceNumberAsync();
     }
 }
