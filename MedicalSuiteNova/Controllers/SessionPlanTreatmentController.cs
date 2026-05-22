@@ -4,6 +4,7 @@ using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Dto.Update;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +50,17 @@ namespace MedicalSuiteNova.Api.Controllers
         {
             var item = await _sessionPlaService.GetByCustomer(id);
             return Ok(item);
+        }
+
+        [HttpGet("{id:int}/payments/total-paid")]
+        public async Task<IActionResult> GetTreatmentPayment(int id)
+        {
+            var result = await _sessionPlaService.GetTotalPaidAsync(id);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(result);
         }
 
         [HttpPost]

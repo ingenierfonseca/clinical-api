@@ -26,7 +26,7 @@ namespace MedicalSuiteNova.Application.Services
             var firstDayLastMonth = firstDayCurrentMonth.AddMonths(-1);
 
             var allInvoices = await _uow.Invoices.GetAllAsync();
-            int totalCountPeding = allInvoices.Where(a => a.StatusId == (int)InvoiceStatusEnum.Pendiente || a.StatusId == (int)InvoiceStatusEnum.PagoParcial).Count();
+            int totalCountPeding = allInvoices.Where(a => a.StatusId == (int)InvoiceStatusEnum.Pending || a.StatusId == (int)InvoiceStatusEnum.PartialPayment).Count();
             int totalCountPaid = allInvoices.Where(a => a.StatusId == 2).Count();
 
             dashboardList.Add(new CustomerDashboardDto
@@ -110,15 +110,15 @@ namespace MedicalSuiteNova.Application.Services
             if (invoice == null)
                 return Result<ResponseInvoiceDto>.Failure($"No existe la factura con el Id {id}.");
 
-            if (invoice.StatusId == (int)InvoiceStatusEnum.Pagada || invoice.StatusId == (int)InvoiceStatusEnum.Anulada || invoice.StatusId == (int)InvoiceStatusEnum.Reembolsada)
+            if (invoice.StatusId == (int)InvoiceStatusEnum.Paid || invoice.StatusId == (int)InvoiceStatusEnum.Cancelled || invoice.StatusId == (int)InvoiceStatusEnum.Refunded)
                 return Result<ResponseInvoiceDto>.Failure("La factura ya no se puede modificar.");
 
-            if (dto.StatusId == (int)InvoiceStatusEnum.Pagada && invoice.Payments.Count == 0)
+            if (dto.StatusId == (int)InvoiceStatusEnum.Paid && invoice.Payments.Count == 0)
             {
                 return Result<ResponseInvoiceDto>.Failure("No se pude modificar la factura al estado pagado, ya que no presenta pagos");
             }
 
-            if (dto.StatusId == (int)InvoiceStatusEnum.Pagada && (invoice.Total - invoice.Payments.Sum(p => p.Amount)) > 0)
+            if (dto.StatusId == (int)InvoiceStatusEnum.Paid && (invoice.Total - invoice.Payments.Sum(p => p.Amount)) > 0)
             {
                 return Result<ResponseInvoiceDto>.Failure("No se pude modificar la factura al estado pagado, ya que la factura tiene saldo pendiente");
             }
@@ -277,8 +277,8 @@ namespace MedicalSuiteNova.Application.Services
             };
             return await CreateBalanceInvoiceAsync(
                 customerId, 
-                currencyId, 
-                (int)InvoiceStatusEnum.Pendiente, 
+                currencyId,
+                (int)InvoiceStatusEnum.Pending, 
                 1,
                 amount, 
                 0, 

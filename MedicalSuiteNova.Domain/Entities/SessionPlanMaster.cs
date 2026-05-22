@@ -14,12 +14,18 @@ namespace MedicalSuiteNova.Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public byte CurrencyId { get; set; }
+        public byte PaymentTermId { get; set; }
+        public bool IsFinanced { get; set; }
+        public decimal DownPayment { get; set; }
         public decimal TotalEstimatedPrice { get; set; }
         public string? Comments { get; set; }
         public virtual ICollection<SessionPlanDetail>? Items { get; set; }
 
         [ForeignKey("CurrencyId")]
         public virtual Currency? Currency { get; set; }
+
+        [ForeignKey("PaymentTermId")]
+        public virtual PaymentTerm? PaymentTerm { get; set; }
 
         [ForeignKey("SessionId")]
         public virtual ClinicalSession? ClinicalSession { get; set; }

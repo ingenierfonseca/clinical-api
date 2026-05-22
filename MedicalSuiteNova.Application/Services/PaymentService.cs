@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DocumentFormat.OpenXml.Office2016.Excel;
 using MedicalSuiteNova.Application.Constants;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
@@ -30,7 +29,7 @@ namespace MedicalSuiteNova.Application.Services
                 var customer = validationBalance.Value.Customer;
                 var currentBalance = validationBalance.Value.CurrentBalance;
 
-                await SaveInvoice(invoice);
+                await SaveInvoice(invoice, request.Amount);
 
                 var payment = await CreatePaymentRecordAsync(request, invoice);
 
@@ -62,16 +61,23 @@ namespace MedicalSuiteNova.Application.Services
         private async Task<Result<PaymentValidationContext>> ValidateBalanceAsync(PaymentRequest request)
         {
             var result = await ResolveInvoiceAsync(request);
+            var invoice = result.Value;
 
             if (!result.IsSuccess)
                 return Result<PaymentValidationContext>.Failure(result.ErrorMessage);
 
-            if (result.Value.CustomerId != request.CustomerId)
+            if (invoice.CustomerId != request.CustomerId)
                 return Result<PaymentValidationContext>.Failure("La factura no pertenece al cliente especificado.");
 
             var currentBalance = await _uow.Ledger.GetLastBalanceByCustomerIdAsync(request.CustomerId);
-            if (request.Amount > currentBalance)
+
+            if (invoice.Id == 0 && request.Amount > currentBalance)
                 return Result<PaymentValidationContext>.Failure($"El monto (${request.Amount}) excede el saldo pendiente actual (${currentBalance}).");
+
+            var currentInvoiceBalance = invoice.Total - invoice.Payments.Sum(p => p.Amount);
+
+            if (result.Value.Id != 0 && request.Amount > currentInvoiceBalance)
+                return Result<PaymentValidationContext>.Failure($"El monto (${request.Amount}) excede el saldo pendiente actual de la factura (${currentInvoiceBalance}).");
 
             var customer = await _uow.Customers.FindAsync(request.CustomerId);
             if (customer == null)
@@ -89,10 +95,10 @@ namespace MedicalSuiteNova.Application.Services
         {
             return request.OperationTypeId switch
             {
-                (int)OperationTypeEnum.PagoFactura =>
+                (int)OperationTypeEnum.InvoicePayment =>
                     await ResolveExistingInvoiceAsync(request.InvoiceId),
 
-                (int)OperationTypeEnum.AbonoSaldo =>
+                (int)OperationTypeEnum.BalancePayment =>
                     Result<Invoice>.Success(await CreateBalanceInvoiceAsync(request)),
 
                 _ => Result<Invoice>.Failure("Operación no soportada")
@@ -101,7 +107,7 @@ namespace MedicalSuiteNova.Application.Services
 
         private async Task<Result<Invoice>> ResolveExistingInvoiceAsync(int invoiceId)
         {
-            var invoice = await _uow.Invoices.FindAsync(invoiceId);
+            var invoice = await _uow.Invoices.FirstOrDefaultAsync(i => i.Id == invoiceId, i => i.Payments);
 
             if (invoice == null)
                 return Result<Invoice>.Failure("Factura no encontrada.");
@@ -109,15 +115,21 @@ namespace MedicalSuiteNova.Application.Services
             return Result<Invoice>.Success(invoice);
         }
 
-        private async Task SaveInvoice(Invoice invoice)
+        private async Task SaveInvoice(Invoice invoice, decimal amount)
         {
             if (invoice.Id == 0)
             {
                 await _uow.Invoices.AddAsync(invoice);
                 await _uow.CompleteAsync();
+                return;
             }
 
-            invoice.StatusId = (int)InvoiceStatusEnum.Pagada;
+            var historicalPaidAmount = invoice.Payments.Sum(p => p.Amount);
+            if (historicalPaidAmount + amount >= invoice.Total)
+                invoice.StatusId = (int)InvoiceStatusEnum.Paid;
+            else
+                invoice.StatusId = (int)InvoiceStatusEnum.PartialPayment;
+
             await _uow.Invoices.UpdateAsync(invoice);
         }
 
@@ -134,8 +146,8 @@ namespace MedicalSuiteNova.Application.Services
                 IssueDate = DateTime.UtcNow,
                 DueDate = DateTime.UtcNow,
                 CurrencyId = request.CurrencyId,
-                StatusId = (int)InvoiceStatusEnum.Pendiente,
-                PaymentTermId = 1, // Pago inmediato
+                StatusId = (int)InvoiceStatusEnum.Pending,
+                PaymentTermId = (int)PaymentTermEnum.Cash,
                 CreatedBy = AuditConstants.CreatedBy,
                 OriginType = "ABONO",
                 Items = [
@@ -173,8 +185,8 @@ namespace MedicalSuiteNova.Application.Services
             {
                 CustomerId = customer.Id,
                 ReferenceId = invoice.Id,
-                ReferenceTable = "Invoice",
-                TransactionType = "PAYMENT",
+                ReferenceTable = LedgerConstants.TblInvoice,
+                TransactionType = LedgerConstants.PAYMENT,
                 CurrencyId = payment.CurrencyId,
                 Amount = payment.Amount,
                 BalanceAfter = currentBalance - payment.Amount,

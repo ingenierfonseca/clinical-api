@@ -259,16 +259,20 @@ CREATE TABLE [dbo].[SessionPlanMaster](
     [Id] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
     [SessionId] [bigint] NOT NULL,
     [CustomerId] [int] NOT NULL,
+    [PaymentTermId] [int] NOT NULL,
 	[Name] [nvarchar](150) NOT NULL,
     [Status] [nvarchar](20) NOT NULL DEFAULT 'En Proceso', -- 'Pendiente', 'Completado', 'Suspendido'
     [StartDate] [datetime] NOT NULL DEFAULT GETDATE(),
     [EndDate] [datetime] NULL,
     [TotalEstimatedPrice] [decimal](10, 2) NOT NULL,
     [CurrencyId] [tinyint] NOT NULL,
+    [IsFinanced] [BIT] NOT NULL,
+    [DownPayment] [DECIMAL(18, 2)] NULL,
 	[Comments] [nvarchar](300) NULL,
     CONSTRAINT [FK_SessionPlanMaster_ClinicalSession] FOREIGN KEY([SessionId]) REFERENCES [dbo].[ClinicalSession] ([Id]),
     CONSTRAINT [FK_SessionPlanMaster_Currency] FOREIGN KEY([CurrencyId]) REFERENCES [dbo].[Currency] ([Id]),
-    CONSTRAINT [FK_SessionPlanMaster_Customer] FOREIGN KEY([CustomerId]) REFERENCES [dbo].[Customer] ([Id])
+    CONSTRAINT [FK_SessionPlanMaster_Customer] FOREIGN KEY([CustomerId]) REFERENCES [dbo].[Customer] ([Id]),
+    CONSTRAINT [FK_SessionPlanMaster_PaymentTerm] FOREIGN KEY([PaymentTermId]) REFERENCES [dbo].[PaymentTerm] ([Id])
 );
 GO
 CREATE TABLE [dbo].[SessionPlanDetail](

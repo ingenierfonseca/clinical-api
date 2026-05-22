@@ -5,8 +5,7 @@ using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Services
 {
-    public class DoctorService: BaseService<Doctor>, IDoctorService
+    public class DoctorService(IUnitOfWork uow, IMapper mapper) : BaseService<Doctor>(uow, mapper, uow.Doctors), IDoctorService
     {
-        public DoctorService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper, uow.Doctors) { }
     }
 }

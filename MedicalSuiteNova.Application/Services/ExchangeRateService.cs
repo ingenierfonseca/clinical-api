@@ -6,10 +6,8 @@ using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Services
 {
-    public class ExchangeRateService:BaseService<ExchangeRate>, IExchangeRateService
+    public class ExchangeRateService(IUnitOfWork uow, IMapper mapper) : BaseService<ExchangeRate>(uow, mapper, uow.ExchangeRates), IExchangeRateService
     {
-        public ExchangeRateService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper, uow.ExchangeRates) { }
-
         public async Task<Result<ExchangeRate>> GetLatestRate(int from, int to)
         {
             var result = await _uow.ExchangeRates.FirstOrDefaultAsync(x => x.FromCurrencyId == from && x.ToCurrencyId == to && x.IsActive);

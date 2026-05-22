@@ -38,30 +38,13 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                     Age = c.Age,
                     Balance = c.Balance,
                     Currency = c.Currency!.Symbol ?? "",
-
-                    // El balance es la suma de (Total Factura - Suma de Pagos de esa factura)
-                    //Balance = c.Invoices.Any() ? c.Invoices.Sum(i => i.Total - (decimal)i.Payments.Sum(p => p.Amount)) : 0,
-                    // Agrupamos las facturas por moneda para obtener balances separados
-                    /*Balances = c.Invoices
-                    .GroupBy(i => new { i.Currency.Symbol, i.Currency.Code })
-                    .Select(g => new CurrencyBalanceDto
-                    {
-                        Symbol = g.Key.Symbol,
-                        Code = g.Key.Code,
-                        Amount = g.Sum(i => i.Total - i.Payments.Sum(p => p.Amount))
-                    }).ToList(),*/
-
-                    // Buscamos la fecha máxima de todos los pagos de todas sus facturas
                     LastPayment = c.Invoices.SelectMany(i => i.Payments).Any()
                     ? c.Invoices.SelectMany(i => i.Payments).Max(p => p.Date)
-                    : null, // El cast a nullable evita errores si no hay pagos
-
-                    // Buscamos la fecha máxima de todas las visitas
+                    : null,
                     LastVisit = c.ClinicalVisits.Max(p => p.VisitDate),
-
-                    CountPaid = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId == (int)InvoiceStatusEnum.Pagada) : 0,
-                    CountPending = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId == (int)InvoiceStatusEnum.Pendiente || i.StatusId == (int)InvoiceStatusEnum.PagoParcial) : 0,
-                    CountOverdue = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId != (int)InvoiceStatusEnum.Vencida && (i.StatusId != (int)InvoiceStatusEnum.Pagada && i.DueDate < hoy)) : 0
+                    CountPaid = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId == (int)InvoiceStatusEnum.Paid) : 0,
+                    CountPending = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId == (int)InvoiceStatusEnum.Pending || i.StatusId == (int)InvoiceStatusEnum.PartialPayment) : 0,
+                    CountOverdue = c.Invoices.Any() ? c.Invoices.Count(i => i.StatusId != (int)InvoiceStatusEnum.Overdue && (i.StatusId != (int)InvoiceStatusEnum.Paid && i.DueDate < hoy)) : 0
                 });
 
             return await GetAllAsync(pageNumber, pageSize, query);

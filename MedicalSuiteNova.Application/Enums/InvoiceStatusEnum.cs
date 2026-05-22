@@ -3,11 +3,11 @@ namespace MedicalSuiteNova.Application.Enums
 {
     public enum InvoiceStatusEnum
     {
-        Pendiente = 1,
-        Pagada = 2,
-        Vencida = 3,
-        Anulada = 4,
-        PagoParcial = 5,
-        Reembolsada = 6
+        Pending = 1,
+        Paid = 2,
+        Overdue = 3,
+        Cancelled = 4,
+        PartialPayment = 5,
+        Refunded = 6
     }
 }

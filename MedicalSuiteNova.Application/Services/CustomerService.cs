@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Wordprocessing;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Request;
@@ -47,8 +45,6 @@ namespace MedicalSuiteNova.Application.Services
             var stopwatch = Stopwatch.StartNew();
             var response = new ResponseImportResult { TotalRows = dtos.Count };
 
-            //var combinaciones = dtos.Select(x => (x.FirstName + x.LastName).ToLower()).ToList();
-            //var fullNamesExists = await _uow.Customers.GetAllAsync(p => combinaciones.Contains((p.FirstName.Trim() + p.LastName.Trim()).ToLower()));
             var dniList = dtos.Select(x => (x.DNI).ToLower()).ToList();
             var dniExists = await _uow.Customers.GetAllAsync(p => dniList.Contains(p.DNI.ToLower()));
 
@@ -158,62 +154,7 @@ namespace MedicalSuiteNova.Application.Services
 
             return response;
         }
-
-        /*public async Task<ResponseImportResult> HandleImport(Stream file)
-        {
-            await _uow.BeginTransactionAsync();
-            try
-            {
-                var patients = _excelService.Parse(file);
-                await _uow.Customers.AddRangeAsync(patients);
-
-                await _uow.CompleteAsync();
-                await _uow.CommitTransactionAsync();
-
-                return result;
-            }
-            catch
-            {
-                await _uow.RollbackTransactionAsync();
-                throw;
-            }
-        }
-
-        public async Task<ResponseImportResult> ImportPatients(Stream fileStream)
-        {
-            var results = new ResponseImportResult();
-            using var workbook = new XLWorkbook(fileStream); // Usando ClosedXML
-            var worksheet = workbook.Worksheet(1);
-            var rows = worksheet.RowsUsed().Skip(1); // Saltar encabezados
-
-            foreach (var row in rows)
-            {
-                try
-                {
-                    var dto = new PatientImportDto
-                    {
-                        FirstName = CleanString(row.Cell(1).Value.ToString()),
-                        LastName = CleanString(row.Cell(2).Value.ToString()),
-                        // ... resto de campos
-                    };
-
-                    // 1. Validar (Ej: ¿Ya existe el email?)
-                    // 2. Mapear a Entidad
-                    // 3. Guardar
-                    results.SuccessCount++;
-                }
-                catch (Exception ex)
-                {
-                    results.Errors.Add(new RowError
-                    {
-                        RowNumber = row.RowNumber(),
-                        PatientName = row.Cell(1).Value.ToString(),
-                        ErrorMessage = ex.Message
-                    });
-                }
-            }
-            return results;
-        }*/
+       
 
         public async Task<Result<string>> UploadAvatarAsync(int id, IFormFile file)
         {
