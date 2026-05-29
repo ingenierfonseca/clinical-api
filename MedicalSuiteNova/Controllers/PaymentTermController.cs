@@ -9,14 +9,9 @@ namespace MedicalSuiteNova.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class PaymentTermController : Controller
+    public class PaymentTermController(IPaymentTermService paymentTermService) : Controller
     {
-        private readonly IPaymentTermService _paymentTermService;
-
-        public PaymentTermController(IPaymentTermService paymentTermService)
-        {
-            _paymentTermService = paymentTermService;
-        }
+        private readonly IPaymentTermService _paymentTermService = paymentTermService;
 
         [HttpGet]
         public async Task<IActionResult> Get(

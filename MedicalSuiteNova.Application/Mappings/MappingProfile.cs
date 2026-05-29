@@ -17,9 +17,9 @@ namespace MedicalSuiteNova.Application.Mappings
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
 
             CreateMap<Invoice, InvoiceInfoDto>()
-                .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency.Symbol))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.InvoiceStatus.Name))
-                .ForMember(dest => dest.PaymentTerm, opt => opt.MapFrom(src => src.PaymentTerm.Name))
+                .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency!.Symbol))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.InvoiceStatus!.Name))
+                .ForMember(dest => dest.PaymentTerm, opt => opt.MapFrom(src => src.PaymentTerm!.Name))
                 .ForMember(dest => dest.Total, opt => opt.MapFrom(src =>
                     /*(src.StatusId == (int)InvoiceStatusEnum.Pendiente
                     || src.StatusId == (int)InvoiceStatusEnum.PagoParcial
@@ -39,8 +39,12 @@ namespace MedicalSuiteNova.Application.Mappings
             CreateMap<ClinicalVisits, ClinicalVisitsDto>();
             CreateMap<UpdateAppointmentTypeDto, AppointmentType>();
             CreateMap<AppointmentType, UpdateAppointmentTypeDto>();
+            CreateMap<ExchangeRateDto, ExchangeRate>();
+            CreateMap<ExchangeRate, ExchangeRateDto>();
             CreateMap<TreatmentDto, Treatment>();
             CreateMap<Treatment, TreatmentDto>();
+            CreateMap<TreatmentCategoryDto, TreatmentCategory>();
+            CreateMap<TreatmentCategory, TreatmentCategoryDto>();
             CreateMap<TreatmentPlanTemplate, TreatmentPlanTemplateDto>();
             CreateMap<TreatmentPlanTemplateItem, TreatmentPlanTemplateItemDto>();
             CreateMap<ClinicalSession, ClinicalSessionDto>();

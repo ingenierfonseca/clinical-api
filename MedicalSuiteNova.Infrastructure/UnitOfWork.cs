@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MedicalSuiteNova.Application.Interfaces;
+using MedicalSuiteNova.Domain.Entities;
 using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Infrastructure.Persistence;
 using MedicalSuiteNova.Infrastructure.Repositories;
@@ -26,6 +27,7 @@ namespace MedicalSuiteNova.Infrastructure
             ClinicalVisits = new ClinicalVisitsRepository(_context, mapper);
             Doctors = new DoctorRepository(_context, mapper);
             Treatments = new TreatmentRepository(_context, mapper);
+            TreatmentsCategory = new TreatmentCategoryRepository(_context, mapper);
             TreatmentPlanTemplates = new TreatmentPlanTemplateRepository(_context, mapper);
             TreatmentsPlanTemplateItems = new TreatmentPlanTemplateItemRepository(_context, mapper);
             SessionPlanMaster = new SessionPlanMasterRepository(_context, mapper);
@@ -47,6 +49,7 @@ namespace MedicalSuiteNova.Infrastructure
         public IClinicalVisitsRepository ClinicalVisits { get; private set; }
         public IDoctorRepository Doctors { get; private set; }
         public ITreatmentRepository Treatments { get; private set; }
+        public ITreatmentCategoryRepository TreatmentsCategory { get; private set; }
         public ITreatmentPlanTemplateRepository TreatmentPlanTemplates { get; private set; }
         public ITreatmentPlanTemplateItemRepository TreatmentsPlanTemplateItems { get; private set; }
         public IClinicalSessionRepository ClinicalSessions { get; private set; }

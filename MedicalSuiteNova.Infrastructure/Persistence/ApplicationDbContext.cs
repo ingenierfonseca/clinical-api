@@ -25,6 +25,7 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
         public DbSet<PaymentTerm> PaymentTerms => Set<PaymentTerm>();
         public DbSet<PaymentType> PaymentTypes => Set<PaymentType>();
         public DbSet<Treatment> Treatments => Set<Treatment>();
+        public DbSet<TreatmentCategory> TreatmentCategories => Set<TreatmentCategory>();
         public DbSet<TreatmentPlanTemplate> TreatmentPlanTemplates => Set<TreatmentPlanTemplate>();
         public DbSet<TreatmentPlanTemplateItem> TreatmentPlanTemplateItems => Set<TreatmentPlanTemplateItem>();
         public DbSet<ClinicalSession> ClinicalSessions => Set<ClinicalSession>();
@@ -49,6 +50,7 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
             modelBuilder.Entity<PaymentTerm>().ToTable("PaymentTerm");
             modelBuilder.Entity<PaymentType>().ToTable("PaymentType");
             modelBuilder.Entity<Treatment>().ToTable("Treatment");
+            modelBuilder.Entity<TreatmentCategory>().ToTable("TreatmentCategory");
             modelBuilder.Entity<TreatmentPlanTemplate>().ToTable("TreatmentPlanTemplate");
             modelBuilder.Entity<TreatmentPlanTemplateItem>().ToTable("TreatmentPlanTemplateItem");
             modelBuilder.Entity<ClinicalSession>().ToTable("ClinicalSession");

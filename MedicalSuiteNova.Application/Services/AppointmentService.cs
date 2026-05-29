@@ -15,7 +15,7 @@ namespace MedicalSuiteNova.Application.Services
             if (!validation.IsSuccess) return Result<AppointmentDto>.Failure(validation.ErrorMessage);
 
             var appointment = _mapper.Map<Appointment>(dto);
-            var result = await _uow.Appointments.AddAsync(appointment);
+            await _uow.Appointments.AddAsync(appointment);
             await _uow.CompleteAsync();
 
             var resultDto = _mapper.Map<AppointmentDto>(appointment);

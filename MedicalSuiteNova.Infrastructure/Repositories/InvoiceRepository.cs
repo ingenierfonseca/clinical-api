@@ -79,7 +79,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             return await _dbSet
                 .OrderByDescending(i => i.Id)
                 .Select(i => i.Number)
-                .FirstAsync()?? string.Empty;
+                .FirstOrDefaultAsync()?? string.Empty;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace MedicalSuiteNova.Application.Interfaces
         IClinicalVisitsRepository ClinicalVisits { get; }
         IDoctorRepository Doctors { get; }
         ITreatmentRepository Treatments { get; }
+        ITreatmentCategoryRepository TreatmentsCategory { get; }
         ITreatmentPlanTemplateRepository TreatmentPlanTemplates { get; }
         ITreatmentPlanTemplateItemRepository TreatmentsPlanTemplateItems { get; }
         IClinicalSessionRepository ClinicalSessions { get; }

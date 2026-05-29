@@ -1,7 +1,6 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Responses;
-using MedicalSuiteNova.Domain.Dto.Update;
 using MedicalSuiteNova.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,14 +11,9 @@ namespace MedicalSuiteNova.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/treatment-plan-template")]
-    public class TreatmentPlanTemplateController : Controller
+    public class TreatmentPlanTemplateController(ITreatmentPlanTemplateService treatmentPlanService) : Controller
     {
-        private readonly ITreatmentPlanTemplateService _treatmentPlanService;
-
-        public TreatmentPlanTemplateController(ITreatmentPlanTemplateService treatmentPlanService)
-        {
-            _treatmentPlanService = treatmentPlanService;
-        }
+        private readonly ITreatmentPlanTemplateService _treatmentPlanService = treatmentPlanService;
 
         [HttpGet]
         public async Task<ActionResult<PagedResponse<TreatmentPlanTemplateDto>>> Get(
@@ -57,7 +51,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Put(int id, UpdateTreatmentDto p)
+        public async Task<IActionResult> Put(int id, TreatmentPlanTemplateDto p)
         {
             var result = await _treatmentPlanService.UpdateAsync(id, p);
             return Ok(result);

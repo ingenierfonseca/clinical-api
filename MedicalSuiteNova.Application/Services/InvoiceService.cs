@@ -76,7 +76,7 @@ namespace MedicalSuiteNova.Application.Services
                 if (!detailsResult.IsSuccess) 
                     return Result<ResponseInvoiceDto>.Failure(detailsResult.ErrorMessage);
 
-                var invoice = await CreateBalanceInvoiceAsync(dto.CustomerId, dto.CurrencyId,
+                var invoice = await CreateBalanceInvoiceAsync(null, dto.CustomerId, dto.CurrencyId,
                     dto.StatusId,  dto.PaymentTermId, detailsResult.Value.SubTotal,
                     detailsResult.Value.Tax, dto.IssueDate, dueDate, "FAC", detailsResult.Value.Items);
 
@@ -261,7 +261,7 @@ namespace MedicalSuiteNova.Application.Services
             return Result<(List<InvoiceItem>, decimal, decimal)>.Success((processedItems, subTotal, taxTotal));
         }
 
-        public async Task<Invoice> CreateBalanceInvoicePlanAsync(string planName, int customerId, byte currencyId, decimal amount)
+        public async Task<Invoice> CreateBalanceInvoicePlanAsync(long id, string planName, int customerId, byte currencyId, decimal amount)
         {
             var items = new List<InvoiceItem>
             {
@@ -276,6 +276,7 @@ namespace MedicalSuiteNova.Application.Services
                 }
             };
             return await CreateBalanceInvoiceAsync(
+                id,
                 customerId, 
                 currencyId,
                 (int)InvoiceStatusEnum.Pending, 
@@ -290,6 +291,7 @@ namespace MedicalSuiteNova.Application.Services
         }
 
         private async Task<Invoice> CreateBalanceInvoiceAsync(
+            long? id,
             int customerId, 
             byte currencyId, 
             byte statusId, 
@@ -318,6 +320,7 @@ namespace MedicalSuiteNova.Application.Services
                 CreatedBy = AuditConstants.CreatedBy,
                 CreatedAt = DateTime.UtcNow,
                 OriginType = originType,
+                SessionPlanMasterId = id,
                 Items = [.. items]
             };
         }

@@ -3,6 +3,7 @@ using AutoMapper;
 using MedicalSuiteNova.Domain.Entities;
 using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
@@ -15,6 +16,23 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                 orderBy: r => r.RateDate,
                 selector: r => r.Rate
             );
+        }
+
+        public async Task InactivateActiveRatesAsync(int fromCurrencyId, int toCurrencyId)
+        {
+            var rates = await _dbSet
+                .Where(e =>
+                    e.FromCurrencyId == fromCurrencyId &&
+                    e.ToCurrencyId == toCurrencyId &&
+                    e.IsActive)
+                .ToListAsync();
+
+            foreach (var rate in rates)
+            {
+                rate.IsActive = false;
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

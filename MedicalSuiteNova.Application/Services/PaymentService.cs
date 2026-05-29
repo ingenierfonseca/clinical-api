@@ -52,7 +52,7 @@ namespace MedicalSuiteNova.Application.Services
 
         private async Task<Result<string>> ValidateAsync(PaymentRequest request)
         {
-            if (!await _uow.PaymentTypes.IsValidPaymentTypeAsync(request.PaymentTypeId))
+            if (!await _uow.PaymentTypes.ExistsAsync(request.PaymentTypeId))
                 return Result<string>.Failure("El tipo de pago no es válido.");
 
             return Result<string>.Success("");

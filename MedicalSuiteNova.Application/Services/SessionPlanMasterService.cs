@@ -32,6 +32,7 @@ namespace MedicalSuiteNova.Application.Services
                 await _uow.CompleteAsync();
 
                 var invoice = await invoiceService.CreateBalanceInvoicePlanAsync(
+                    result.Id,
                     session.Name, 
                     clinicalSession.CustomerId,
                     session.CurrencyId,
@@ -200,13 +201,13 @@ namespace MedicalSuiteNova.Application.Services
 
         public async Task<Result<decimal>> GetTotalPaidAsync(int id)
         {
-            if (await _uow.SessionPlanMaster.ExistsAsync(id))
+            if (!await _uow.SessionPlanMaster.ExistsAsync(id))
                 return Result<decimal>.Failure("El Id no es válido.");
 
             var invoice = await _uow.Invoices.FirstOrDefaultAsync(i => i.SessionPlanMasterId == id, i => i.Payments!);
             
             if (invoice == null)
-                return Result<decimal>.Failure("El Id no es válido.");
+                return Result<decimal>.Failure("No se encontró factura para el plan.");
 
             return Result<decimal>.Success(invoice.Payments.Sum(p => p.Amount));
         }

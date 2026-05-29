@@ -1,11 +1,12 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using MedicalSuiteNova.Domain.Entities;
 using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Infrastructure.Persistence;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
-    public class PaymentTypeRepository(ApplicationDbContext context, IMapper mapper) : BaseRepository<PaymentType>(context, mapper), IPaymentTypeRepository
+    public class TreatmentCategoryRepository(ApplicationDbContext context, IMapper mapper) : BaseRepository<TreatmentCategory>(context, mapper), ITreatmentCategoryRepository
     {
     }
 }

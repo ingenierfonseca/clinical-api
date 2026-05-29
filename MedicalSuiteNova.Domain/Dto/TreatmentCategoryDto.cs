@@ -1,11 +1,11 @@
 ﻿
 namespace MedicalSuiteNova.Domain.Dto
 {
-    public class AppointmentTypeDto
+    public class TreatmentCategoryDto
     {
         public byte Id { get; set; }
         public required string Name { get; set; }
-        public string? Description { get; set; }
-        public int DurationMinutes { get; set; }
+        public required string Description { get; set; }
+        public bool IsActive { get; set; }
     }
 }

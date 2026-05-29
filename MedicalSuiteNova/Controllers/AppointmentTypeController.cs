@@ -43,7 +43,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Put(int id, UpdateAppointmentTypeDto p)
+        public async Task<IActionResult> Put(int id, AppointmentTypeDto p)
         {
             var result = await _appointmentTypeService.UpdateAsync(id, p);
             return Ok(result);

@@ -6,10 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
-    public class InvoiceDetailRepository: BaseRepository<InvoiceItem>, IInvoiceDetailRepository
+    public class InvoiceDetailRepository(ApplicationDbContext context, IMapper mapper) : BaseRepository<InvoiceItem>(context, mapper), IInvoiceDetailRepository
     {
-        public InvoiceDetailRepository(ApplicationDbContext context, IMapper mapper) : base(context, mapper) { }
-
         public async Task DeleteByInvoiceIdAsync(int invoiceId)
         {
             var items = await _context.InvoiceDetails

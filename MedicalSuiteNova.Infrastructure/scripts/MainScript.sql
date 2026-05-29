@@ -1,7 +1,18 @@
 ﻿/*USE master
-DROP DATABASE ClinicalSuiteNovaDB
+DROP DATABASE IF EXISTS ClinicalSuiteNovaDB;
 CREATE DATABASE ClinicalSuiteNovaDB
 USE ClinicalSuiteNovaDB
+CREATE TABLE Currency (
+    Id TINYINT PRIMARY KEY,
+    Name varchar(50) NOT NULL,
+	Code varchar(5) NOT NULL,
+	Symbol varchar(3) not null
+);
+GO
+INSERT INTO Currency (Id, Code, Symbol, Name) VALUES 
+(1, 'NIO', 'C$', 'Córdoba Nicaragüense' ),
+(2, 'USD', '$', 'Dólar');
+GO
 CREATE TABLE [dbo].[Customer](
 	[Id] [int] identity(1,1) primary key,
     [DNI] NVARCHAR(20) NOT NULL,
@@ -74,17 +85,6 @@ INSERT INTO InvoiceStatus (Id, Name) VALUES
 (5, 'Pago Parcial'),
 (6, 'Reembolsada');
 GO
-CREATE TABLE Currency (
-    Id TINYINT PRIMARY KEY,
-    Name varchar(50) NOT NULL,
-	Code varchar(5) NOT NULL,
-	Symbol varchar(3) not null
-);
-GO
-INSERT INTO Currency (Id, Code, Symbol, Name) VALUES 
-(1, 'NIO', 'C$', 'Córdoba Nicaragüense' ),
-(2, 'USD', '$', 'Dólar');
-GO
 CREATE TABLE PaymentTerm (
     Id TINYINT PRIMARY KEY,
     Name varchar(50) NOT NULL,
@@ -145,7 +145,7 @@ CREATE TABLE [dbo].[CustomerAccountLedger] (
 -- Índice para consultas rápidas de estado de cuenta por paciente
 CREATE INDEX [IX_Ledger_Customer_Date] ON [dbo].[CustomerAccountLedger] ([CustomerId], [CreatedAt] DESC);
 GO
-CREATE TABLE Treatment (
+CREATE TABLE [dbo].[Treatment] (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Name NVARCHAR(150) NOT NULL,
     Description NVARCHAR(500) NULL,
@@ -156,8 +156,11 @@ CREATE TABLE Treatment (
     CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
     UpdatedAt DATETIME NULL,
 	CONSTRAINT FK_Treatment_Currency
-		FOREIGN KEY (CurrencyId) REFERENCES Currency(Id);
+		FOREIGN KEY (CurrencyId) REFERENCES Currency(Id)
 );
+GO
+INSERT INTO [dbo].[Treatment] ([Name], [Description], [CurrencyId], [Price], [DurationMinutes], [IsActive])
+VALUES ('Ortodoncia', 'Tratamiento de correccion dental', 2, 2500, 180, 1)
 GO
 CREATE TABLE [dbo].[TreatmentCategory] (
     [Id] [tinyint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -198,31 +201,31 @@ CREATE TABLE [dbo].[TreatmentPlanTemplate](
 );
 GO
 INSERT INTO [dbo].[TreatmentPlanTemplate] 
-([Title], [Description], [CategoryId], [Complexity], [EstimatedDurationMonths], [BasePrice], [Version], [IsActive], [CreatedAt], [CreatedBy])
+([Title], [Description], [CategoryId], [Complexity], [CurrencyId], [EstimatedDurationMonths], [BasePrice], [Version], [IsActive], [CreatedAt], [CreatedBy])
 VALUES
 -- 1. Ortodoncia
-('Ortodoncia Metálica Convencional', 'Tratamiento correctivo completo con brackets metálicos de acero inoxidable.', 1, 'Alta', 24, 2500.00, 1, 1, GETDATE(), 1),
-('Ortodoncia Estética (Zafiro)', 'Corrección dental mediante brackets transparentes de alta estética.', 1, 'Alta', 18, 3200.00, 1, 1, GETDATE(), 1),
+('Ortodoncia Metálica Convencional', 'Tratamiento correctivo completo con brackets metálicos de acero inoxidable.', 1, 'Alta', 2, 24, 2500.00, 1, 1, GETDATE(), 1),
+('Ortodoncia Estética (Zafiro)', 'Corrección dental mediante brackets transparentes de alta estética.', 1, 'Alta', 2, 18, 3200.00, 1, 1, GETDATE(), 1),
 
 -- 2. Implantología
-('Rehabilitación sobre Implante Dental', 'Fase quirúrgica y protésica para la sustitución de una pieza dental.', 2, 'Media', 6, 1200.00, 1, 1, GETDATE(), 1),
+('Rehabilitación sobre Implante Dental', 'Fase quirúrgica y protésica para la sustitución de una pieza dental.', 2, 'Media', 2, 6, 1200.00, 1, 1, GETDATE(), 1),
 
 -- 3. Estética Dental
-('Diseño de Sonrisa (Carillas Porcelana)', 'Transformación estética mediante carillas de porcelana E-Max (6-8 piezas).', 3, 'Alta', 2, 4500.00, 1, 1, GETDATE(), 1),
-('Blanqueamiento Dental Combinado', 'Sesión clínica de luz LED más kit de refuerzo ambulatorio en casa.', 3, 'Baja', 1, 350.00, 1, 1, GETDATE(), 1),
+('Diseño de Sonrisa (Carillas Porcelana)', 'Transformación estética mediante carillas de porcelana E-Max (6-8 piezas).', 3, 'Alta', 2, 2, 4500.00, 1, 1, GETDATE(), 1),
+('Blanqueamiento Dental Combinado', 'Sesión clínica de luz LED más kit de refuerzo ambulatorio en casa.', 3, 'Baja', 2, 1, 350.00, 1, 1, GETDATE(), 1),
 
 -- 4. Odontología General / Preventiva
-('Saneamiento Básico y Prevención', 'Limpieza profunda (Scalling), aplicación de flúor y sellantes.', 4, 'Baja', 1, 120.00, 1, 1, GETDATE(), 1),
-('Restauración Estética Completa', 'Remoción de amalgamas antiguas y sustitución por resinas compuestas.', 4, 'Baja', 1, 200.00, 1, 1, GETDATE(), 1),
+('Saneamiento Básico y Prevención', 'Limpieza profunda (Scalling), aplicación de flúor y sellantes.', 4, 'Baja', 2, 1, 120.00, 1, 1, GETDATE(), 1),
+('Restauración Estética Completa', 'Remoción de amalgamas antiguas y sustitución por resinas compuestas.', 4, 'Baja', 2, 1, 200.00, 1, 1, GETDATE(), 1),
 
 -- 5. Endodoncia
-('Tratamiento de Conducto (Molar)', 'Terapia endodóntica multirradicular para salvar la pieza dental.', 5, 'Media', 1, 250.00, 1, 1, GETDATE(), 1),
+('Tratamiento de Conducto (Molar)', 'Terapia endodóntica multirradicular para salvar la pieza dental.', 5, 'Media', 2, 1, 250.00, 1, 1, GETDATE(), 1),
 
 -- 6. Rehabilitación Oral
-('Prótesis Total Removible (Superior/Inferior)', 'Confección de dentadura completa para paciente edéntulo.', 6, 'Media', 3, 800.00, 1, 1, GETDATE(), 1),
+('Prótesis Total Removible (Superior/Inferior)', 'Confección de dentadura completa para paciente edéntulo.', 6, 'Media', 2, 3, 800.00, 1, 1, GETDATE(), 1),
 
 -- 7. Cirugía
-('Cirugía de Terceros Molares (Cordales)', 'Extracción quirúrgica de 4 muelas del juicio bajo anestesia local.', 7, 'Media', 1, 600.00, 1, 1, GETDATE(), 1);
+('Cirugía de Terceros Molares (Cordales)', 'Extracción quirúrgica de 4 muelas del juicio bajo anestesia local.', 7, 'Media', 2, 1, 600.00, 1, 1, GETDATE(), 1);
 GO
 CREATE TABLE [dbo].[TreatmentPlanTemplateItem](
     [Id] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -237,12 +240,12 @@ CREATE TABLE [dbo].[TreatmentPlanTemplateItem](
 GO
 INSERT INTO [dbo].[TreatmentPlanTemplateItem] ([TemplateId], [TreatmentId], [Name], [Order])
 VALUES 
-(1, 11, 'Diagnóstico y planificación', 1), -- 11 sería el ID de 'Ortodoncia'
-(1, 11, 'Colocación de aparatología', 2),  -- 11 sería el ID de 'Ortodoncia'
-(1, 11, 'Alineación y nivelación', 3),     -- 11 sería el ID de 'Ortodoncia'
-(1, 11, 'Cierre de espacios', 4),          -- 11 sería el ID de 'Ortodoncia'
-(1, 11, 'Detalle y acabado', 5),           -- 11 sería el ID de 'Ortodoncia'
-(1, 11, 'Retención', 6);                   -- 11 sería el ID de 'Ortodoncia'
+(1, 1, 'Diagnóstico y planificación', 1), -- 1 sería el ID de 'Ortodoncia'
+(1, 1, 'Colocación de aparatología', 2),  -- 1 sería el ID de 'Ortodoncia'
+(1, 1, 'Alineación y nivelación', 3),     -- 1 sería el ID de 'Ortodoncia'
+(1, 1, 'Cierre de espacios', 4),          -- 1 sería el ID de 'Ortodoncia'
+(1, 1, 'Detalle y acabado', 5),           -- 1 sería el ID de 'Ortodoncia'
+(1, 1, 'Retención', 6);                   -- 1 sería el ID de 'Ortodoncia'
 GO
 CREATE TABLE [dbo].[ClinicalSession] (
     [Id] [bigint] IDENTITY(1,1) PRIMARY KEY,
@@ -259,7 +262,7 @@ CREATE TABLE [dbo].[SessionPlanMaster](
     [Id] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
     [SessionId] [bigint] NOT NULL,
     [CustomerId] [int] NOT NULL,
-    [PaymentTermId] [int] NOT NULL,
+    [PaymentTermId] [tinyint] NOT NULL,
 	[Name] [nvarchar](150) NOT NULL,
     [Status] [nvarchar](20) NOT NULL DEFAULT 'En Proceso', -- 'Pendiente', 'Completado', 'Suspendido'
     [StartDate] [datetime] NOT NULL DEFAULT GETDATE(),
@@ -267,7 +270,7 @@ CREATE TABLE [dbo].[SessionPlanMaster](
     [TotalEstimatedPrice] [decimal](10, 2) NOT NULL,
     [CurrencyId] [tinyint] NOT NULL,
     [IsFinanced] [BIT] NOT NULL,
-    [DownPayment] [DECIMAL(18, 2)] NULL,
+    [DownPayment] [DECIMAL](18,2) NULL,
 	[Comments] [nvarchar](300) NULL,
     CONSTRAINT [FK_SessionPlanMaster_ClinicalSession] FOREIGN KEY([SessionId]) REFERENCES [dbo].[ClinicalSession] ([Id]),
     CONSTRAINT [FK_SessionPlanMaster_Currency] FOREIGN KEY([CurrencyId]) REFERENCES [dbo].[Currency] ([Id]),
