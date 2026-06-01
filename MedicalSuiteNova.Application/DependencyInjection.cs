@@ -45,6 +45,9 @@ namespace MedicalSuiteNova.Application
             services.AddScoped<IPaymentTermService, PaymentTermService>();
             services.AddScoped<IExchangeRateService, ExchangeRateService>();
             services.AddScoped<ICurrencyService, CurrencyService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IPermissionService, PermissionService>();
 
             return services;
         }

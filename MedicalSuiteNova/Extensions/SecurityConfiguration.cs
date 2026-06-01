@@ -37,12 +37,17 @@ namespace MedicalSuiteNova.Api.Extensions
                 {
                     OnAuthenticationFailed = context =>
                     {
-                        Console.WriteLine($"--- Falló Autenticación: {context.Exception.Message} ---");
+                        var logger = context.HttpContext.RequestServices
+                            .GetRequiredService<ILogger<JwtBearerEvents>>();
+                        logger.LogWarning(context.Exception, "Falló autenticación JWT");
                         return Task.CompletedTask;
                     },
                     OnTokenValidated = context =>
                     {
-                        Console.WriteLine("--- Token validado con éxito ---");
+                        var logger = context.HttpContext.RequestServices
+                            .GetRequiredService<ILogger<JwtBearerEvents>>();
+                        logger.LogInformation("Token JWT validado exitosamente para {Username}",
+                            context.Principal?.Identity?.Name);
                         return Task.CompletedTask;
                     }
                 };

@@ -1,4 +1,4 @@
-﻿/*USE master
+﻿USE master
 DROP DATABASE IF EXISTS ClinicalSuiteNovaDB;
 CREATE DATABASE ClinicalSuiteNovaDB
 USE ClinicalSuiteNovaDB
@@ -379,4 +379,86 @@ INSERT INTO ExchangeRates (FromCurrencyId, ToCurrencyId, Rate, RateDate, IsActiv
 VALUES (2, 1, 36.550000, GETDATE(), 1, 'Manual/Banco Central');
 INSERT INTO ExchangeRates (FromCurrencyId, ToCurrencyId, Rate, RateDate, IsActive, Source)
 VALUES (1, 2, 0.027360, GETDATE(), 1, 'Manual/Banco Central');
-*/
+GO
+CREATE TABLE [dbo].[Role](
+    [Id] INT IDENTITY(1,1) PRIMARY KEY,
+    [Name] NVARCHAR(50) NOT NULL,
+    [Description] NVARCHAR(250) NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1,
+    CONSTRAINT UQ_Role_Name UNIQUE ([Name])
+);
+GO
+INSERT INTO [dbo].[Role] ([Name], [Description]) VALUES
+('Admin', 'Administrador del sistema con acceso total'),
+('Doctor', 'Médico o especialista de la clínica'),
+('Staff', 'Personal de recepción y atención al paciente');
+GO
+CREATE TABLE [dbo].[User](
+    [Id] INT IDENTITY(1,1) PRIMARY KEY,
+    [Username] NVARCHAR(50) NOT NULL,
+    [Email] NVARCHAR(100) NOT NULL,
+    [PasswordHash] NVARCHAR(500) NOT NULL,
+    [IsActive] BIT NOT NULL DEFAULT 1,
+    [RefreshToken] NVARCHAR(500) NULL,
+    [RefreshTokenExpiry] DATETIME NULL,
+    [DoctorId] INT NULL,
+    [CustomerId] INT NULL,
+    [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT UQ_User_Username UNIQUE ([Username]),
+    CONSTRAINT UQ_User_Email UNIQUE ([Email]),
+    CONSTRAINT FK_User_Doctor FOREIGN KEY ([DoctorId]) REFERENCES [dbo].[Doctor]([Id]),
+    CONSTRAINT FK_User_Customer FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customer]([Id])
+);
+GO
+CREATE TABLE [dbo].[Permission](
+    [Id] INT IDENTITY(1,1) PRIMARY KEY,
+    [Name] NVARCHAR(100) NOT NULL,
+    [Description] NVARCHAR(250) NULL,
+    [Module] NVARCHAR(50) NOT NULL,
+    CONSTRAINT UQ_Permission_Name UNIQUE ([Name])
+);
+GO
+INSERT INTO [dbo].[Permission] ([Name], [Description], [Module]) VALUES
+('appointments.create', 'Crear citas', 'Citas'),
+('appointments.read', 'Ver citas', 'Citas'),
+('appointments.update', 'Actualizar citas', 'Citas'),
+('patients.create', 'Crear pacientes', 'Pacientes'),
+('patients.read', 'Ver pacientes', 'Pacientes'),
+('patients.update', 'Actualizar pacientes', 'Pacientes'),
+('clinical.create', 'Crear expediente clínico', 'Expediente Clínico'),
+('clinical.read', 'Ver expediente clínico', 'Expediente Clínico'),
+('billing.create', 'Crear facturas', 'Facturación'),
+('billing.read', 'Ver facturas', 'Facturación'),
+('billing.pay', 'Registrar pagos', 'Facturación'),
+('reports.read', 'Ver reportes', 'Reportes'),
+('users.manage', 'Gestionar usuarios', 'Usuarios'),
+('settings.read', 'Ver configuración', 'Configuración'),
+('settings.update', 'Actualizar configuración', 'Configuración');
+GO
+CREATE TABLE [dbo].[UserRole](
+    [UserId] INT NOT NULL,
+    [RoleId] INT NOT NULL,
+    CONSTRAINT PK_UserRole PRIMARY KEY ([UserId], [RoleId]),
+    CONSTRAINT FK_UserRole_User FOREIGN KEY ([UserId]) REFERENCES [dbo].[User]([Id]),
+    CONSTRAINT FK_UserRole_Role FOREIGN KEY ([RoleId]) REFERENCES [dbo].[Role]([Id])
+);
+GO
+CREATE TABLE [dbo].[RolePermission](
+    [RoleId] INT NOT NULL,
+    [PermissionId] INT NOT NULL,
+    CONSTRAINT PK_RolePermission PRIMARY KEY ([RoleId], [PermissionId]),
+    CONSTRAINT FK_RolePermission_Role FOREIGN KEY ([RoleId]) REFERENCES [dbo].[Role]([Id]),
+    CONSTRAINT FK_RolePermission_Permission FOREIGN KEY ([PermissionId]) REFERENCES [dbo].[Permission]([Id])
+);
+GO
+INSERT INTO [dbo].[RolePermission] ([RoleId], [PermissionId])
+SELECT 1, Id FROM [dbo].[Permission];
+GO
+INSERT INTO [dbo].[User] ([Username], [Email], [PasswordHash], [IsActive], [CustomerId], [DoctorId])
+VALUES ('admin', 'admin@clinica.com', '$2a$11$igebiSXTamBKbT//NOd5Z.sNDTSP0aduEV1fm2sKZnY8VWlQkm2j6', 1, NULL, NULL);
+GO
+INSERT INTO [dbo].[UserRole] ([UserId], [RoleId])
+VALUES (1, 1);
+GO
+ALTER TABLE [dbo].[User] DROP CONSTRAINT IF EXISTS [FK_User_Role];
+GO

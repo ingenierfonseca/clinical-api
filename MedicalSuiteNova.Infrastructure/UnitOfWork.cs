@@ -36,6 +36,9 @@ namespace MedicalSuiteNova.Infrastructure
             ExchangeRates = new ExchangeRateRepository(_context, mapper);
             Currencies = new CurrencyRepository(_context, mapper);
             PaymentTerms = new PaymentTermRepository(_context, mapper);
+            Users = new UserRepository(_context, mapper);
+            Roles = new RoleRepository(_context, mapper);
+            Permissions = new PermissionRepository(_context, mapper);
         }
 
         public IPaymentRepository Payments { get; private set; }
@@ -58,6 +61,9 @@ namespace MedicalSuiteNova.Infrastructure
         public IExchangeRateRepository ExchangeRates { get; private set; }
         public ICurrencyRepository Currencies { get; private set; }
         public IPaymentTermRepository PaymentTerms { get; private set; }
+        public IUserRepository Users { get; private set; }
+        public IRoleRepository Roles { get; private set; }
+        public IPermissionRepository Permissions { get; private set; }
 
         public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
 

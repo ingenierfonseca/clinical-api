@@ -1,4 +1,5 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
+using MedicalSuiteNova.Domain.Entities;
 using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Infrastructure.Persistence;
 using MedicalSuiteNova.Infrastructure.Repositories;
@@ -40,6 +41,9 @@ namespace MedicalSuiteNova.Infrastructure
             services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<IPaymentTermRepository, PaymentTermRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

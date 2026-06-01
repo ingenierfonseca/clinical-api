@@ -25,6 +25,9 @@ namespace MedicalSuiteNova.Application.Interfaces
         IExchangeRateRepository ExchangeRates { get; }
         ICurrencyRepository Currencies { get; }
         IPaymentTermRepository PaymentTerms { get; }
+        IUserRepository Users { get; }
+        IRoleRepository Roles { get; }
+        IPermissionRepository Permissions { get; }
 
         Task<int> CompleteAsync();
         Task BeginTransactionAsync();

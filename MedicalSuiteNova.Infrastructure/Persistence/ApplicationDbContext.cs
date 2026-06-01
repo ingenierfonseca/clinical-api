@@ -32,6 +32,11 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
         public DbSet<SessionPlanMaster> SessionPlanMasters => Set<SessionPlanMaster>();
         public DbSet<SessionPlanDetail> SessionPlanDetails => Set<SessionPlanDetail>();
         public DbSet<ExchangeRate> ExchangeRates => Set<ExchangeRate>();
+        public DbSet<Role> Roles => Set<Role>();
+        public DbSet<User> Users => Set<User>();
+        public DbSet<Permission> Permissions => Set<Permission>();
+        public DbSet<UserRole> UserRoles => Set<UserRole>();
+        public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +62,11 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
             modelBuilder.Entity<SessionPlanMaster>().ToTable("SessionPlanMaster");
             modelBuilder.Entity<SessionPlanDetail>().ToTable("SessionPlanDetail");
             modelBuilder.Entity<ExchangeRate>().ToTable("ExchangeRates");
+            modelBuilder.Entity<Role>().ToTable("Role");
+            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<Permission>().ToTable("Permission");
+            modelBuilder.Entity<UserRole>().ToTable("UserRole").HasKey(ur => new { ur.UserId, ur.RoleId });
+            modelBuilder.Entity<RolePermission>().ToTable("RolePermission").HasKey(rp => new { rp.RoleId, rp.PermissionId });
             base.OnModelCreating(modelBuilder);
         }
     }
