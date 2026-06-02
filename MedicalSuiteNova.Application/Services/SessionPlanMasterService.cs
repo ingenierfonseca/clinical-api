@@ -76,7 +76,7 @@ namespace MedicalSuiteNova.Application.Services
                 await _uow.CommitTransactionAsync();
                 return Result<SessionPlanMasterDto>.Success(_mapper.Map<SessionPlanMasterDto>(result));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await _uow.RollbackTransactionAsync();
                 return Result<SessionPlanMasterDto>.Failure("Ocurrió un error inesperado al procesar el plan.");
@@ -114,7 +114,7 @@ namespace MedicalSuiteNova.Application.Services
             });
         }
 
-        private SessionPlanMaster CreateSessionPlan(RequestSessionPlanMaster request, int customerId, List<TreatmentPlanTemplate> templates)
+        private static SessionPlanMaster CreateSessionPlan(RequestSessionPlanMaster request, int customerId, List<TreatmentPlanTemplate> templates)
         {
             SessionPlanMaster session = new()
             {

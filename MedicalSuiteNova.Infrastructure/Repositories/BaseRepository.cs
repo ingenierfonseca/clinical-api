@@ -8,22 +8,23 @@ using System.Linq.Expressions;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T>(ApplicationDbContext context, IMapper mapper) : IBaseRepository<T> where T : class
     {
-        protected readonly ApplicationDbContext _context;
-        protected readonly IMapper _mapper;
-        protected readonly DbSet<T> _dbSet;
-
-        public BaseRepository(ApplicationDbContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-            _dbSet = context.Set<T>();
-        }
+        protected readonly ApplicationDbContext _context = context;
+        protected readonly IMapper _mapper = mapper;
+        protected readonly DbSet<T> _dbSet = context.Set<T>();
 
         public async Task<List<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
+        }
+
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
+        {
+            IQueryable<T> query = _dbSet;
+            if (predicate != null) query = query.Where(predicate);
+
+            return await query.ToListAsync();
         }
 
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
@@ -33,14 +34,6 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             if (includes != null)
                 foreach (var include in includes) query = query.Include(include);
 
-            if (predicate != null) query = query.Where(predicate);
-
-            return await query.ToListAsync();
-        }
-
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
-        {
-            IQueryable<T> query = _dbSet;
             if (predicate != null) query = query.Where(predicate);
 
             return await query.ToListAsync();

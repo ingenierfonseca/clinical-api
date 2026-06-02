@@ -4,13 +4,8 @@ using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Services
 {
-    public class RoleService : BaseService<Role>, IRoleService
+    public class RoleService(IUnitOfWork uow, IMapper mapper) : BaseService<Role>(uow, mapper, uow.Roles), IRoleService
     {
-        public RoleService(IUnitOfWork uow, IMapper mapper)
-            : base(uow, mapper, uow.Roles)
-        {
-        }
-
         public async Task AssignRolesToUserAsync(int userId, List<int> roleIds)
         {
             var user = await _uow.Users.FindAsync(userId);

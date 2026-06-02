@@ -11,14 +11,12 @@ namespace MedicalSuiteNova.Domain.Entities
         public bool IsActive { get; set; } = true;
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiry { get; set; }
-        public int? DoctorId { get; set; }
-        public int? CustomerId { get; set; }
+        public int? StaffId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public virtual Doctor? Doctor { get; set; }
-        public virtual Customer? Customer { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-
+        public virtual Staff? Staff { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; } = [];
+        
         public object GetId() => Id;
     }
 }

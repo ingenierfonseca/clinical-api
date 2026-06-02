@@ -8,7 +8,6 @@ namespace MedicalSuiteNova.Application.Interfaces
         Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request);
         Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenRequestDto request);
         Task<UserInfoDto> GetCurrentUserAsync(string username);
-        Task<LinkUserResultDto> LinkDoctorAsync(int userId, int doctorId);
-        Task<LinkUserResultDto> LinkCustomerAsync(int userId, int customerId);
+        Task<LinkUserResultDto> LinkStaffAsync(int userId, int staffId);
     }
 }

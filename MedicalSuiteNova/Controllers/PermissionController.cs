@@ -1,3 +1,4 @@
+using MedicalSuiteNova.Api.Constants;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto.Permission;
 using Microsoft.AspNetCore.Authorization;
@@ -5,14 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalSuiteNova.Api.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = AppRole.SuperAdmin)]
     [ApiController]
     [Route("api/[controller]")]
-    public class PermissionController : ControllerBase
+    public class PermissionController(IPermissionService permissionService) : ControllerBase
     {
-        private readonly IPermissionService _permissionService;
-
-        public PermissionController(IPermissionService permissionService) => _permissionService = permissionService;
+        private readonly IPermissionService _permissionService = permissionService;
 
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)

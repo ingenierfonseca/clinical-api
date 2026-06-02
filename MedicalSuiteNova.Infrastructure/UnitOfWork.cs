@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Entities;
 using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Infrastructure.Persistence;
 using MedicalSuiteNova.Infrastructure.Repositories;
@@ -39,6 +38,9 @@ namespace MedicalSuiteNova.Infrastructure
             Users = new UserRepository(_context, mapper);
             Roles = new RoleRepository(_context, mapper);
             Permissions = new PermissionRepository(_context, mapper);
+            Staff = new StaffRepository(_context, mapper);
+            StaffTypes = new StaffTypeRepository(_context, mapper);
+            RolePermissions = new RolePermissionRepository(_context, mapper);
         }
 
         public IPaymentRepository Payments { get; private set; }
@@ -64,6 +66,9 @@ namespace MedicalSuiteNova.Infrastructure
         public IUserRepository Users { get; private set; }
         public IRoleRepository Roles { get; private set; }
         public IPermissionRepository Permissions { get; private set; }
+        public IStaffRepository Staff { get; private set; }
+        public IStaffTypeRepository StaffTypes { get; private set; }
+        public IRolePermissionRepository RolePermissions { get; private set; }
 
         public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
 

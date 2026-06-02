@@ -1,3 +1,4 @@
+using MedicalSuiteNova.Api.Constants;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto.Role;
 using Microsoft.AspNetCore.Authorization;
@@ -5,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalSuiteNova.Api.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = AppRole.SuperAdmin)]
     [ApiController]
     [Route("api/[controller]")]
     public class RoleController(IRoleService roleService) : ControllerBase

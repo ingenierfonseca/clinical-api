@@ -9,7 +9,9 @@ namespace MedicalSuiteNova.Domain.Dto.Auth
         public List<string> Roles { get; set; } = new();
         public List<string> Permissions { get; set; } = new();
         public int UserId { get; set; }
-        public int? DoctorId { get; set; }
-        public int? CustomerId { get; set; }
+        public int? StaffId { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? StaffTypeName { get; set; }
     }
 }

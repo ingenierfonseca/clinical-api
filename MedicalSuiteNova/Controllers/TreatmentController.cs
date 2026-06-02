@@ -1,27 +1,22 @@
-﻿using MedicalSuiteNova.Application.Interfaces;
+﻿using MedicalSuiteNova.Api.Constants;
+using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Dto.Update;
-using MedicalSuiteNova.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
 
 namespace MedicalSuiteNova.Api.Controllers
 {
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class TreatmentController : Controller
+    public class TreatmentController(ITreatmentService treatmentService) : Controller
     {
-        private readonly ITreatmentService _treatmentService;
-
-        public TreatmentController(ITreatmentService treatmentService)
-        {
-            _treatmentService = treatmentService;
-        }
+        private readonly ITreatmentService _treatmentService = treatmentService;
 
         [HttpGet]
+        [Authorize(Policy = AppPolicies.CanViewTreatments)]
         public async Task<ActionResult<PagedResponse<TreatmentDto>>> Get(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
@@ -31,6 +26,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpGet("active")]
+        [Authorize(Policy = AppPolicies.CanViewTreatments)]
         public async Task<ActionResult<PagedResponse<TreatmentDto>>> GetActive(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
@@ -43,6 +39,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize(Policy = AppPolicies.CanViewTreatments)]
         public async Task<IActionResult> Get(int id)
         {
             var item = await _treatmentService.FindAsync(id);
@@ -50,6 +47,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = AppPolicies.CanCreateTreatments)]
         public async Task<IActionResult> Post(TreatmentDto p)
         {
             var result = await _treatmentService.CreateAsync(p);
@@ -57,6 +55,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Policy = AppPolicies.CanEditTreatments)]
         public async Task<IActionResult> Put(int id, UpdateTreatmentDto p)
         {
             var result = await _treatmentService.UpdateAsync(id, p);

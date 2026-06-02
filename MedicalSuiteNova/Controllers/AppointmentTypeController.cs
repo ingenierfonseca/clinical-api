@@ -1,7 +1,6 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Responses;
-using MedicalSuiteNova.Domain.Dto.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,14 +9,9 @@ namespace MedicalSuiteNova.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class AppointmentTypeController : Controller
+    public class AppointmentTypeController(IAppointmentTypeService appointmentTypeService) : Controller
     {
-        private readonly IAppointmentTypeService _appointmentTypeService;
-
-        public AppointmentTypeController(IAppointmentTypeService appointmentTypeService)
-        {
-            _appointmentTypeService = appointmentTypeService;
-        }
+        private readonly IAppointmentTypeService _appointmentTypeService = appointmentTypeService;
 
         [HttpGet]
         public async Task<ActionResult<PagedResponse<AppointmentTypeDto>>> Get(

@@ -393,6 +393,39 @@ INSERT INTO [dbo].[Role] ([Name], [Description]) VALUES
 ('Doctor', 'Médico o especialista de la clínica'),
 ('Staff', 'Personal de recepción y atención al paciente');
 GO
+CREATE TABLE StaffType (
+    Id TINYINT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(50) NOT NULL,
+    Description NVARCHAR(250) NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
+);
+GO
+INSERT INTO StaffType (Name, Description) VALUES
+('Administrador', 'Administrador del sistema con acceso total'),
+('Doctor', 'Médico o especialista de la clínica'),
+('Recepcionista', 'Personal de recepción y atención al paciente'),
+('Asistente Médico', 'Asistente que apoya en procedimientos clínicos'),
+('Cajero', 'Personal encargado de cobros y facturación');
+GO
+CREATE TABLE Staff (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    FirstName NVARCHAR(50) NOT NULL,
+    LastName NVARCHAR(50) NOT NULL,
+    Phone NVARCHAR(15) NULL,
+    Email NVARCHAR(60) NULL,
+    HireDate DATETIME NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    Avatar NVARCHAR(500) NULL,
+    StaffTypeId TINYINT NOT NULL,
+    BirthDate DATE NULL,
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT FK_Staff_StaffType FOREIGN KEY (StaffTypeId) REFERENCES StaffType(Id)
+);
+GO
+INSERT INTO Staff(FirstName, LastName, Phone, Email, HireDate, StaffTypeId, BirthDate)
+VALUES ('Marlon', 'Fonseca', '86422597', 'ingenierfonseca@gmail.com', GETDATE(), 1, '03/21/1989')
+GO
 CREATE TABLE [dbo].[User](
     [Id] INT IDENTITY(1,1) PRIMARY KEY,
     [Username] NVARCHAR(50) NOT NULL,
@@ -401,13 +434,11 @@ CREATE TABLE [dbo].[User](
     [IsActive] BIT NOT NULL DEFAULT 1,
     [RefreshToken] NVARCHAR(500) NULL,
     [RefreshTokenExpiry] DATETIME NULL,
-    [DoctorId] INT NULL,
-    [CustomerId] INT NULL,
+    [StaffId] INT NULL,
     [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
     CONSTRAINT UQ_User_Username UNIQUE ([Username]),
     CONSTRAINT UQ_User_Email UNIQUE ([Email]),
-    CONSTRAINT FK_User_Doctor FOREIGN KEY ([DoctorId]) REFERENCES [dbo].[Doctor]([Id]),
-    CONSTRAINT FK_User_Customer FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customer]([Id])
+    CONSTRAINT FK_User_Staff FOREIGN KEY ([StaffId]) REFERENCES [dbo].[Staff]([Id])
 );
 GO
 CREATE TABLE [dbo].[Permission](
@@ -454,11 +485,8 @@ GO
 INSERT INTO [dbo].[RolePermission] ([RoleId], [PermissionId])
 SELECT 1, Id FROM [dbo].[Permission];
 GO
-INSERT INTO [dbo].[User] ([Username], [Email], [PasswordHash], [IsActive], [CustomerId], [DoctorId])
-VALUES ('admin', 'admin@clinica.com', '$2a$11$igebiSXTamBKbT//NOd5Z.sNDTSP0aduEV1fm2sKZnY8VWlQkm2j6', 1, NULL, NULL);
+INSERT INTO [dbo].[User] ([Username], [Email], [PasswordHash], [IsActive], [StaffId])
+VALUES ('admin', 'admin@clinica.com', '$2a$11$igebiSXTamBKbT//NOd5Z.sNDTSP0aduEV1fm2sKZnY8VWlQkm2j6', 1, 1);
 GO
 INSERT INTO [dbo].[UserRole] ([UserId], [RoleId])
 VALUES (1, 1);
-GO
-ALTER TABLE [dbo].[User] DROP CONSTRAINT IF EXISTS [FK_User_Role];
-GO

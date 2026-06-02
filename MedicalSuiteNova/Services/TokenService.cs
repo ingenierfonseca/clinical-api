@@ -8,10 +8,9 @@ using System.Text;
 
 namespace MedicalSuiteNova.Api.Services
 {
-    public class TokenService : ITokenService
+    public class TokenService(IConfiguration config) : ITokenService
     {
-        private readonly IConfiguration _config;
-        public TokenService(IConfiguration config) => _config = config;
+        private readonly IConfiguration _config = config;
 
         public string CreateToken(User user)
         {
@@ -20,27 +19,36 @@ namespace MedicalSuiteNova.Api.Services
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new (JwtRegisteredClaimNames.Sub, user.Username),
+                new (JwtRegisteredClaimNames.UniqueName, user.Username),
+                new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             if (user.UserRoles != null)
             {
+                var uniqueRoles = new HashSet<string>();
+                var uniquePermissions = new HashSet<string>();
+
                 foreach (var userRole in user.UserRoles)
                 {
                     if (userRole.Role?.Name != null)
-                        claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+                        uniqueRoles.Add(userRole.Role.Name);
 
                     if (userRole.Role?.RolePermissions != null)
                     {
                         foreach (var rolePermission in userRole.Role.RolePermissions)
                         {
                             if (rolePermission.Permission?.Name != null)
-                                claims.Add(new Claim("permission", rolePermission.Permission.Name));
+                                uniquePermissions.Add(rolePermission.Permission.Name);
                         }
                     }
                 }
+
+                foreach (var role in uniqueRoles)
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+
+                foreach (var permission in uniquePermissions)
+                    claims.Add(new Claim("permission", permission));
             }
 
             var tokenDescriptor = new SecurityTokenDescriptor

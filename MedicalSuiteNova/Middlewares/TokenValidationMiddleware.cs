@@ -1,10 +1,8 @@
 ﻿namespace MedicalSuiteNova.Api.Middlewares
 {
-    public class TokenValidationMiddleware
+    public class TokenValidationMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate _next;
-
-        public TokenValidationMiddleware(RequestDelegate next) => _next = next;
+        private readonly RequestDelegate _next = next;
 
         public async Task InvokeAsync(HttpContext context)
         {

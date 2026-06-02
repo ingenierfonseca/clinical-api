@@ -1,4 +1,5 @@
-﻿using MedicalSuiteNova.Application.Interfaces;
+﻿using MedicalSuiteNova.Api.Constants;
+using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Request;
 using Microsoft.AspNetCore.Authorization;
@@ -9,16 +10,12 @@ namespace MedicalSuiteNova.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class PaymentController : Controller
+    public class PaymentController(IPaymentService paymentService) : Controller
     {
-        private readonly IPaymentService _paymentService;
-
-        public PaymentController(IPaymentService paymentService)
-        {
-            _paymentService = paymentService;
-        }
+        private readonly IPaymentService _paymentService = paymentService;
 
         [HttpGet]
+        [Authorize(Policy = AppPolicies.CanViewPayments)]
         public async Task<IActionResult> Get(
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
@@ -28,6 +25,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize(Policy = AppPolicies.CanViewPayments)]
         public async Task<IActionResult> Get(int id)
         {
             var item = await _paymentService.FindAsync(id);
@@ -35,6 +33,7 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = AppPolicies.CanCreatePayments)]
         public async Task<IActionResult> Post(PaymentRequest p)
         {
             var result = await _paymentService.CreatePaymentAsync(p);

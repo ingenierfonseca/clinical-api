@@ -16,7 +16,7 @@ namespace MedicalSuiteNova.Api.Extensions
             .AddJwtBearer(options =>
             {
                 options.IncludeErrorDetails = true;
-                options.MapInboundClaims = false;
+                //options.MapInboundClaims = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,

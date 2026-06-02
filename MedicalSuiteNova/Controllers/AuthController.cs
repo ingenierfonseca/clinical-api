@@ -1,4 +1,5 @@
-﻿using MedicalSuiteNova.Application.Interfaces;
+﻿using MedicalSuiteNova.Api.Constants;
+using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +10,9 @@ namespace MedicalSuiteNova.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController(IAuthService authService) : ControllerBase
     {
-        private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService) => _authService = authService;
+        private readonly IAuthService _authService = authService;
 
         [HttpPost("login")]
         [AllowAnonymous]
@@ -48,25 +47,17 @@ namespace MedicalSuiteNova.Api.Controllers
                 ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(username))
-                return Unauthorized(new { status = 401, errors = new[] { "Token inválido" } });
+                return Unauthorized(new { status = 401, errors = new[] { AppError.InvalidToken } });
 
             var result = await _authService.GetCurrentUserAsync(username);
             return Ok(result);
         }
 
-        [HttpPost("{userId}/link-doctor/{doctorId}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> LinkDoctor(int userId, int doctorId)
+        [HttpPost("{userId}/link-staff/{doctorId}")]
+        [Authorize(Roles = AppRole.SuperAdmin)]
+        public async Task<IActionResult> LinkStaffAsync(int userId, int doctorId)
         {
-            var result = await _authService.LinkDoctorAsync(userId, doctorId);
-            return Ok(result);
-        }
-
-        [HttpPost("{userId}/link-customer/{customerId}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> LinkCustomer(int userId, int customerId)
-        {
-            var result = await _authService.LinkCustomerAsync(userId, customerId);
+            var result = await _authService.LinkStaffAsync(userId, doctorId);
             return Ok(result);
         }
     }

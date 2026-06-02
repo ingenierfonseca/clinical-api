@@ -28,7 +28,10 @@ namespace MedicalSuiteNova.Application.Interfaces
         IUserRepository Users { get; }
         IRoleRepository Roles { get; }
         IPermissionRepository Permissions { get; }
-
+        IStaffRepository Staff { get; }
+        IStaffTypeRepository StaffTypes { get; }
+        IRolePermissionRepository RolePermissions { get; }
+ 
         Task<int> CompleteAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();

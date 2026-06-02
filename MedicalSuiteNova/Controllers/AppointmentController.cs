@@ -9,14 +9,9 @@ namespace MedicalSuiteNova.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class AppointmentController : ControllerBase
+    public class AppointmentController(IAppointmentService appointmentService) : ControllerBase
     {
-        private readonly IAppointmentService _appointmentService;
-
-        public AppointmentController(IAppointmentService appointmentService)
-        {
-            _appointmentService = appointmentService;
-        }
+        private readonly IAppointmentService _appointmentService = appointmentService;
 
         [HttpGet]
         public async Task<ActionResult<PagedResponse<AppointmentInfoDto>>> Get(

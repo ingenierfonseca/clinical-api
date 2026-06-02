@@ -9,8 +9,8 @@ namespace MedicalSuiteNova.Domain.Entities
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;
 
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-        public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
+        public ICollection<UserRole> UserRoles { get; set; } = [];
+        public ICollection<RolePermission> RolePermissions { get; set; } = [];
 
         public object GetId() => Id;
     }

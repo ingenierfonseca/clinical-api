@@ -29,6 +29,9 @@ try
     builder.Services.AddScoped<ITokenService, TokenService>();
     builder.Services.AddJwtAuthentication(builder.Configuration);
 
+    // Middleware para validar permisos en api
+    builder.Services.AddCustomAuthorization();
+
     // Add services to the container.
     builder.Services.AddControllers();
     builder.Services.AddCustomControllers();

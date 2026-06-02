@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Application.Mappings;
 using MedicalSuiteNova.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Reflection;
 
 namespace MedicalSuiteNova.Application
 {
@@ -13,11 +13,8 @@ namespace MedicalSuiteNova.Application
         {
             services.AddSingleton<IMapper>(sp =>
             {
-                var configExpression = new MapperConfigurationExpression();
-                configExpression.AddProfile<MappingProfile>();
-
                 var config = new MapperConfiguration(
-                    configExpression,
+                    cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()),
                     NullLoggerFactory.Instance
                 );
 
@@ -48,7 +45,11 @@ namespace MedicalSuiteNova.Application
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPermissionService, PermissionService>();
-
+            services.AddScoped<IStaffService, StaffService>();
+            services.AddScoped<IStaffTypeService, StaffTypeService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRolePermissionService, RolePermissionService>();
+ 
             return services;
         }
     }

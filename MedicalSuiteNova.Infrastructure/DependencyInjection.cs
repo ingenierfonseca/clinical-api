@@ -44,7 +44,10 @@ namespace MedicalSuiteNova.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IPermissionRepository, PermissionRepository>();
-
+            services.AddScoped<IStaffRepository, StaffRepository>();
+            services.AddScoped<IStaffTypeRepository, StaffTypeRepository>();
+            services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+ 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;

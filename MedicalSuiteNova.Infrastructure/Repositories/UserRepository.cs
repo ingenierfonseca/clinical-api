@@ -20,8 +20,8 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                     .ThenInclude(ur => ur.Role)
                         .ThenInclude(r => r.RolePermissions)
                             .ThenInclude(rp => rp.Permission)
-                .Include(u => u.Doctor)
-                .Include(u => u.Customer)
+                .Include(u => u.Staff)
+                    .ThenInclude(s => s!.StaffType)
                 .FirstOrDefaultAsync(u => u.Username == username);
         }
 
@@ -32,8 +32,8 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                     .ThenInclude(ur => ur.Role)
                         .ThenInclude(r => r.RolePermissions)
                             .ThenInclude(rp => rp.Permission)
-                .Include(u => u.Doctor)
-                .Include(u => u.Customer)
+                .Include(u => u.Staff)
+                    .ThenInclude(s => s!.StaffType)
                 .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
         }
 
