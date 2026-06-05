@@ -3,6 +3,7 @@ using MedicalSuiteNova.Application.Constants;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Payment;
 using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
@@ -201,6 +202,53 @@ namespace MedicalSuiteNova.Application.Services
         private static void UpdateCustomerBalance(Customer customer, decimal newBalance)
         {
             customer.Balance = newBalance;
+        }
+
+        public async Task<Result<PaymentBaucherDto>> GetBaucher(int id)
+        {
+            var payment = await _uow.Payments.FirstOrDefaultAsync(
+                x => x.Id == id,
+                x => x.Invoice!,
+                x => x.Invoice!.Items!,
+                x => x.PaymentType!,
+                x => x.Currency!
+            );
+
+            if (payment == null)
+                return Result<PaymentBaucherDto>.Failure("EL pago solicitado no existe.");
+
+            var allInvoicePayments = await _uow.Payments.GetAllAsync(
+                x => x.InvoiceId == payment.InvoiceId && x.Date <= payment.Date
+            );
+
+            decimal totalPaidBefore = allInvoicePayments
+                .Where(x => x.Id < payment.Id)
+                .Sum(p => p.Amount);
+
+            decimal invoiceTotal = payment.Invoice!.Total;
+            decimal previousBalance = invoiceTotal - totalPaidBefore;
+            decimal remainingBalance = previousBalance - payment.Amount;
+
+            var baucher = new PaymentBaucherDto
+            {
+                CompanyName = "Clinica Dental Melissa",
+                CompanyAddress = "Semaforos Sutiaba 1c norte 80v abajo, León",
+                CompanyPhone = "2315-3064",
+                CompanyNIT = "001-010101-0010C",
+                ReceiptNumber = $"REC-{payment.Id:D6}",
+                AmountPaid = payment.Amount,
+                PaymentDate = payment.Date,
+                CurrencySymbol = payment.Currency!.Symbol,
+                PaymentMethod = payment.PaymentType!.Name,
+                InvoiceNumber = payment.Invoice!.Number!,
+                IsPartialPayment = invoiceTotal != payment.Amount,
+                InvoiceTotal = invoiceTotal,
+                PreviousBalance = previousBalance,
+                RemainingBalance = remainingBalance,
+                Items = _mapper.Map<List<InvoiceItemDto>>(payment.Invoice.Items)
+            };
+
+            return Result<PaymentBaucherDto>.Success(baucher);
         }
     }
 }

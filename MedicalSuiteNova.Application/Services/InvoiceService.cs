@@ -4,6 +4,7 @@ using MedicalSuiteNova.Application.Constants;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Payment;
 using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;

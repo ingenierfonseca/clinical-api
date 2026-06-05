@@ -1,6 +1,6 @@
 
 using AutoMapper;
-using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Payment;
 using MedicalSuiteNova.Domain.Dto.Update;
 using MedicalSuiteNova.Domain.Entities;
 

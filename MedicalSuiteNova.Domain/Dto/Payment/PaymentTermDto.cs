@@ -1,5 +1,4 @@
-﻿
-namespace MedicalSuiteNova.Domain.Dto
+﻿namespace MedicalSuiteNova.Domain.Dto.Payment
 {
     public class PaymentTermDto
     {

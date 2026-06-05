@@ -1,5 +1,5 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Payment;
 using MedicalSuiteNova.Domain.Dto.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
