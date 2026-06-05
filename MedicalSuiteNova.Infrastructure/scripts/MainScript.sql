@@ -45,19 +45,66 @@ create table AppointmentType(
 	DurationMinutes INT
 )
 GO
-create table Appointment(
-	Id bigint identity (1,1) primary key,
-	CustomerId integer,
-	AppointmentDate DateTime,
-	DoctorId integer,
-	AppointmentTypeId TINYINT,
-	CONSTRAINT FK_Appointment_Patient
-        FOREIGN KEY (CustomerId) REFERENCES Customer(Id),
-	CONSTRAINT FK_Appointment_Doctor
-        FOREIGN KEY (DoctorId) REFERENCES Doctor(Id),
-	CONSTRAINT FK_Appointment_AppointmentType
-        FOREIGN KEY (AppointmentTypeId) REFERENCES AppointmentType(Id)
-)
+CREATE TABLE ResourceType (
+    Id TINYINT PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL
+);
+GO
+INSERT INTO ResourceType VALUES
+(1,'Sillon Odontologia'),
+(2,'Consultorio')
+GO
+CREATE TABLE Resource (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    ResourceTypeId TINYINT NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+    Description VARCHAR(500) NULL,
+    Capacity INT NULL,
+    Color VARCHAR(20) NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 NULL,
+    CONSTRAINT FK_Resource_ResourceType FOREIGN KEY (ResourceTypeId) REFERENCES ResourceType(Id)
+);
+GO
+CREATE TABLE AppointmentStatus (
+    Id TINYINT PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL
+);
+GO
+INSERT INTO AppointmentStatus VALUES
+(1,'Pending'),
+(2,'Confirmed'),
+(3,'InProgress'),
+(4,'Completed'),
+(5,'Cancelled'),
+(6,'NoShow'),
+(7,'Rescheduled');
+GO
+CREATE TABLE Appointment (
+    Id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    CustomerId INT NOT NULL,
+    DoctorId INT NOT NULL,
+    ResourceId INT NULL,
+    AppointmentTypeId TINYINT NOT NULL,
+    Date DATE NOT NULL,
+    StartTime TIME NOT NULL,
+    EndTime TIME NOT NULL,
+    StatusId TINYINT NOT NULL,
+    Notes VARCHAR(1000) NULL,
+    CancellationReason VARCHAR(500) NULL,
+    IsConfirmed BIT NOT NULL DEFAULT 0,
+    ReminderSent BIT NOT NULL DEFAULT 0,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 NULL,
+    CreatedBy INT NULL,
+    UpdatedBy INT NULL,
+    CONSTRAINT FK_Appointment_Customer FOREIGN KEY (CustomerId) REFERENCES Customer(Id),
+    CONSTRAINT FK_Appointment_Doctor FOREIGN KEY (DoctorId) REFERENCES Doctor(Id),
+    CONSTRAINT FK_Appointment_Resource FOREIGN KEY (ResourceId) REFERENCES Resource(Id),
+    CONSTRAINT FK_Appointment_AppointmentType FOREIGN KEY (AppointmentTypeId) REFERENCES AppointmentType(Id),
+    CONSTRAINT FK_Appointment_AppointmentStatus FOREIGN KEY (StatusId) REFERENCES AppointmentStatus(Id)
+);
 GO
 CREATE TABLE [dbo].[ClinicalVisits] (
     [Id] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,

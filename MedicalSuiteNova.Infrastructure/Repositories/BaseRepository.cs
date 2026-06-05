@@ -47,6 +47,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             int pageSize,
             Expression<Func<T, bool>>? predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            Expression<Func<T, TDto>>? selector = null,
             params Expression<Func<T, object>>[] includes
         ) where TDto : class
         {
@@ -61,11 +62,24 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
 
             var totalRecords = await query.CountAsync();
 
-            var data = await query
-                .ProjectTo<TDto>(_mapper.ConfigurationProvider)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            List<TDto> data;
+
+            if (selector != null)
+            {
+                data = await query
+                    .Select(selector)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+            }
+            else
+            {
+                data = await query
+                    .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+            }
 
             return new PagedResponse<TDto>(data, pageNumber, pageSize, totalRecords);
         }

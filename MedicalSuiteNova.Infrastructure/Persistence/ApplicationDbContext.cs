@@ -38,6 +38,9 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
         public DbSet<UserRole> UserRoles => Set<UserRole>();
         public DbSet<StaffType> StaffTypes => Set<StaffType>();
         public DbSet<Staff> Staff => Set<Staff>();
+        public DbSet<ResourceType> ResourceTypes => Set<ResourceType>();
+        public DbSet<Resource> Resources => Set<Resource>();
+        public DbSet<AppointmentStatus> AppointmentStatuses => Set<AppointmentStatus>();
         public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
  
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -73,6 +76,12 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
                 .HasOne(s => s.StaffType)
                 .WithMany()
                 .HasForeignKey(s => s.StaffTypeId);
+            modelBuilder.Entity<ResourceType>().ToTable("ResourceType");
+            modelBuilder.Entity<Resource>().ToTable("Resource")
+                .HasOne(r => r.ResourceType)
+                .WithMany()
+                .HasForeignKey(r => r.ResourceTypeId);
+            modelBuilder.Entity<AppointmentStatus>().ToTable("AppointmentStatus");
             modelBuilder.Entity<RolePermission>().ToTable("RolePermission").HasKey(rp => new { rp.RoleId, rp.PermissionId });
             base.OnModelCreating(modelBuilder);
         }

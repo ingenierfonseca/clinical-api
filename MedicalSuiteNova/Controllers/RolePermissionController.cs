@@ -19,7 +19,16 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var items = await _rolePermissionService.GetAllAsync(pageNumber, pageSize);
+            var items = await _rolePermissionService.GetAllAsync<RolePermissionDto>(pageNumber, pageSize);
+            return Ok(items);
+        }
+
+        [HttpGet("{roleId:int}")]
+        public async Task<IActionResult> GetAll(int roleId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
+        {
+            var items = await _rolePermissionService.GetAllAsync<RolePermissionDto>(pageNumber, pageSize, r => r.RoleId == roleId);
             return Ok(items);
         }
 

@@ -1,4 +1,6 @@
 ﻿
+using MedicalSuiteNova.Domain.Dto.Appointment;
+
 namespace MedicalSuiteNova.Domain.Dto
 {
     public class ClinicalVisitsDto

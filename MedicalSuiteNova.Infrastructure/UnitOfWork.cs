@@ -40,6 +40,9 @@ namespace MedicalSuiteNova.Infrastructure
             Permissions = new PermissionRepository(_context, mapper);
             Staff = new StaffRepository(_context, mapper);
             StaffTypes = new StaffTypeRepository(_context, mapper);
+            ResourceTypes = new ResourceTypeRepository(_context, mapper);
+            Resources = new ResourceRepository(_context, mapper);
+            AppointmentStatuses = new AppointmentStatusRepository(_context, mapper);
             RolePermissions = new RolePermissionRepository(_context, mapper);
         }
 
@@ -68,6 +71,9 @@ namespace MedicalSuiteNova.Infrastructure
         public IPermissionRepository Permissions { get; private set; }
         public IStaffRepository Staff { get; private set; }
         public IStaffTypeRepository StaffTypes { get; private set; }
+        public IResourceTypeRepository ResourceTypes { get; private set; }
+        public IResourceRepository Resources { get; private set; }
+        public IAppointmentStatusRepository AppointmentStatuses { get; private set; }
         public IRolePermissionRepository RolePermissions { get; private set; }
 
         public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();

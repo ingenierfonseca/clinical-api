@@ -47,6 +47,9 @@ namespace MedicalSuiteNova.Application
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IStaffTypeService, StaffTypeService>();
+            services.AddScoped<IResourceTypeService, ResourceTypeService>();
+            services.AddScoped<IResourceService, ResourceService>();
+            services.AddScoped<IAppointmentStatusService, AppointmentStatusService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRolePermissionService, RolePermissionService>();
  

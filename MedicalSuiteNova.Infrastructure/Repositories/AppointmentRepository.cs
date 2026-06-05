@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Appointment;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
 using MedicalSuiteNova.Domain.Interfaces;
@@ -12,39 +12,36 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
     {
         public async Task<PagedResponse<AppointmentInfoDto>> GetAllPaginatedAsync(int pageNumber, int pageSize)
         {
-            /*var query = _context.Appointments
-                .Include(a => a.Patient)
-                .Include(a => a.Doctor)
-                .Include(a => a.AppointmentType)
-                .Select(a => new AppointmentInfoDto
-                {
-                    Id = a.Id,
-                    AppointmentDate = a.AppointmentDate,
-                    PatientName = a.Patient!.getShortName(),
-                    DoctorName = a.Doctor!.getShortName(),
-                    TypeName = a.AppointmentType!.Name
-                })
-                .OrderByDescending(a => a.AppointmentDate);*/
-
             Expression<Func<Appointment, AppointmentInfoDto>> selector = a => new AppointmentInfoDto
             {
                 Id = a.Id,
-                AppointmentDate = a.AppointmentDate,
+                CustomerId = a.CustomerId,
+                DoctorId = a.DoctorId,
+                StatusId = a.StatusId,
+                AppointmentTypeId = a.AppointmentTypeId,
+                ResourceId = a.ResourceId,
+                Date = a.Date,
+                StartTime = a.StartTime,
+                EndTime = a.EndTime,
                 PatientName = a.Patient!.GetShortName(),
                 DoctorName = a.Doctor!.getShortName(),
-                TypeName = a.AppointmentType!.Name
+                TypeName = a.AppointmentType!.Name,
+                StatusName = a.Status!.Name,
+                ResourceName = a.Resource != null ? a.Resource.Name : null,
+                Notes = a.Notes
             };
-            return await GetAllAsync<AppointmentInfoDto>(
+            return await GetAllAsync(
                 pageNumber,
                 pageSize,
                 null,
-                query => query.OrderByDescending(a => a.AppointmentDate),
-                new Expression<Func<Appointment, object>>[]
-                {
-                    a => a.Patient!,
-                    a => a.Doctor!,
-                    a => a.AppointmentType!
-                });
+                query => query.OrderByDescending(a => a.Date),
+                selector,
+                a => a.Patient!,
+                a => a.Doctor!,
+                a => a.AppointmentType!,
+                a => a.Status!,
+                a => a.Resource!
+            );
         }
     }
 }

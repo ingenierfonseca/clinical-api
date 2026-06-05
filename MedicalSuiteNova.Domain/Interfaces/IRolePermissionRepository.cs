@@ -4,12 +4,8 @@ using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Domain.Interfaces
 {
-    public interface IRolePermissionRepository
+    public interface IRolePermissionRepository:IBaseRepository<RolePermission>
     {
-        Task<PagedResponse<RolePermission>> GetAllAsync(int pageNumber, int pageSize);
-        Task<RolePermission?> FindAsync(int roleId, int permissionId);
-        Task<bool> ExistsAsync(int roleId, int permissionId);
-        Task<RolePermission> AddAsync(RolePermission entity);
         Task DeleteAsync(RolePermission entity);
     }
 }

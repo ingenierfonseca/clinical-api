@@ -14,6 +14,7 @@ namespace MedicalSuiteNova.Domain.Interfaces
             int pageSize,
             Expression<Func<T, bool>>? predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            Expression<Func<T, TDto>>? selector = null,
             params Expression<Func<T, object>>[] includes
         ) where TDto : class;
 

@@ -1,5 +1,5 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Appointment;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var appointments = await _appointmentService.GetAllAsync<AppointmentInfoDto>(pageNumber, pageSize);
+            var appointments = await _appointmentService.GetAllPaginatedAsync(pageNumber, pageSize);
             return Ok(appointments);
         }
 
@@ -29,12 +29,23 @@ namespace MedicalSuiteNova.Api.Controllers
             return Ok(appointment);
         }
 
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats(
+            [FromQuery] DateOnly startDate = default,
+            [FromQuery] DateOnly endDate = default
+        )
+        {
+            
+            var appointment = await _appointmentService.GetStats(startDate, endDate);
+            return Ok(appointment);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Post(AppointmentDto p)
+        public async Task<IActionResult> Post(CreateAppointmentDto p)
         {
             var result = await _appointmentService.AddAsync(p);
             if (!result.IsSuccess)
-                return BadRequest(result.ErrorMessage);
+                return BadRequest(new { message = result.ErrorMessage });
             return Ok(result.Value);
         }
 
@@ -43,7 +54,7 @@ namespace MedicalSuiteNova.Api.Controllers
         {
             var result = await _appointmentService.UpdateAsync(id, dto);
             if (!result.IsSuccess)
-                return BadRequest(result.ErrorMessage);
+                return BadRequest(new { message = result.ErrorMessage });
             return Ok(result.Value);
         }
     }
