@@ -1,6 +1,7 @@
 
 using AutoMapper;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Invoice;
 using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Mappings

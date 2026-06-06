@@ -50,7 +50,10 @@ namespace MedicalSuiteNova.Infrastructure
             services.AddScoped<IResourceRepository, ResourceRepository>();
             services.AddScoped<IAppointmentStatusRepository, AppointmentStatusRepository>();
             services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
- 
+            services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
+            services.AddScoped<IConsultationTypeRepository, ConsultationTypeRepository>();
+  
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;

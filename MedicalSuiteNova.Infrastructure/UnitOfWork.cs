@@ -44,6 +44,9 @@ namespace MedicalSuiteNova.Infrastructure
             Resources = new ResourceRepository(_context, mapper);
             AppointmentStatuses = new AppointmentStatusRepository(_context, mapper);
             RolePermissions = new RolePermissionRepository(_context, mapper);
+            Services = new ServiceRepository(_context, mapper);
+            Specialties = new SpecialtyRepository(_context, mapper);
+            ConsultationTypes = new ConsultationTypeRepository(_context, mapper);
         }
 
         public IPaymentRepository Payments { get; private set; }
@@ -75,6 +78,9 @@ namespace MedicalSuiteNova.Infrastructure
         public IResourceRepository Resources { get; private set; }
         public IAppointmentStatusRepository AppointmentStatuses { get; private set; }
         public IRolePermissionRepository RolePermissions { get; private set; }
+        public IServiceRepository Services { get; private set; }
+        public ISpecialtyRepository Specialties { get; private set; }
+        public IConsultationTypeRepository ConsultationTypes { get; private set; }
 
         public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
 

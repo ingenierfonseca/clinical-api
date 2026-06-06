@@ -1,6 +1,6 @@
 ﻿using MedicalSuiteNova.Domain.Entities;
 
-namespace MedicalSuiteNova.Domain.Dto.Responses
+namespace MedicalSuiteNova.Domain.Dto.Invoice
 {
     public class ResponseInvoiceDto
     {
@@ -19,7 +19,7 @@ namespace MedicalSuiteNova.Domain.Dto.Responses
         public required string CreatedBy { get; set; }
         public required List<InvoiceItemDto> Items { get; set; }
 
-        public static ResponseInvoiceDto ToDto(Invoice invoice)
+        public static ResponseInvoiceDto ToDto(Entities.Invoice invoice)
         {
             return new ResponseInvoiceDto
             {

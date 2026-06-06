@@ -24,7 +24,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                 StartTime = a.StartTime,
                 EndTime = a.EndTime,
                 PatientName = a.Patient!.GetShortName(),
-                DoctorName = a.Doctor!.getShortName(),
+                DoctorName = a.Doctor!.Staff!.GetShortName(),
                 TypeName = a.AppointmentType!.Name,
                 StatusName = a.Status!.Name,
                 ResourceName = a.Resource != null ? a.Resource.Name : null,

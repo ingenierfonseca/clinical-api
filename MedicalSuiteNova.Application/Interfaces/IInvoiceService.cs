@@ -1,4 +1,5 @@
 ﻿using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Invoice;
 using MedicalSuiteNova.Domain.Dto.Payment;
 using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
@@ -17,5 +18,6 @@ namespace MedicalSuiteNova.Application.Interfaces
         Task<Result<ResponseInvoiceDto>> UpdateAsync(int id, RequestInvoiceDto dto);
         Task<Invoice> CreateBalanceInvoicePlanAsync(long id, string planName, int customerId, byte currencyId, decimal amount);
         Task<string> GenerateInvoiceNumberAsync();
+        Task<Result<InvoicePrintDto>> InvoicePrint(int id);
     }
 }

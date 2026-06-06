@@ -39,6 +39,17 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task<IEnumerable<TResult>> GetFilteredSelectedAsync<TResult>(
+            Expression<Func<T, bool>> filter,
+            Expression<Func<T, TResult>> select
+        )
+        {
+            return await _context.Set<T>()
+                                 .Where(filter)
+                                 .Select(select)
+                                 .ToListAsync();
+        }
+
         public async Task<PagedResponse<TDto>> GetAllAsync<TDto>(int page, int size, Expression<Func<T, bool>> predicate) where TDto : class
             => await GetAllAsync<TDto>(page, size, predicate, null);
 

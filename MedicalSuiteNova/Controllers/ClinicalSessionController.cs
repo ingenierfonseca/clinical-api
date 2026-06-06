@@ -1,5 +1,5 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.ClinicalSession;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Dto.Update;
 using Microsoft.AspNetCore.Authorization;
@@ -10,14 +10,9 @@ namespace MedicalSuiteNova.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/clinical-session")]
-    public class ClinicalSessionController : Controller
+    public class ClinicalSessionController(IClinicalSessionService clinicalSessionService) : Controller
     {
-        private readonly IClinicalSessionService _clinicalSessionService;
-
-        public ClinicalSessionController(IClinicalSessionService clinicalSessionService)
-        {
-            _clinicalSessionService = clinicalSessionService;
-        }
+        private readonly IClinicalSessionService _clinicalSessionService = clinicalSessionService;
 
         [HttpGet]
         public async Task<ActionResult<PagedResponse<ClinicalSessionDto>>> Get(
@@ -34,6 +29,13 @@ namespace MedicalSuiteNova.Api.Controllers
             [FromQuery] int pageSize = 10)
         {
             var items = await _clinicalSessionService.GetAllAsync<ClinicalSessionDto>(pageNumber, pageSize);
+            return Ok(items);
+        }
+
+        [HttpGet("customer/{id:int}/short-info")]
+        public async Task<ActionResult<IEnumerable<ClinicalSessionShortInfoDto>>> GetShortInfoByCustomer(int id)
+        {
+            var items = await _clinicalSessionService.GetShortInfoByCustomer(id);
             return Ok(items);
         }
 

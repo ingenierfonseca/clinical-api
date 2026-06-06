@@ -1,5 +1,6 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Application.Services;
+using MedicalSuiteNova.Domain.Dto.Doctor;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Dto.Update;
 using MedicalSuiteNova.Domain.Entities;
@@ -11,29 +12,32 @@ namespace MedicalSuiteNova.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class DoctorController : Controller
+    public class DoctorController(IDoctorService doctorService) : Controller
     {
-        private readonly IDoctorService _doctorService;
-
-        public DoctorController(IDoctorService doctorService)
-        {
-            _doctorService = doctorService;
-        }
+        private readonly IDoctorService _doctorService = doctorService;
 
         [HttpGet]
-        public async Task<ActionResult<PagedResponse<DoctorDto>>> Get(
+        public async Task<ActionResult<PagedResponse<DoctorInfoDto>>> Get(
+            [FromQuery] int? specialtyId,
             [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 10)
+            [FromQuery] int pageSize = 10
+            )
         {
-            var appointments = await _doctorService.GetAllAsync<DoctorDto>(pageNumber, pageSize);
+            var appointments = await _doctorService.GetAllAsync(
+                pageNumber,
+                pageSize,
+                specialtyId
+            );
             return Ok(appointments);
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var appointment = await _doctorService.FindAsync(id);
-            return Ok(appointment);
+            var result = await _doctorService.FindAsync(id);
+            if (!result.IsSuccess)
+                return BadRequest(new { message = result.ErrorMessage });
+            return Ok(result.Value);
         }
 
         [HttpPost]

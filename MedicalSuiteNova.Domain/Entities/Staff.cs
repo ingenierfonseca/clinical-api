@@ -19,5 +19,6 @@ namespace MedicalSuiteNova.Domain.Entities
         public virtual StaffType? StaffType { get; set; }
 
         public object GetId() => Id;
+        public string GetShortName() => $"{FirstName.Split(' ', 2)[0]} {LastName.Split(' ', 2)[0]}";
     }
 }

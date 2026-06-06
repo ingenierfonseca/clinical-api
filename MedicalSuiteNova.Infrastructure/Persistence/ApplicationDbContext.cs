@@ -4,13 +4,8 @@ using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Infrastructure.Persistence
 {
-    public class ApplicationDbContext: DbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-        {
-        }
-
         public DbSet<Customer> Patients => Set<Customer>();
         public DbSet<Doctor> Doctors => Set<Doctor>();
         public DbSet<Appointment> Appointments => Set<Appointment>();
@@ -42,7 +37,10 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
         public DbSet<Resource> Resources => Set<Resource>();
         public DbSet<AppointmentStatus> AppointmentStatuses => Set<AppointmentStatus>();
         public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
- 
+        public DbSet<Service> Services => Set<Service>();
+        public DbSet<Specialty> Specialties => Set<Specialty>();
+        public DbSet<ConsultationType> ConsultationTypes => Set<ConsultationType>();
+  
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
@@ -83,6 +81,9 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
                 .HasForeignKey(r => r.ResourceTypeId);
             modelBuilder.Entity<AppointmentStatus>().ToTable("AppointmentStatus");
             modelBuilder.Entity<RolePermission>().ToTable("RolePermission").HasKey(rp => new { rp.RoleId, rp.PermissionId });
+            modelBuilder.Entity<Service>().ToTable("Services");
+            modelBuilder.Entity<Specialty>().ToTable("Specialties");
+            modelBuilder.Entity<ConsultationType>().ToTable("ConsultationType");
             base.OnModelCreating(modelBuilder);
         }
     }

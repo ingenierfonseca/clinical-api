@@ -34,7 +34,10 @@ namespace MedicalSuiteNova.Application.Interfaces
         IResourceRepository Resources { get; }
         IAppointmentStatusRepository AppointmentStatuses { get; }
         IRolePermissionRepository RolePermissions { get; }
- 
+        IServiceRepository Services { get; }
+        ISpecialtyRepository Specialties { get; }
+        IConsultationTypeRepository ConsultationTypes { get; }
+  
         Task<int> CompleteAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();

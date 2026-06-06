@@ -1,21 +1,25 @@
 ﻿
 using MedicalSuiteNova.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
     public class Doctor: IEntity
     {
         public int Id { get; set; }
-        public required string FirstName { get; set; }
-        public required string LastName { get; set; }
-        public byte Age { get; set; }
-        public required string Specialist { get; set; }
-        public required string Phone { get; set; }
+        public byte ServiceId { get; set; }
+        public int StaffId { get; set; }
+        public int SpecialtyId { get; set; }
 
         public object GetId() => Id;
-        public string getShortName()
-        {
-            return $"{FirstName.Split(' ', 2)[0]} {LastName.Split(' ', 2)[0]}";
-        }
+
+        [ForeignKey("ServiceId")]
+        public virtual Service? Service { get; set; }
+
+        [ForeignKey("SpecialtyId")]
+        public virtual Specialty? Specialty { get; set; }
+
+        [ForeignKey("StaffId")]
+        public virtual Staff? Staff { get; set; }
     }
 }

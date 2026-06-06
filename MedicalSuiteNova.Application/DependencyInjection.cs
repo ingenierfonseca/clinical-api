@@ -52,7 +52,10 @@ namespace MedicalSuiteNova.Application
             services.AddScoped<IAppointmentStatusService, AppointmentStatusService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRolePermissionService, RolePermissionService>();
- 
+            services.AddScoped<IServiceService, ServiceService>();
+            services.AddScoped<ISpecialtyService, SpecialtyService>();
+            services.AddScoped<IConsultationTypeService, ConsultationTypeService>();
+  
             return services;
         }
     }

@@ -11,13 +11,21 @@ namespace MedicalSuiteNova.Domain.Entities
         public int DoctorId { get; set; }
         public DateTime Date {  get; set; }
         public string? ReasonForVisit { get; set; }
-        public string? ClinicalNotes { get; set; }
+        public byte ConsultationSpecialtyId { get; set; }
+        public byte ConsultationTypeId { get; set; }
+        public long ConsultationId { get; set; }
 
         [ForeignKey("CustomerId")]
         public virtual Customer? Customer { get; set; }
 
         [ForeignKey("DoctorId")]
         public virtual Doctor? Doctor { get; set; }
+
+        [ForeignKey("ConsultationSpecialtyId")]
+        public virtual Service? ConsultationSpecialty { get; set; }
+
+        [ForeignKey("ConsultationTypeId")]
+        public virtual ConsultationType? ConsultationType { get; set; }
         public object GetId() => Id;
     }
 }

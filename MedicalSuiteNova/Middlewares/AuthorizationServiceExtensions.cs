@@ -8,7 +8,10 @@ namespace MedicalSuiteNova.Api.Middlewares
         {
             services.AddAuthorizationBuilder()
                 .AddPaymentPolicies()
-                .AddTreatmentPolicies();
+                .AddTreatmentPolicies()
+                .AddServicePolicies()
+                .AddSpecialtyPolicies()
+                .AddConsultationTypePolicies();
 
             return services;
         }

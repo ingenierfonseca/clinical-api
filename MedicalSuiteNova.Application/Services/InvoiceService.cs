@@ -4,6 +4,7 @@ using MedicalSuiteNova.Application.Constants;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Invoice;
 using MedicalSuiteNova.Domain.Dto.Payment;
 using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
@@ -344,6 +345,42 @@ namespace MedicalSuiteNova.Application.Services
             int currentYear = DateTime.Now.Year;
             // Ejemplo: FAC-000001
             return $"FAC-{currentYear}-{nextNumber.ToString().PadLeft(6, '0')}";
+        }
+
+        public async Task<Result<InvoicePrintDto>> InvoicePrint(int id)
+        {
+            var invoice = await _uow.Invoices.FirstOrDefaultAsync(
+                x => x.Id == id,
+                x => x.Items!,
+                x => x.Patient!,
+                x => x.Currency!,
+                x => x.PaymentTerm!
+            );
+
+            if (invoice == null)
+                return Result<InvoicePrintDto>.Failure("La factura solicitada no existe.");
+            var baucher = new InvoicePrintDto
+            {
+                CompanyName = "Clinica Dental Melissa",
+                CompanyAddress = "Semaforos Sutiaba 1c norte 80v abajo, León",
+                CompanyPhone = "2315-3064",
+                CompanyNIT = "001-010101-0010C",
+                CompanyEmail = "",
+                CompanyLogoUrl = "",
+                CustomerName = $"{invoice.Patient!.FirstName} {invoice.Patient!.LastName}",
+                //CustomerAddress = invoice.Patient.Address,
+                CustomerPhone = invoice.Patient!.Phone!,
+                CustomerEmail = invoice.Patient!.Email,
+                Date = invoice.IssueDate,
+                CurrencySymbol = invoice.Currency!.Symbol,
+                PaymentTerm = invoice.PaymentTerm!.Name,
+                InvoiceNumber = invoice.Number!,
+                SubTotal = invoice.SubTotal,
+                Total = invoice.Total,
+                Items = _mapper.Map<List<InvoiceItemDto>>(invoice.Items)
+            };
+
+            return Result<InvoicePrintDto>.Success(baucher);
         }
     }
 }

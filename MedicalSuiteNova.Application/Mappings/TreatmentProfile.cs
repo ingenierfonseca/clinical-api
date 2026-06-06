@@ -1,6 +1,7 @@
 
 using AutoMapper;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.ClinicalSession;
 using MedicalSuiteNova.Domain.Dto.Update;
 using MedicalSuiteNova.Domain.Entities;
 
@@ -24,6 +25,12 @@ namespace MedicalSuiteNova.Application.Mappings
             CreateMap<SessionPlanDetailDto, SessionPlanDetail>();
             CreateMap<UpdateTreatmentDto, Treatment>();
             CreateMap<Treatment, UpdateTreatmentDto>();
+            CreateMap<ServiceDto, Service>();
+            CreateMap<Service, ServiceDto>();
+            CreateMap<SpecialtyDto, Specialty>();
+            CreateMap<Specialty, SpecialtyDto>();
+            CreateMap<ConsultationTypeDto, ConsultationType>();
+            CreateMap<ConsultationType, ConsultationTypeDto>();
         }
     }
 }

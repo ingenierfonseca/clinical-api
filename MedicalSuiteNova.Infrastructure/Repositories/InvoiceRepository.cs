@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Invoice;
 using MedicalSuiteNova.Domain.Dto.Payment;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;

@@ -29,13 +29,38 @@ CREATE TABLE [dbo].[Customer](
     CONSTRAINT FK_Customer_Currency FOREIGN KEY (CurrencyId) REFERENCES Currency(Id)
 )
 GO
+CREATE TABLE Services (
+    Id TINYINT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(500) NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    UpdatedAt DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    CONSTRAINT UQ_Services_Name UNIQUE (Name)
+);
+GO
+INSERT Services (Name) VALUES('Odontologia')
+GO
+CREATE TABLE Specialties (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(500) NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    UpdatedAt DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    CONSTRAINT UQ_Specialties_Name UNIQUE (Name)
+);
+GO
+INSERT Specialties (Name) VALUES('Dentista General'),('Ortodoncia'),('Endodoncia')
+GO
 create table Doctor(
 	Id integer identity (1,1) primary key,
-	FirstName varchar(50) NOT NULL,
-	LastName varchar(50) NOT NULL,
-	Age TINYINT,
-	Specialist varchar(100) NOT NULL,
-	[Phone] [NVARCHAR](15)
+    StaffId TINYINT NOT NULL,
+    ServiceId TINYINT NOT NULL,
+	SpecialtyId INT NOT NULL,
+    CONSTRAINT FK_Doctor_Service FOREIGN KEY (ServiceId) REFERENCES Services(Id),
+    CONSTRAINT FK_Doctor_Specialty FOREIGN KEY (SpecialtyId) REFERENCES Specialties(Id),
+    CONSTRAINT FK_Doctor_Staff FOREIGN KEY (StaffId) REFERENCES Staff(Id)
 )
 GO
 create table AppointmentType(
@@ -294,15 +319,37 @@ VALUES
 (1, 1, 'Detalle y acabado', 5),           -- 1 sería el ID de 'Ortodoncia'
 (1, 1, 'Retención', 6);                   -- 1 sería el ID de 'Ortodoncia'
 GO
+CREATE TABLE ConsultationType (
+    Id TINYINT PRIMARY KEY,
+    Name NVARCHAR(50) NOT NULL,
+    Description NVARCHAR(100) NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    UpdatedAt DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    CONSTRAINT UQ_ConsultationType_Name UNIQUE (Name)
+);
+GO
+INSERT ConsultationType (Id, Name) 
+VALUES (1, 'Inicial / Primera vez'), 
+	(2, 'Evolución / Seguimiento'), 
+	(3, 'Lectura de exámenes'),
+	(4, 'Urgencia'),
+	(5, 'Procedimiento')
+GO
 CREATE TABLE [dbo].[ClinicalSession] (
     [Id] [bigint] IDENTITY(1,1) PRIMARY KEY,
     [CustomerId] [int] NOT NULL,
     [DoctorId] [int] NOT NULL,
     [Date] [datetime] DEFAULT GETDATE(),
     [ReasonForVisit] [nvarchar](200) NULL, -- "Dolor en molar inferior"
-    [ClinicalNotes] [nvarchar](300) NULL,
+    ConsultationSpecialtyId TINYINT NOT NULL,
+    ConsultationTypeId TINYINT NOT NULL,
+    ConsultationId BIGINT NULL,
     CONSTRAINT [FK_Session_Patient] FOREIGN KEY([CustomerId]) REFERENCES [dbo].[Customer]([Id]),
-    CONSTRAINT [FK_Session_Doctor] FOREIGN KEY([DoctorId]) REFERENCES [dbo].[Doctor]([Id])
+    CONSTRAINT [FK_Session_Doctor] FOREIGN KEY([DoctorId]) REFERENCES [dbo].[Doctor]([Id]),
+    CONSTRAINT [FK_Session_Specialty] FOREIGN KEY([ConsultationSpecialtyId]) REFERENCES [dbo].[Services]([Id]),
+    CONSTRAINT [FK_Session_ConsultationType] FOREIGN KEY([ConsultationTypeId]) REFERENCES [dbo].[ConsultationType]([Id]),
+    CONSTRAINT [FK_Session_Consultation] FOREIGN KEY([ConsultationId]) REFERENCES [dbo].[ClinicalSession]([Id])
 );
 GO
 CREATE TABLE [dbo].[SessionPlanMaster](

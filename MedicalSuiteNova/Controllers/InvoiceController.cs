@@ -1,6 +1,7 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Request;
+using MedicalSuiteNova.Domain.Dto.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,16 @@ namespace MedicalSuiteNova.Api.Controllers
         {
             var invoices = await _invoiceService.GetByIdDtoAsync(id);
             return Ok(invoices);
+        }
+
+        [HttpGet("{id:int}/print")]
+        public async Task<IActionResult> GetToPrint(int id)
+        {
+            var result = await _invoiceService.InvoicePrint(id);
+            if (!result.IsSuccess)
+                return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(result.Value);
         }
 
         [HttpGet("customer/{id:int}")]
