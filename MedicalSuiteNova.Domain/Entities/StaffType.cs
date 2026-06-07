@@ -1,11 +1,10 @@
 
-using MedicalSuiteNova.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class StaffType : IEntity
+    public class StaffType
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,6 +13,5 @@ namespace MedicalSuiteNova.Domain.Entities
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public object GetId() => Id;
     }
 }

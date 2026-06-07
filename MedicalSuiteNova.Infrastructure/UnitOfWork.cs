@@ -47,6 +47,8 @@ namespace MedicalSuiteNova.Infrastructure
             Services = new ServiceRepository(_context, mapper);
             Specialties = new SpecialtyRepository(_context, mapper);
             ConsultationTypes = new ConsultationTypeRepository(_context, mapper);
+            ClinicalNotes = new ClinicalNotesRepository(_context, mapper);
+            ClinicalFiles = new ClinicalFileRepository(_context, mapper);
         }
 
         public IPaymentRepository Payments { get; private set; }
@@ -81,6 +83,8 @@ namespace MedicalSuiteNova.Infrastructure
         public IServiceRepository Services { get; private set; }
         public ISpecialtyRepository Specialties { get; private set; }
         public IConsultationTypeRepository ConsultationTypes { get; private set; }
+        public IClinicalNotesRepository ClinicalNotes { get; private set; }
+        public IClinicalFileRepository ClinicalFiles { get; private set; }
 
         public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
 

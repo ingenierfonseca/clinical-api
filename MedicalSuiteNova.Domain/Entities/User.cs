@@ -1,8 +1,7 @@
-using MedicalSuiteNova.Domain.Interfaces;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class User : IEntity
+    public class User
     {
         public int Id { get; set; }
         public required string Username { get; set; }

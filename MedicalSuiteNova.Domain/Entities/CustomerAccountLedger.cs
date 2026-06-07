@@ -1,9 +1,8 @@
 ﻿
-using MedicalSuiteNova.Domain.Interfaces;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class CustomerAccountLedger: IEntity
+    public class CustomerAccountLedger
     {
         public long Id { get; set; }
         public int CustomerId { get; set; }
@@ -20,7 +19,5 @@ namespace MedicalSuiteNova.Domain.Entities
 
         public virtual Customer? Customer { get; set; }
         public virtual Currency? Currency { get; set; }
-
-        public object GetId() => Id;
     }
 }

@@ -11,7 +11,7 @@ namespace MedicalSuiteNova.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddSingleton<IMapper>(sp =>
+            services.AddSingleton(sp =>
             {
                 var config = new MapperConfiguration(
                     cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()),
@@ -20,13 +20,6 @@ namespace MedicalSuiteNova.Application
 
                 return config.CreateMapper();
             });
-            /*var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-            services.AddSingleton(mappingConfig);
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);*/
 
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
@@ -55,7 +48,9 @@ namespace MedicalSuiteNova.Application
             services.AddScoped<IServiceService, ServiceService>();
             services.AddScoped<ISpecialtyService, SpecialtyService>();
             services.AddScoped<IConsultationTypeService, ConsultationTypeService>();
-  
+            services.AddScoped<IClinicalNotesService, ClinicalNotesService>();
+            services.AddScoped<IFileStorageService, FileStorageService>();
+
             return services;
         }
     }

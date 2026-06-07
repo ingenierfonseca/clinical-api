@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ClosedXML.Excel;
+using MedicalSuiteNova.Application.Constants;
 using MedicalSuiteNova.Application.Interfaces;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Request;
@@ -12,10 +13,8 @@ using System.Diagnostics;
 
 namespace MedicalSuiteNova.Application.Services
 {
-    public class CustomerService : BaseService<Customer>, ICustomerService
+    public class CustomerService(IFileStorageService _fileStorage, IUnitOfWork uow, IMapper mapper) : BaseService<Customer>(uow, mapper, uow.Customers), ICustomerService
     {
-        public CustomerService(IUnitOfWork uow, IMapper mapper) : base(uow, mapper, uow.Customers) { }
-
         public async Task<List<CustomerDashboardDto>> GetDashboard()
         {
             var dashboardList = new List<CustomerDashboardDto>();
@@ -156,9 +155,42 @@ namespace MedicalSuiteNova.Application.Services
         }
        
 
-        public async Task<Result<string>> UploadAvatarAsync(int id, IFormFile file)
+        public async Task<Result<string>>UploadAvatarAsync(int id, IFormFile file)
         {
-            if (file == null || file.Length == 0)
+            var customer = await _uow.Customers.FindAsync(id);
+
+            if (customer == null)
+                return Result<string>.Failure("Cliente no encontrado.");
+
+            var result = await _fileStorage.SaveAsync(
+                file,
+                FolderName.AvatarFolder,
+                [".jpg", ".jpeg", ".png", ".webp" ]);
+
+            if (!result.IsSuccess)
+                return Result<string>.Failure(result.ErrorMessage);
+
+            if (!string.IsNullOrEmpty(customer.Avatar))
+            {
+                string oldFile = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    FolderName.RootFolder,
+                    FolderName.UploadFolder,
+                    FolderName.AvatarFolder,
+                    customer.Avatar);
+
+                if (File.Exists(oldFile))
+                    File.Delete(oldFile);
+            }
+
+            customer.Avatar = result.Value.StoredName;
+
+            await _uow.Customers.UpdateAsync(customer);
+            await _uow.CompleteAsync();
+
+            return Result<string>.Success("");
+
+            /*if (file == null || file.Length == 0)
                 return Result<string>.Failure("No se ha seleccionado ninguna imagen.");
 
             // 1. Validar extensión
@@ -204,7 +236,7 @@ namespace MedicalSuiteNova.Application.Services
             catch (Exception ex)
             {
                 return Result<string>.Failure($"Error al guardar la imagen: {ex.Message}");
-            }
+            }*/
         }
     }
 }

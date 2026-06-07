@@ -1,9 +1,8 @@
 
-using MedicalSuiteNova.Domain.Interfaces;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class Staff : IEntity
+    public class Staff
     {
         public int Id { get; set; }
         public required string FirstName { get; set; }
@@ -18,7 +17,6 @@ namespace MedicalSuiteNova.Domain.Entities
 
         public virtual StaffType? StaffType { get; set; }
 
-        public object GetId() => Id;
         public string GetShortName() => $"{FirstName.Split(' ', 2)[0]} {LastName.Split(' ', 2)[0]}";
     }
 }

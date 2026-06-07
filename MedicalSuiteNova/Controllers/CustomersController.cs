@@ -10,14 +10,9 @@ namespace MedicalSuiteNova.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class CustomersController : ControllerBase
+    public class CustomersController(ICustomerService customerService) : ControllerBase
     {
-        private readonly ICustomerService _customerService;
-
-        public CustomersController(ICustomerService customerService)
-        {
-            _customerService = customerService;
-        }
+        private readonly ICustomerService _customerService = customerService;
 
         [HttpGet]
         public async Task<IActionResult> Get(
@@ -51,7 +46,6 @@ namespace MedicalSuiteNova.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Customer p)
         {
-            p.CreatedAt = DateTime.Now;
             await _customerService.AddAsync(p);
             return Ok();
         }

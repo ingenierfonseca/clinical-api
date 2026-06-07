@@ -40,7 +40,9 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
         public DbSet<Service> Services => Set<Service>();
         public DbSet<Specialty> Specialties => Set<Specialty>();
         public DbSet<ConsultationType> ConsultationTypes => Set<ConsultationType>();
-  
+        public DbSet<ClinicalNotes> ClinicalNotes => Set<ClinicalNotes>();
+        public DbSet<ClinicalFile> ClinicalFiles => Set<ClinicalFile>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
@@ -84,6 +86,8 @@ namespace MedicalSuiteNova.Infrastructure.Persistence
             modelBuilder.Entity<Service>().ToTable("Services");
             modelBuilder.Entity<Specialty>().ToTable("Specialties");
             modelBuilder.Entity<ConsultationType>().ToTable("ConsultationType");
+            modelBuilder.Entity<ClinicalNotes>().ToTable("ClinicalNotes");
+            modelBuilder.Entity<ClinicalFile>().ToTable("ClinicalFile");
             base.OnModelCreating(modelBuilder);
         }
     }

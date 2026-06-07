@@ -1,10 +1,9 @@
 ﻿
-using MedicalSuiteNova.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class ClinicalSession: IEntity
+    public class ClinicalSession
     {
         public long Id { get; set; }
         public int CustomerId { get; set; }
@@ -26,6 +25,5 @@ namespace MedicalSuiteNova.Domain.Entities
 
         [ForeignKey("ConsultationTypeId")]
         public virtual ConsultationType? ConsultationType { get; set; }
-        public object GetId() => Id;
     }
 }

@@ -1,9 +1,8 @@
 ﻿
-using MedicalSuiteNova.Domain.Interfaces;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class Treatment: IEntity
+    public class Treatment
     {
         public int Id { get; set; }
         public required string Name { get; set; }
@@ -12,10 +11,9 @@ namespace MedicalSuiteNova.Domain.Entities
         public decimal Price { get; set; }
         public int DurationMinutes { get; set; }
         public bool IsActive { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
 
-        public object GetId() => Id;
         public virtual Currency? Currency { get; set; }
     }
 }

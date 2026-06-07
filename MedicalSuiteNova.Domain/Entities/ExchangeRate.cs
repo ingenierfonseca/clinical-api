@@ -1,10 +1,9 @@
 ﻿
-using MedicalSuiteNova.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class ExchangeRate: IEntity
+    public class ExchangeRate
     { 
         public int Id { get; set; }
         public byte FromCurrencyId { get; set; }
@@ -18,7 +17,5 @@ namespace MedicalSuiteNova.Domain.Entities
         public virtual Currency? FromCurrency { get; set; }
         [ForeignKey("ToCurrencyId")]
         public virtual Currency? ToCurrency { get; set; }
-
-        public object GetId() => Id;
     }
 }

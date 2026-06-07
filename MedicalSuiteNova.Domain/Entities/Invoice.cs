@@ -1,10 +1,9 @@
 ﻿
-using MedicalSuiteNova.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class Invoice : IEntity
+    public class Invoice
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
@@ -18,11 +17,9 @@ namespace MedicalSuiteNova.Domain.Entities
         public byte CurrencyId { get; set; }
         public byte StatusId { get; set; }
         public byte PaymentTermId { get; set; }
-        //public long ReferenceId { get; set; }
-        //public required string ReferenceTable { get; set; }
         public long? SessionPlanMasterId { get; set; }
         public string? OriginType { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public required string CreatedBy { get; set; }
 
         [ForeignKey("CustomerId")]
@@ -41,6 +38,5 @@ namespace MedicalSuiteNova.Domain.Entities
         public virtual SessionPlanMaster? SessionPlanMaster { get; set; }
         public virtual ICollection<InvoiceItem>? Items { get; set; }
         public virtual ICollection<Payment> Payments { get; set; } = [];
-        public object GetId() => Id;
     }
 }

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace MedicalSuiteNova.Application.Interfaces
 {
-    public interface IBaseService<T> where T : class, IEntity
+    public interface IBaseService<T> where T : class
     {
         Task<PagedResponse<TDto>> GetAllAsync<TDto>(int pageNumber, int pageSize) where TDto : class;
         Task<PagedResponse<TDto>> GetAllAsync<TDto>(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate) where TDto : class;

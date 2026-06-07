@@ -37,7 +37,9 @@ namespace MedicalSuiteNova.Application.Interfaces
         IServiceRepository Services { get; }
         ISpecialtyRepository Specialties { get; }
         IConsultationTypeRepository ConsultationTypes { get; }
-  
+        IClinicalNotesRepository ClinicalNotes { get; }
+        IClinicalFileRepository ClinicalFiles { get; }
+
         Task<int> CompleteAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();

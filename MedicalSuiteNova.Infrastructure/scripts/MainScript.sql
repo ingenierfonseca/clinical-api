@@ -352,6 +352,34 @@ CREATE TABLE [dbo].[ClinicalSession] (
     CONSTRAINT [FK_Session_Consultation] FOREIGN KEY([ConsultationId]) REFERENCES [dbo].[ClinicalSession]([Id])
 );
 GO
+CREATE TABLE ClinicalNotes (
+    Id INT IDENTITY(1,1) NOT NULL,
+    ClinicalSessionId BIGINT NOT NULL,
+    DoctorId INT NOT NULL,
+    CreatedAt DATETIME2 NOT NULL CONSTRAINT DF_ClinicalNotes_CreatedAt DEFAULT SYSUTCDATETIME(),
+    Note NVARCHAR(MAX) NOT NULL CONSTRAINT DF_ClinicalNotes_Note DEFAULT '',
+    IsPrivate BIT NOT NULL,
+    CONSTRAINT PK_ClinicalNotes PRIMARY KEY CLUSTERED (Id),
+    CONSTRAINT FK_ClinicalNotes_ClinicalSession FOREIGN KEY (ClinicalSessionId) 
+        REFERENCES ClinicalSession (Id),
+    CONSTRAINT FK_ClinicalNotes_Doctor FOREIGN KEY (DoctorId) 
+        REFERENCES Doctor (Id)
+);
+GO
+CREATE TABLE ClinicalFile (
+    Id INT IDENTITY(1,1) NOT NULL,
+    ClinicalSessionId BIGINT NOT NULL,
+    CustomerId INT NOT NULL,
+    TypeId TINYINT NOT NULL,
+    Url NVARCHAR(300) NOT NULL,
+    Description NVARCHAR(MAX) NOT NULL,
+    CONSTRAINT PK_ClinicalFile PRIMARY KEY CLUSTERED (Id),
+    CONSTRAINT FK_ClinicalFile_ClinicalSession FOREIGN KEY (ClinicalSessionId) 
+        REFERENCES ClinicalSession (Id),
+    CONSTRAINT FK_ClinicalFile_Customer FOREIGN KEY (CustomerId) 
+        REFERENCES Customer (Id)
+);
+GO
 CREATE TABLE [dbo].[SessionPlanMaster](
     [Id] [bigint] IDENTITY(1,1) PRIMARY KEY NOT NULL,
     [SessionId] [bigint] NOT NULL,

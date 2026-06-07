@@ -1,8 +1,7 @@
-﻿using MedicalSuiteNova.Domain.Interfaces;
-
+﻿
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class TreatmentPlanTemplate : IEntity
+    public class TreatmentPlanTemplate
     {
         public int Id { get; set; }
         public required string Title { get; set; }
@@ -16,7 +15,6 @@ namespace MedicalSuiteNova.Domain.Entities
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public int CreatedBy { get; set; }
-        public object GetId() => Id;
 
         public virtual TreatmentCategory? Category { get; set; }
         public virtual Currency? Currency { get; set; }

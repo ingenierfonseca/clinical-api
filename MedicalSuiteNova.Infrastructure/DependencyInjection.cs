@@ -53,7 +53,9 @@ namespace MedicalSuiteNova.Infrastructure
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
             services.AddScoped<IConsultationTypeRepository, ConsultationTypeRepository>();
-  
+            services.AddScoped<IClinicalNotesRepository, ClinicalNotesRepository>();
+            services.AddScoped<IClinicalFileRepository, ClinicalFileRepository>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;

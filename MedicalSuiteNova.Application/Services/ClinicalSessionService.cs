@@ -24,7 +24,7 @@ namespace MedicalSuiteNova.Application.Services
                 return Result<ClinicalSessionDto>.Failure("ConsultationTypeId no es válido.");
 
             if (dto.Date == DateTime.MinValue)
-                dto.Date = DateTime.Now;
+                dto.Date = DateTime.UtcNow;
 
             var session = _mapper.Map<ClinicalSession>(dto);
             await _uow.ClinicalSessions.AddAsync(session);

@@ -1,9 +1,8 @@
 ﻿
-using MedicalSuiteNova.Domain.Interfaces;
 
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class Resource : IEntity
+    public class Resource
     {
         public int Id { get; set; }
         public byte ResourceTypeId { get; set; }
@@ -16,6 +15,5 @@ namespace MedicalSuiteNova.Domain.Entities
         public DateTime UpdatedAt { get; set; }
 
         public virtual ResourceType? ResourceType { get; set; }
-        public object GetId() => Id;
     }
 }

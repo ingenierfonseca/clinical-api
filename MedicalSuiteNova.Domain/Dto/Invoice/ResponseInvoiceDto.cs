@@ -15,7 +15,7 @@ namespace MedicalSuiteNova.Domain.Dto.Invoice
         public decimal Total { get; set; }
         public byte CurrencyId { get; set; }
         public byte StatusId { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public required string CreatedBy { get; set; }
         public required List<InvoiceItemDto> Items { get; set; }
 

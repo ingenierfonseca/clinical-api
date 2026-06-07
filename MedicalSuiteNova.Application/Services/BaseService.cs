@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 namespace MedicalSuiteNova.Application.Services
 {
     public class BaseService<T> : IBaseService<T> 
-        where T : class, IEntity
+        where T : class
     {
         public readonly IUnitOfWork _uow;
 

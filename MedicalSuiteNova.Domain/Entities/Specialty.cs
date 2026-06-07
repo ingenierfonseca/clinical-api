@@ -1,8 +1,7 @@
-﻿using MedicalSuiteNova.Domain.Interfaces;
-
+﻿
 namespace MedicalSuiteNova.Domain.Entities
 {
-    public class Specialty: IEntity
+    public class Specialty
     {
         public int Id { get; set; }
         public required string Name { get; set; }
@@ -10,7 +9,5 @@ namespace MedicalSuiteNova.Domain.Entities
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-
-        public object GetId() => Id;
     }
 }
