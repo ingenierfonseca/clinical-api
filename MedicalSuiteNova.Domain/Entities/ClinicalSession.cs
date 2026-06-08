@@ -12,7 +12,7 @@ namespace MedicalSuiteNova.Domain.Entities
         public string? ReasonForVisit { get; set; }
         public byte ConsultationSpecialtyId { get; set; }
         public byte ConsultationTypeId { get; set; }
-        public long ConsultationId { get; set; }
+        public long? ConsultationId { get; set; }
 
         [ForeignKey("CustomerId")]
         public virtual Customer? Customer { get; set; }

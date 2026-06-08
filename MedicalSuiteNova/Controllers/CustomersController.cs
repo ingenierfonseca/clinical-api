@@ -76,7 +76,7 @@ namespace MedicalSuiteNova.Api.Controllers
 
             customer.FirstName = p.FirstName;
             customer.LastName = p.LastName;
-            customer.Age = p.Age;
+            customer.BirthDate = p.BirthDate;
             customer.Email = p.Email;
             customer.Phone = p.Phone;
             customer.Avatar = p.Avatar;

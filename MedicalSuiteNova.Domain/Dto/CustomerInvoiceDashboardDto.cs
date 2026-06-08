@@ -6,7 +6,7 @@ namespace MedicalSuiteNova.Domain.Dto
         public int Id { get; set; }
         public required string FullName { get; set; }
         public string? Avatar {  get; set; }
-        public byte Age { get; set; }
+        public DateOnly? BirthDate { get; set; }
         public string? Currency { get; set; }
         public decimal Balance { get; set; }
         public List<CurrencyBalanceDto>? Balances { get; set; }

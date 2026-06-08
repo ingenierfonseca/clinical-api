@@ -7,5 +7,6 @@ namespace MedicalSuiteNova.Application.Interfaces
     public interface IClinicalNotesService : IBaseService<ClinicalNotes>
     {
         Task<Result<ClinicalNotesDto>> AddAsync(CreateClinicalNotesDto dto);
+        Task<List<ClinicalNotes>> GetBySessionId(int sessionId);
     }
 }

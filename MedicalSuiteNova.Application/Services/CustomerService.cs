@@ -131,7 +131,6 @@ namespace MedicalSuiteNova.Application.Services
                         DNI = DNI,
                         FirstName = firstName,
                         LastName = lastName,
-                        Age = d.Age,
                         Phone = phone,
                         Email = email,
                         CreatedAt = DateTime.UtcNow

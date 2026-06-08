@@ -37,7 +37,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                     Id = c.Id,
                     Avatar = c.Avatar,
                     FullName = c.FirstName.Trim() + " " + c.LastName.Trim(),
-                    Age = c.Age,
+                    BirthDate = c.BirthDate,
                     Balance = c.Balance,
                     Currency = c.Currency!.Symbol ?? "",
                     LastPayment = c.Invoices.SelectMany(i => i.Payments).Any()

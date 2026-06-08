@@ -11,7 +11,9 @@ namespace MedicalSuiteNova.Domain.Entities
         public string FirstName { get; set; } = string.Empty;
         [StringLength(50)]
         public string LastName { get; set; } = string.Empty;
-        public byte Age { get; set; }
+        [StringLength(20)]
+        public string Gender { get; set; } = string.Empty;
+        public DateOnly? BirthDate { get; set; }
         [StringLength(15)]
         public string? Phone { get; set; }
         [StringLength(60)]

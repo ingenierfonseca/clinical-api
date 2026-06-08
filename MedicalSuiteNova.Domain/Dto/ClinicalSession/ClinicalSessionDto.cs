@@ -11,7 +11,7 @@ namespace MedicalSuiteNova.Domain.Dto.ClinicalSession
         public string? ReasonForVisit { get; set; }
         public byte ConsultationSpecialtyId { get; set; }
         public byte ConsultationTypeId { get; set; }
-        public long ConsultationId { get; set; }
+        public long? ConsultationId { get; set; }
 
         public virtual CustomerDto? Customer { get; set; }
         public virtual DoctorDto? Doctor { get; set; }

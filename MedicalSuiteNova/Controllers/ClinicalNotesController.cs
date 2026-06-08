@@ -7,7 +7,7 @@ namespace MedicalSuiteNova.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/clinical-note")]
     public class ClinicalNotesController(IClinicalNotesService clinicalNotesService) : ControllerBase
     {
         private readonly IClinicalNotesService _clinicalNotesService = clinicalNotesService;
@@ -26,6 +26,13 @@ namespace MedicalSuiteNova.Api.Controllers
             if (note == null)
                 return NotFound(new { status = 404, errors = new[] { "Nota clínica no encontrada" } });
             return Ok(note);
+        }
+
+        [HttpGet("session/{id:int}")]
+        public async Task<IActionResult> GetBySessionId(int id)
+        {
+            var items = await _clinicalNotesService.GetBySessionId(id);
+            return Ok(items);
         }
 
         [HttpPost]

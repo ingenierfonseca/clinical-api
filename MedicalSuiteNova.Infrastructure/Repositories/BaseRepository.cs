@@ -21,13 +21,18 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
 
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
         {
-            IQueryable<T> query = _dbSet;
-            if (predicate != null) query = query.Where(predicate);
-
-            return await query.ToListAsync();
+            return await GetAllAsync(predicate, []);
         }
 
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            return await GetAllAsync(predicate, null, includes);
+        }
+
+        public async Task<List<T>> GetAllAsync(
+            Expression<Func<T, bool>> predicate,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _dbSet;
 
@@ -35,6 +40,8 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                 foreach (var include in includes) query = query.Include(include);
 
             if (predicate != null) query = query.Where(predicate);
+
+            if (orderBy != null) query = orderBy(query);
 
             return await query.ToListAsync();
         }

@@ -1,5 +1,7 @@
 
 
+using System.ComponentModel.DataAnnotations;
+
 namespace MedicalSuiteNova.Domain.Entities
 {
     public class Staff
@@ -7,6 +9,8 @@ namespace MedicalSuiteNova.Domain.Entities
         public int Id { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
+        [StringLength(20)]
+        public string Gender { get; set; } = string.Empty;
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public DateTime? HireDate { get; set; }

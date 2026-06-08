@@ -8,6 +8,10 @@ namespace MedicalSuiteNova.Domain.Interfaces
         Task<List<T>> GetAllAsync();
         Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate);
         Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+        Task<List<T>> GetAllAsync(
+            Expression<Func<T, bool>> predicate,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            params Expression<Func<T, object>>[] includes);
         Task<IEnumerable<TResult>> GetFilteredSelectedAsync<TResult>(
             Expression<Func<T, bool>> filter,
             Expression<Func<T, TResult>> select

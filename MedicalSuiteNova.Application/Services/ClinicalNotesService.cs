@@ -22,5 +22,15 @@ namespace MedicalSuiteNova.Application.Services
 
             return Result<ClinicalNotesDto>.Success(_mapper.Map<ClinicalNotesDto>(entity));
         }
+
+        public async Task<List<ClinicalNotes>> GetBySessionId(int sessionId)
+        {
+            return await _uow.ClinicalNotes.GetAllAsync(
+                x => x.ClinicalSessionId == sessionId,
+                query => query.OrderByDescending(a => a.CreatedAt),
+                x => x.Doctor!,
+                x => x.Doctor!.Staff!
+            );
+        }
     }
 }

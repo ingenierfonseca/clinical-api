@@ -1,4 +1,5 @@
 ﻿using MedicalSuiteNova.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalSuiteNova.Domain.Dto.Doctor
@@ -9,6 +10,8 @@ namespace MedicalSuiteNova.Domain.Dto.Doctor
         public byte ServiceId { get; set; }
         public int StaffId { get; set; }
         public int SpecialtyId { get; set; }
+        [StringLength(10)]
+        public string Title { get; set; } = string.Empty;
         public virtual ServiceDto? Service { get; set; }
         public virtual SpecialtyDto? Specialty { get; set; }
         public virtual StaffDto? Staff { get; set; }
