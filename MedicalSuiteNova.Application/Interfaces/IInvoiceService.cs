@@ -1,4 +1,5 @@
 ﻿using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Customer;
 using MedicalSuiteNova.Domain.Dto.Invoice;
 using MedicalSuiteNova.Domain.Dto.Payment;
 using MedicalSuiteNova.Domain.Dto.Request;

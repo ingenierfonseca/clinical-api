@@ -1,4 +1,5 @@
-﻿using MedicalSuiteNova.Domain.Dto.Doctor;
+﻿using MedicalSuiteNova.Domain.Dto.Customer;
+using MedicalSuiteNova.Domain.Dto.Doctor;
 
 namespace MedicalSuiteNova.Domain.Dto.ClinicalSession
 {

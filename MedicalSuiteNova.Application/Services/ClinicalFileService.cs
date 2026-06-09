@@ -1,6 +1,5 @@
 ﻿
 using AutoMapper;
-using DocumentFormat.OpenXml.Vml.Office;
 using MedicalSuiteNova.Application.Constants;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
@@ -69,6 +68,15 @@ namespace MedicalSuiteNova.Application.Services
                     return [".jpg", ".jpeg", ".png", ".webp" ];
                 default: throw new FileNotFoundException("");
             }
+        }
+
+        public async Task<List<ClinicalFile>> GetSessionImages(int sessionId)
+        {
+            return await _uow.ClinicalFiles.GetAllAsync(
+                x => x.ClinicalSessionId == sessionId,
+                query => query.OrderByDescending(x => x.CreatedAt),
+                []
+            );
         }
     }
 }

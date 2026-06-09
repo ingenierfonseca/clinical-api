@@ -1,13 +1,18 @@
 ﻿
+using System.Text.RegularExpressions;
+
 namespace MedicalSuiteNova.Utils
 {
-    public static class PhoneHelper
+    public static partial class PhoneHelper
     {
-        public static bool IsValidPhone(string phone)
-        {
-            var normalized = NormalizePhone(phone);
+        [GeneratedRegex(@"^\d{8}$")]
+        private static partial Regex PhoneRegex();
 
-            return normalized.Length == 8;
+        public static bool ValidatePhoneNumber(string phone)
+        {
+            if (string.IsNullOrEmpty(phone)) return true;
+
+            return PhoneRegex().IsMatch(phone);
         }
 
         public static string NormalizePhone(string phone)

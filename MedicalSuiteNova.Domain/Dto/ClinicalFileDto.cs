@@ -9,5 +9,6 @@ namespace MedicalSuiteNova.Domain.Dto
         public byte TypeId { get; set; }
         public required string Url { get; set; }
         public required string Description { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

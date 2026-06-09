@@ -1,5 +1,6 @@
 ﻿
 using MedicalSuiteNova.Domain.Dto.Appointment;
+using MedicalSuiteNova.Domain.Dto.Customer;
 using MedicalSuiteNova.Domain.Dto.Doctor;
 
 namespace MedicalSuiteNova.Domain.Dto

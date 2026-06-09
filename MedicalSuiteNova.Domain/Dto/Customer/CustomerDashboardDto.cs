@@ -1,5 +1,4 @@
-﻿
-namespace MedicalSuiteNova.Domain.Dto
+﻿namespace MedicalSuiteNova.Domain.Dto.Customer
 {
     public class CustomerDashboardDto
     {

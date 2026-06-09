@@ -7,6 +7,7 @@ namespace MedicalSuiteNova.Api.Controllers
 {
     [Authorize]
     [ApiController]
+    [Route("api/clinical-file")]
     public class ClinicalFileController(IClinicalFileService clinicalFileService) : Controller
     {
         private readonly IClinicalFileService _clinicalFileService = clinicalFileService;
@@ -16,6 +17,13 @@ namespace MedicalSuiteNova.Api.Controllers
         {
             var result = await _clinicalFileService.UploadFile(item, file);
             return result.IsSuccess ? Ok(result) : BadRequest(new { message = result.ErrorMessage });
+        }
+
+        [HttpGet("session/{id:int}/images")]
+        public async Task<IActionResult> GetSessionImages(int id)
+        {
+            var items = await _clinicalFileService.GetSessionImages(id);
+            return Ok(items);
         }
     }
 }

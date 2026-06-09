@@ -1,7 +1,6 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Customer;
 using MedicalSuiteNova.Domain.Dto.Request;
-using MedicalSuiteNova.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,10 +43,12 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Customer p)
+        public async Task<IActionResult> Post(CreateCustomerDto dto)
         {
-            await _customerService.AddAsync(p);
-            return Ok();
+            var result = await _customerService.AddAsync(dto);
+            return result.IsSuccess
+                ? Ok(result.Value)
+                : BadRequest(new { message = result.ErrorMessage });
         }
 
         [HttpPost("bulk-import")]
@@ -67,22 +68,12 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Put(int id, Customer p)
+        public async Task<IActionResult> Put(int id, UpdateCustomerDto dto)
         {
-            //TODO
-            var customer = await _customerService.FindAsync(id);
-            if (customer == null)
-                return NotFound();
-
-            customer.FirstName = p.FirstName;
-            customer.LastName = p.LastName;
-            customer.BirthDate = p.BirthDate;
-            customer.Email = p.Email;
-            customer.Phone = p.Phone;
-            customer.Avatar = p.Avatar;
-
-            await _customerService.UpdateAsync(id, customer);
-            return Ok();
+            var result = await _customerService.UpdateAsync(id, dto);
+            return result.IsSuccess
+                ? Ok(result.Value) 
+                : BadRequest(new { message = result.ErrorMessage });
         }
     }
 }

@@ -10,6 +10,7 @@ namespace MedicalSuiteNova.Domain.Entities
         public byte TypeId { get; set; }
         public required string Url { get; set; }
         public required string Description { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         [ForeignKey("CustomerId")]
         public virtual Customer? Customer { get; set; }

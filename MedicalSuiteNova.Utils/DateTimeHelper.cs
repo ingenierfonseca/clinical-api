@@ -3,6 +3,24 @@ namespace MedicalSuiteNova.Utils
 {
     public static class DateTimeHelper
     {
+        private const int MaxValidAge = 120;
+        public static (bool isValid, string message) ValidateBirthDate(DateOnly birthDate)
+        {
+            var today = DateOnly.FromDateTime(DateTime.Today);
+
+            if (birthDate > today)
+                return (false, "La fecha de nacimiento no puede ser una fecha futura.");
+
+            int age = today.Year - birthDate.Year;
+            if (birthDate.DayOfYear < today.DayOfYear)
+                age--;
+
+            if (age > MaxValidAge)
+                return (false, $"La fecha de nacimiento es inválida (edad máxima permitida: {MaxValidAge} años).");
+
+            return (true, "OK");
+        }
+
         public static (bool isValid, string message) ValidateIssueDate(DateTime issueDate)
         {
             if (issueDate == default)

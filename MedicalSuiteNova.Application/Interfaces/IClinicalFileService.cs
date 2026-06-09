@@ -9,5 +9,6 @@ namespace MedicalSuiteNova.Application.Interfaces
     public interface IClinicalFileService : IBaseService<ClinicalFile>
     {
         Task<Result<ClinicalFileDto>> UploadFile(ClinicalFile item, IFormFile file);
+        Task<List<ClinicalFile>> GetSessionImages(int sessionId);
     }
 }

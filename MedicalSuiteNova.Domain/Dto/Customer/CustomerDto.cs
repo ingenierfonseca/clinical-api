@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MedicalSuiteNova.Domain.Entities
+namespace MedicalSuiteNova.Domain.Dto.Customer
 {
-    public class Customer
+    public class CustomerDto
     {
         public int Id { get; set; }
         [StringLength(20)]
@@ -14,8 +14,8 @@ namespace MedicalSuiteNova.Domain.Entities
         [StringLength(20)]
         public string Gender { get; set; } = string.Empty;
         [StringLength(100)]
-        public string? Address { get; set; }
-        public DateOnly? BirthDate { get; set; }
+        public string Address { get; set; } = string.Empty;
+        public DateOnly BirthDate { get; set; }
         [StringLength(15)]
         public string? Phone { get; set; }
         [StringLength(60)]
@@ -23,13 +23,9 @@ namespace MedicalSuiteNova.Domain.Entities
         [StringLength(500)]
         public string? Avatar { get; set; }
         public decimal Balance { get; set; }
-        public byte? CurrencyId { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public byte CurrencyId { get; set; }
 
-        public virtual Currency? Currency { get; set; }
-        public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
-        public virtual ICollection<Appointment> Appointments { get; set; } = [];
-        public virtual ICollection<ClinicalVisits> ClinicalVisits { get; set; } = [];
+        public virtual CurrencyDto? Currency { get; set; }
 
         public string GetShortName()
         {

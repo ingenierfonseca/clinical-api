@@ -2,10 +2,11 @@
 using ClosedXML.Excel;
 using MedicalSuiteNova.Application.Constants;
 using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Customer;
 using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
+using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Util;
 using MedicalSuiteNova.Utils;
 using Microsoft.AspNetCore.Http;
@@ -37,6 +38,54 @@ namespace MedicalSuiteNova.Application.Services
             });
 
             return dashboardList;
+        }
+
+        public async Task<Result<CustomerDto>> AddAsync(CreateCustomerDto dto)
+        {
+            var existDNI = await _uow.Customers.FirstOrDefaultAsync(c => c.DNI == dto.DNI);
+            if (existDNI != null)
+                return Result<CustomerDto>.Failure("Ya existe la identificación");
+
+            var validateResult = ValidateAsync(dto);
+            if (!validateResult.IsSuccess)
+                return Result<CustomerDto>.Failure(validateResult.ErrorMessage);
+
+            var customer = await _uow.Customers.AddAsync(_mapper.Map<Customer>(dto));
+            await _uow.CompleteAsync();
+
+            return Result<CustomerDto>.Success(_mapper.Map<CustomerDto>(customer));
+        }
+
+        public async Task<Result<CustomerDto>> UpdateAsync(int id, UpdateCustomerDto dto)
+        {
+            var customer = await _uow.Customers.FindAsync(id);
+            if (customer == null)
+                return Result<CustomerDto>.Failure("Id no encontrado");
+
+            var validateResult = ValidateAsync(dto);
+            if (!validateResult.IsSuccess)
+                return Result<CustomerDto>.Failure(validateResult.ErrorMessage);
+
+            _mapper.Map(dto, customer);
+            await _uow.Customers.UpdateAsync(customer);
+            await _uow.CompleteAsync();
+
+            return Result<CustomerDto>.Success(_mapper.Map<CustomerDto>(customer));
+        }
+
+        private static Result<string> ValidateAsync(ICustomerValidatable dto)
+        {
+            if (!PhoneHelper.ValidatePhoneNumber(dto.Phone!))
+                return Result<string>.Failure("Teléfono inválido");
+
+            if (!MailHelper.IsValidEmail(dto.Email!))
+                return Result<string>.Failure("Email inválido");
+
+            var (isValid, message) = DateTimeHelper.ValidateBirthDate(dto.BirthDate);
+            if (!isValid)
+                return Result<string>.Failure(message);
+
+            return Result<string>.Success("");
         }
 
         public async Task<ResponseImportResult> BulkImport(List<CustomerImportDto> dtos)
@@ -106,7 +155,7 @@ namespace MedicalSuiteNova.Application.Services
                     continue;
                 }
 
-                if (!string.IsNullOrWhiteSpace(phone) && !PhoneHelper.IsValidPhone(phone))
+                if (!string.IsNullOrWhiteSpace(phone) && !PhoneHelper.ValidatePhoneNumber(phone))
                 {
                     response.Errors.Add(new RowError
                     {

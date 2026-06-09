@@ -22,6 +22,7 @@ CREATE TABLE [dbo].[Customer](
 	BirthDate DATE NULL,
 	[Phone] [NVARCHAR](15),
 	Email NVARCHAR(60),
+    Address VARCHAR(100) NULL,
 	Avatar NVARCHAR(500),
     [Balance] DECIMAL(18,2) NOT NULL DEFAULT 0,
 	CreatedAt DATETIME DEFAULT GETDATE(),
@@ -375,6 +376,7 @@ CREATE TABLE ClinicalFile (
     TypeId TINYINT NOT NULL,
     Url NVARCHAR(300) NOT NULL,
     Description NVARCHAR(MAX) NOT NULL,
+    CreatedAt DATETIME DEFAULT GETDATE() 
     CONSTRAINT PK_ClinicalFile PRIMARY KEY CLUSTERED (Id),
     CONSTRAINT FK_ClinicalFile_ClinicalSession FOREIGN KEY (ClinicalSessionId) 
         REFERENCES ClinicalSession (Id),

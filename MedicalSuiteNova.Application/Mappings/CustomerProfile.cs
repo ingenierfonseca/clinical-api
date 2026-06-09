@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.Customer;
 using MedicalSuiteNova.Domain.Entities;
 
 namespace MedicalSuiteNova.Application.Mappings
@@ -13,6 +14,8 @@ namespace MedicalSuiteNova.Application.Mappings
             CreateMap<Customer, CustomerDto>();
             CreateMap<CustomerInvoiceDashboardDto, Customer>();
             CreateMap<Customer, CustomerInvoiceDashboardDto>();
+            CreateMap<CreateCustomerDto, Customer>();
+            CreateMap<UpdateCustomerDto, Customer>();
         }
     }
 }

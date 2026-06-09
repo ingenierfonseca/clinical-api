@@ -49,6 +49,7 @@ namespace MedicalSuiteNova.Application
             services.AddScoped<ISpecialtyService, SpecialtyService>();
             services.AddScoped<IConsultationTypeService, ConsultationTypeService>();
             services.AddScoped<IClinicalNotesService, ClinicalNotesService>();
+            services.AddScoped<IClinicalFileService, ClinicalFileService>();
             services.AddScoped<IFileStorageService, FileStorageService>();
 
             return services;
