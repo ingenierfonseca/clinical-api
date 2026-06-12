@@ -1,14 +1,11 @@
 ﻿
-namespace MedicalSuiteNova.Domain.Dto
+namespace MedicalSuiteNova.Domain.Dto.ClinicalFile
 {
-    public class ClinicalFileDto
+    public class CreateClinicalFileDto
     {
-        public int Id { get; set; }
         public long ClinicalSessionId { get; set; }
         public int CustomerId { get; set; }
         public byte TypeId { get; set; }
-        public required string Url { get; set; }
         public required string Description { get; set; }
-        public DateTime CreatedAt { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using MedicalSuiteNova.Domain.Dto.ClinicalImage;
+﻿using MedicalSuiteNova.Domain.Dto.ClinicalFile;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using Microsoft.AspNetCore.Http;
 

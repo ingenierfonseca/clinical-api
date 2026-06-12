@@ -542,6 +542,7 @@ CREATE TABLE Staff (
     Phone NVARCHAR(15) NULL,
     Email NVARCHAR(60) NULL,
     HireDate DATETIME NULL,
+    Address VARCHAR(100) NULL,
     IsActive BIT NOT NULL DEFAULT 1,
     Avatar NVARCHAR(500) NULL,
     StaffTypeId TINYINT NOT NULL,

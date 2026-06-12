@@ -1,7 +1,7 @@
 ﻿
 using MedicalSuiteNova.Application.Constants;
 using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Dto.ClinicalImage;
+using MedicalSuiteNova.Domain.Dto.ClinicalFile;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using Microsoft.AspNetCore.Http;
 

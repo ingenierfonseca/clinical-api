@@ -13,6 +13,7 @@ namespace MedicalSuiteNova.Domain.Entities
         public string Gender { get; set; } = string.Empty;
         public string? Phone { get; set; }
         public string? Email { get; set; }
+        public string? Address { get; set; }
         public DateTime? HireDate { get; set; }
         public bool IsActive { get; set; } = true;
         public string? Avatar { get; set; }

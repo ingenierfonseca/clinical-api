@@ -1,5 +1,6 @@
 
 using MedicalSuiteNova.Application.Interfaces;
+using MedicalSuiteNova.Application.Services;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using Microsoft.AspNetCore.Authorization;
@@ -42,6 +43,13 @@ namespace MedicalSuiteNova.Api.Controllers
         {
             var result = await _staffService.UpdateAsync(id, p);
             return Ok(result);
+        }
+
+        [HttpPost("{id}/upload-avatar")]
+        public async Task<IActionResult> UploadAvatar(int id, IFormFile file)
+        {
+            var result = await _staffService.UploadAvatarAsync(id, file);
+            return result.IsSuccess ? Ok(result) : BadRequest(new { message = result.ErrorMessage });
         }
     }
 }

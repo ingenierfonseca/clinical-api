@@ -3,7 +3,7 @@ using AutoMapper;
 using MedicalSuiteNova.Application.Constants;
 using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.ClinicalFile;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +12,7 @@ namespace MedicalSuiteNova.Application.Services
 {
     public class ClinicalFileService(IFileStorageService _fileStorage, IUnitOfWork uow, IMapper mapper) : BaseService<ClinicalFile>(uow, mapper, uow.ClinicalFiles), IClinicalFileService
     {
-        public async Task<Result<ClinicalFileDto>> UploadFile(ClinicalFile item, IFormFile file)
+        public async Task<Result<ClinicalFileDto>> UploadFile(CreateClinicalFileDto item, IFormFile file)
         {
             if (!await _uow.Customers.ExistsAsync(item.CustomerId))
                 return Result<ClinicalFileDto>.Failure("Cliente no encontrado.");

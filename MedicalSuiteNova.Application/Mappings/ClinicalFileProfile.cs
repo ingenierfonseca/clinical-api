@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MedicalSuiteNova.Domain.Dto;
+using MedicalSuiteNova.Domain.Dto.ClinicalFile;
 using MedicalSuiteNova.Domain.Dto.ClinicalNotes;
 using MedicalSuiteNova.Domain.Entities;
 

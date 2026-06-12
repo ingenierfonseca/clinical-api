@@ -10,7 +10,9 @@ namespace MedicalSuiteNova.Domain.Dto
         public int? StaffId { get; set; }
         public string? StaffName { get; set; }
         public string? StaffTypeName { get; set; }
-        public List<string> Roles { get; set; } = new();
+        public List<string> Roles { get; set; } = [];
         public DateTime CreatedAt { get; set; }
+
+        public virtual StaffDto? Staff { get; set; }
     }
 }

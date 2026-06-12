@@ -135,16 +135,6 @@ namespace MedicalSuiteNova.Application.Services
                     continue;
                 }
 
-                if (d.Age > 120)
-                {
-                    response.Errors.Add(new RowError
-                    {
-                        RowNumber = index,
-                        ErrorMessage = "Edad inválido"
-                    });
-                    continue;
-                }
-
                 if (!string.IsNullOrWhiteSpace(email) && !MailHelper.IsValidEmail(email))
                 {
                     response.Errors.Add(new RowError
@@ -237,54 +227,6 @@ namespace MedicalSuiteNova.Application.Services
             await _uow.CompleteAsync();
 
             return Result<string>.Success("");
-
-            /*if (file == null || file.Length == 0)
-                return Result<string>.Failure("No se ha seleccionado ninguna imagen.");
-
-            // 1. Validar extensión
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
-            var extension = Path.GetExtension(file.FileName).ToLower();
-            if (!allowedExtensions.Contains(extension))
-                return Result<string>.Failure("Formato de imagen no permitido (solo JPG, PNG).");
-
-            string fileName = $"avatar_{id}_{Guid.NewGuid()}{extension}";
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "avatars");
-
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-
-            string fullPath = Path.Combine(path, fileName);
-
-            try
-            {
-                var customer = await _uow.Customers.FindAsync(id);
-                if (customer == null)
-                {
-                    return Result<string>.Failure("No se encontro el customer");
-                }
-
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                
-                if (!string.IsNullOrEmpty(customer.Avatar))
-                {
-                    var oldPath = Path.Combine(path, customer.Avatar);
-                    if (File.Exists(oldPath)) File.Delete(oldPath);
-                }
-
-                customer.Avatar = fileName;
-                await _uow.Customers.UpdateAsync(customer);
-                await _uow.CompleteAsync();
-
-                return Result<string>.Success(fileName);
-            }
-            catch (Exception ex)
-            {
-                return Result<string>.Failure($"Error al guardar la imagen: {ex.Message}");
-            }*/
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Domain.Entities;
+using MedicalSuiteNova.Domain.Dto.ClinicalFile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +13,7 @@ namespace MedicalSuiteNova.Api.Controllers
         private readonly IClinicalFileService _clinicalFileService = clinicalFileService;
 
         [HttpPost("upload-file")]
-        public async Task<IActionResult> UploadFile(ClinicalFile item, IFormFile file)
+        public async Task<IActionResult> UploadFile([FromForm] CreateClinicalFileDto item, [FromForm] IFormFile file)
         {
             var result = await _clinicalFileService.UploadFile(item, file);
             return result.IsSuccess ? Ok(result) : BadRequest(new { message = result.ErrorMessage });

@@ -7,6 +7,7 @@ namespace MedicalSuiteNova.Utils
     {
         public static bool IsValidEmail(string email)
         {
+            if (string.IsNullOrEmpty(email)) return true;
             try
             {
                 var addr = new MailAddress(email);

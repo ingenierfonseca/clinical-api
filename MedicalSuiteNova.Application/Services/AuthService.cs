@@ -158,9 +158,10 @@ namespace MedicalSuiteNova.Application.Services
                 Permissions = permissions,
                 UserId = user.Id,
                 StaffId = staff?.Id,
-                FirstName = staff!.FirstName,
+                /*FirstName = staff!.FirstName,
                 LastName = staff!.LastName,
-                StaffTypeName = staff?.StaffType?.Name
+                StaffTypeName = staff?.StaffType?.Name,
+                Avatar = staff?.Avatar*/
             };
         }
     }

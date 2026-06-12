@@ -1,5 +1,5 @@
 ﻿
-namespace MedicalSuiteNova.Domain.Dto.ClinicalImage
+namespace MedicalSuiteNova.Domain.Dto.ClinicalFile
 {
     public class FileUploadResult
     {
