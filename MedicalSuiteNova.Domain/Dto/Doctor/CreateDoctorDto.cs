@@ -1,11 +1,10 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace MedicalSuiteNova.Domain.Dto.Update
+namespace MedicalSuiteNova.Domain.Dto.Doctor
 {
-    public class UpdateDoctorDto
+    public class CreateDoctorDto
     {
-        public int Id { get; set; }
         public byte ServiceId { get; set; }
         public int StaffId { get; set; }
         public int SpecialtyId { get; set; }

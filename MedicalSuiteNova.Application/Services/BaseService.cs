@@ -69,6 +69,15 @@ namespace MedicalSuiteNova.Application.Services
             return _mapper.Map<Dto>(entity);
         }
 
+        public async Task<TOutputDto> AddAsync<TInputDto, TOutputDto>(TInputDto dto)
+        where TInputDto : class
+        where TOutputDto : class
+        {
+            var entity = await _repository.AddAsync(_mapper.Map<T>(dto));
+            await _uow.CompleteAsync();
+            return _mapper.Map<TOutputDto>(entity);
+        }
+
         public async Task<Result<Dto>> UpdateAsync<Dto>(int id, Dto dto) where Dto : class
         {
             var t = await _repository.FindAsync(id)

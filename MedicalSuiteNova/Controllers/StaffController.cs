@@ -1,6 +1,5 @@
 
 using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Application.Services;
 using MedicalSuiteNova.Domain.Dto;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using Microsoft.AspNetCore.Authorization;

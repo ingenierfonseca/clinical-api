@@ -1,9 +1,7 @@
 ﻿using MedicalSuiteNova.Application.Interfaces;
-using MedicalSuiteNova.Application.Services;
 using MedicalSuiteNova.Domain.Dto.Doctor;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Dto.Update;
-using MedicalSuiteNova.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,17 +32,28 @@ namespace MedicalSuiteNova.Api.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var result = await _doctorService.FindAsync(id);
+            var doctor = await _doctorService.FindAsync(id);
+            if (doctor == null)
+                return BadRequest(new { message = "Id no encontrado" });
+            return Ok(doctor);
+        }
+
+        [HttpGet("{id:int}/info")]
+        public async Task<IActionResult> GetInfo(int id)
+        {
+            var result = await _doctorService.GetInfo(id);
             if (!result.IsSuccess)
                 return BadRequest(new { message = result.ErrorMessage });
             return Ok(result.Value);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Doctor p)
+        public async Task<IActionResult> Post(CreateDoctorDto p)
         {
             var result = await _doctorService.AddAsync(p);
-            return Ok(result);
+            if (!result.IsSuccess)
+                return BadRequest(new { message = result.ErrorMessage });
+            return Ok(result.Value);
         }
 
         [HttpPut("{id:int}")]

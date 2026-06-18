@@ -19,7 +19,7 @@ namespace MedicalSuiteNova.Application.Services
 
             var result = await _fileStorage.SaveAsync(
                 file,
-                FolderName.AvatarFolder,
+                FolderName.AvatarStaffFolder,
                 [".jpg", ".jpeg", ".png", ".webp"]);
 
             if (!result.IsSuccess)

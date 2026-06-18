@@ -18,7 +18,7 @@ namespace MedicalSuiteNova.Domain.Entities
         public bool IsActive { get; set; } = true;
         public string? Avatar { get; set; }
         public byte StaffTypeId { get; set; }
-        public DateTime? BirthDate { get; set; }
+        public DateOnly? BirthDate { get; set; }
 
         public virtual StaffType? StaffType { get; set; }
 

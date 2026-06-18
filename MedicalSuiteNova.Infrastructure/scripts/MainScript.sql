@@ -1,7 +1,53 @@
 ﻿USE master
-DROP DATABASE IF EXISTS ClinicalSuiteNovaDB;
-CREATE DATABASE ClinicalSuiteNovaDB
+GO
+IF DB_ID('ClinicalSuiteNovaDB') IS NOT NULL
+BEGIN
+    ALTER DATABASE ClinicalSuiteNovaDB
+    SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+
+    DROP DATABASE ClinicalSuiteNovaDB;
+END
+GO
+CREATE DATABASE ClinicalSuiteNovaDB;
+GO
 USE ClinicalSuiteNovaDB
+GO
+CREATE TABLE StaffType (
+    Id TINYINT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(50) NOT NULL,
+    Description NVARCHAR(250) NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
+);
+GO
+INSERT INTO StaffType (Name, Description) VALUES
+('Administrador', 'Administrador del sistema con acceso total'),
+('Doctor', 'Médico o especialista de la clínica'),
+('Recepcionista', 'Personal de recepción y atención al paciente'),
+('Asistente Médico', 'Asistente que apoya en procedimientos clínicos'),
+('Cajero', 'Personal encargado de cobros y facturación');
+GO
+CREATE TABLE Staff (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    FirstName NVARCHAR(50) NOT NULL,
+    LastName NVARCHAR(50) NOT NULL,
+    Gender VARCHAR(20) NOT NULL,
+    Phone NVARCHAR(15) NULL,
+    Email NVARCHAR(60) NULL,
+    HireDate DATETIME NULL,
+    Address VARCHAR(100) NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    Avatar NVARCHAR(500) NULL,
+    StaffTypeId TINYINT NOT NULL,
+    BirthDate DATE NULL,
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT FK_Staff_StaffType FOREIGN KEY (StaffTypeId) REFERENCES StaffType(Id)
+);
+GO
+INSERT INTO Staff(FirstName, LastName, Gender, Phone, Email, HireDate, StaffTypeId, BirthDate)
+VALUES ('Marlon', 'Fonseca', 'Masculino', '86422597', 'ingenierfonseca@gmail.com', GETDATE(), 1, '03/21/1989'),
+    ('Melissa', 'Fonseca', 'Femenino', '86422597', 'eliafonseca@gmail.com', GETDATE(), 1, '05/22/1987')
+GO
 CREATE TABLE Currency (
     Id TINYINT PRIMARY KEY,
     Name varchar(50) NOT NULL,
@@ -48,16 +94,18 @@ CREATE TABLE Specialties (
     Name NVARCHAR(100) NOT NULL,
     Description NVARCHAR(500) NULL,
     IsActive BIT NOT NULL DEFAULT 1,
+	ServiceId TINYINT NOT NULL,
     CreatedAt DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
     UpdatedAt DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-    CONSTRAINT UQ_Specialties_Name UNIQUE (Name)
+    CONSTRAINT UQ_Specialties_Name UNIQUE (Name),
+	CONSTRAINT FK_Specialties_Service FOREIGN KEY (ServiceId) REFERENCES Services(Id),
 );
 GO
-INSERT Specialties (Name) VALUES('Dentista General'),('Ortodoncia'),('Endodoncia')
+INSERT Specialties (Name, ServiceId) VALUES('Dentista General', 1),('Ortodoncia', 1),('Endodoncia', 1)
 GO
 create table Doctor(
 	Id integer identity (1,1) primary key,
-    StaffId TINYINT NOT NULL,
+    StaffId INT NOT NULL,
     ServiceId TINYINT NOT NULL,
 	SpecialtyId INT NOT NULL,
     Title VARCHAR(10) NOT NULL,
@@ -66,12 +114,16 @@ create table Doctor(
     CONSTRAINT FK_Doctor_Staff FOREIGN KEY (StaffId) REFERENCES Staff(Id)
 )
 GO
+INSERT INTO DOCTOR (StaffId, ServiceId, SpecialtyId, Title) VALUES (2,1,1,'Dra.');
+GO
 create table AppointmentType(
 	Id TINYINT identity (1,1) primary key,
 	Name varchar(50) NOT NULL,
 	Description varchar(100),
 	DurationMinutes INT
 )
+GO
+INSERT AppointmentType (Name, DurationMinutes) VALUES ('Revisión General', 30)
 GO
 CREATE TABLE ResourceType (
     Id TINYINT PRIMARY KEY,
@@ -515,44 +567,10 @@ CREATE TABLE [dbo].[Role](
 );
 GO
 INSERT INTO [dbo].[Role] ([Name], [Description]) VALUES
+('SuperAdmin', 'Administrador del sistema con acceso total'),
 ('Admin', 'Administrador del sistema con acceso total'),
 ('Doctor', 'Médico o especialista de la clínica'),
 ('Staff', 'Personal de recepción y atención al paciente');
-GO
-CREATE TABLE StaffType (
-    Id TINYINT IDENTITY(1,1) PRIMARY KEY,
-    Name NVARCHAR(50) NOT NULL,
-    Description NVARCHAR(250) NULL,
-    IsActive BIT NOT NULL DEFAULT 1,
-    CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
-);
-GO
-INSERT INTO StaffType (Name, Description) VALUES
-('Administrador', 'Administrador del sistema con acceso total'),
-('Doctor', 'Médico o especialista de la clínica'),
-('Recepcionista', 'Personal de recepción y atención al paciente'),
-('Asistente Médico', 'Asistente que apoya en procedimientos clínicos'),
-('Cajero', 'Personal encargado de cobros y facturación');
-GO
-CREATE TABLE Staff (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
-    FirstName NVARCHAR(50) NOT NULL,
-    LastName NVARCHAR(50) NOT NULL,
-    Gender VARCHAR(20) NOT NULL,
-    Phone NVARCHAR(15) NULL,
-    Email NVARCHAR(60) NULL,
-    HireDate DATETIME NULL,
-    Address VARCHAR(100) NULL,
-    IsActive BIT NOT NULL DEFAULT 1,
-    Avatar NVARCHAR(500) NULL,
-    StaffTypeId TINYINT NOT NULL,
-    BirthDate DATE NULL,
-    CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
-    CONSTRAINT FK_Staff_StaffType FOREIGN KEY (StaffTypeId) REFERENCES StaffType(Id)
-);
-GO
-INSERT INTO Staff(FirstName, LastName, Phone, Email, HireDate, StaffTypeId, BirthDate)
-VALUES ('Marlon', 'Fonseca', '86422597', 'ingenierfonseca@gmail.com', GETDATE(), 1, '03/21/1989')
 GO
 CREATE TABLE [dbo].[User](
     [Id] INT IDENTITY(1,1) PRIMARY KEY,
@@ -579,20 +597,20 @@ CREATE TABLE [dbo].[Permission](
 GO
 INSERT INTO [dbo].[Permission] ([Name], [Description], [Module]) VALUES
 ('appointments.create', 'Crear citas', 'Citas'),
-('appointments.read', 'Ver citas', 'Citas'),
+('appointments.view', 'Ver citas', 'Citas'),
 ('appointments.update', 'Actualizar citas', 'Citas'),
 ('patients.create', 'Crear pacientes', 'Pacientes'),
-('patients.read', 'Ver pacientes', 'Pacientes'),
+('patients.view', 'Ver pacientes', 'Pacientes'),
 ('patients.update', 'Actualizar pacientes', 'Pacientes'),
 ('clinical.create', 'Crear expediente clínico', 'Expediente Clínico'),
-('clinical.read', 'Ver expediente clínico', 'Expediente Clínico'),
+('clinical.view', 'Ver expediente clínico', 'Expediente Clínico'),
 ('billing.create', 'Crear facturas', 'Facturación'),
-('billing.read', 'Ver facturas', 'Facturación'),
+('billing.view', 'Ver facturas', 'Facturación'),
 ('billing.pay', 'Registrar pagos', 'Facturación'),
-('reports.read', 'Ver reportes', 'Reportes'),
-('users.manage', 'Gestionar usuarios', 'Usuarios'),
-('settings.read', 'Ver configuración', 'Configuración'),
-('settings.update', 'Actualizar configuración', 'Configuración');
+('upload-patients.view', 'Ver carga', 'Carga'),
+('upload-patients.create', 'Crear carga pacientes', 'Carga'),
+('upload-patients.update', 'Actualizar carga pacientes', 'Carga'),
+('administration-tretament-plan.view', 'Ver planes de tratamiento', 'Planes de tratamiento');
 GO
 CREATE TABLE [dbo].[UserRole](
     [UserId] INT NOT NULL,
@@ -614,7 +632,8 @@ INSERT INTO [dbo].[RolePermission] ([RoleId], [PermissionId])
 SELECT 1, Id FROM [dbo].[Permission];
 GO
 INSERT INTO [dbo].[User] ([Username], [Email], [PasswordHash], [IsActive], [StaffId])
-VALUES ('admin', 'admin@clinica.com', '$2a$11$igebiSXTamBKbT//NOd5Z.sNDTSP0aduEV1fm2sKZnY8VWlQkm2j6', 1, 1);
+VALUES ('admin', 'admin@clinica.com', '$2a$11$igebiSXTamBKbT//NOd5Z.sNDTSP0aduEV1fm2sKZnY8VWlQkm2j6', 1, 1),
+    ('eliafonseca', 'eliafonseca@clinica.com', '$2a$11$igebiSXTamBKbT//NOd5Z.sNDTSP0aduEV1fm2sKZnY8VWlQkm2j6', 1, 2);
 GO
 INSERT INTO [dbo].[UserRole] ([UserId], [RoleId])
-VALUES (1, 1);
+VALUES (1, 1), (2, 3);

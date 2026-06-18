@@ -30,14 +30,14 @@ namespace MedicalSuiteNova.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateRoleDto dto)
+        public async Task<IActionResult> Create(CreateRoleDto dto)
         {
-            var role = await _roleService.AddAsync(dto);
+            var role = await _roleService.AddAsync<CreateRoleDto, RoleDto>(dto);
             return Ok(role);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateRoleDto dto)
+        public async Task<IActionResult> Update(int id, UpdateRoleDto dto)
         {
             var result = await _roleService.UpdateAsync(id, dto);
             if (!result.IsSuccess)

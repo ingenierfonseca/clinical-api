@@ -48,7 +48,7 @@ namespace MedicalSuiteNova.Application.Services
                 {
                     OriginalName = file.FileName,
                     StoredName = storedName,
-                    RelativePath = $"uploads/{folder}/{storedName}",
+                    RelativePath = $"{FolderName.UploadFolder}/{folder}/{storedName}",
                     ContentType = file.ContentType,
                     Size = file.Length
                 });

@@ -18,6 +18,9 @@ namespace MedicalSuiteNova.Application.Interfaces
         Task<T> AddAsync(T patient);
 
         Task<Dto> AddAsync<Dto>(Dto dto) where Dto : class;
+        Task<TOutputDto> AddAsync<TInputDto, TOutputDto>(TInputDto dto)
+        where TInputDto : class
+        where TOutputDto : class;
 
         Task<Result<Dto>> UpdateAsync<Dto>(int id, Dto t) where Dto : class;
     }
