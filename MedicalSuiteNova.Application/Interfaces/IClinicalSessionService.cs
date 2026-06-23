@@ -8,5 +8,6 @@ namespace MedicalSuiteNova.Application.Interfaces
     {
         Task<Result<ClinicalSessionDto>> AddAsync(ClinicalSessionDto dto);
         Task<IEnumerable<ClinicalSessionShortInfoDto>> GetShortInfoByCustomer(int customerId);
+        Task<List<ClinicalSession>> GetHistoryCustomer(int customerId);
     }
 }

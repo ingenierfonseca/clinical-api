@@ -36,5 +36,17 @@ namespace MedicalSuiteNova.Utils
 
             return (true, "OK");
         }
+
+        public static int CalculateDiffMonthDate(DateTime startDate, DateTime endDate)
+        {
+            int months = ((endDate.Year - startDate.Year) * 12) + endDate.Month - startDate.Month;
+
+            if (endDate.Day < startDate.Day && months > 0)
+            {
+                months--;
+            }
+
+            return months >= 0 ? months : 0;
+        }
     }
 }

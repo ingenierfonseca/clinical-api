@@ -48,5 +48,14 @@ namespace MedicalSuiteNova.Application.Services
                 }
             );
         }
+
+        public async Task<List<ClinicalSession>> GetHistoryCustomer(int customerId)
+        {
+            return await _uow.ClinicalSessions.GetAllAsync(
+                c => c.CustomerId == customerId,
+                query => query.OrderByDescending(x => x.Date),
+                []
+            );
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using ClosedXML.Excel;
 using MedicalSuiteNova.Application.Constants;
+using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Application.Interfaces;
+using MedicalSuiteNova.Domain.Dto.Appointment;
 using MedicalSuiteNova.Domain.Dto.Customer;
 using MedicalSuiteNova.Domain.Dto.Request;
 using MedicalSuiteNova.Domain.Dto.Responses;
@@ -38,6 +40,93 @@ namespace MedicalSuiteNova.Application.Services
             });
 
             return dashboardList;
+        }
+
+        public async Task<List<CustomerRiskDashboard>> GetCustomerRiskDashboard(int customerId)
+        {
+            var customer = await _uow.Customers.FindAsync(customerId);
+            if (customer == null)
+                return [];
+
+            List<CustomerRiskDashboard> dashboardList = [];
+            dashboardList.Add(await GetAppointmentRisk(customerId));
+            dashboardList.Add(await GetPaymentRisk(customer));
+
+            return dashboardList;
+        }
+
+        public async Task<CustomerRiskDashboard> GetAppointmentRisk(int customerId)
+        {
+            var missedAppointment = await _uow.Appointments.GetAllAsync(
+                a => a.CustomerId == customerId && (
+                a.StatusId == (int)AppointmentStatusEnum.NoShow ||
+                a.StatusId == (int)AppointmentStatusEnum.Cancelled));
+
+            var appointmentTotal = missedAppointment.Count;
+            RiskLevelEnum riskLevel = CalculateRisk(appointmentTotal);
+
+            return new CustomerRiskDashboard
+            {
+                Title = "Riesgo de no presentarse a la cita",
+                Description = $"{appointmentTotal} {(appointmentTotal > 1 ? "citas" : "cita")} perdidas",
+                RiskLevel = riskLevel.ToString()
+            };
+        }
+
+        public async Task<CustomerRiskDashboard> GetPaymentRisk(Customer customer)
+        {
+            var diff = 0;
+            string description = "Sin deudas pendientes";
+
+            if (customer.Balance > 0)
+            {
+                var payments = await _uow.Payments.GetAllAsync(p => p.CustomerId == customer.Id);
+                if (payments != null && payments.Count > 0)
+                {
+                    var latestPayment = payments.OrderBy(p => p.Date).Last();
+                    diff = DateTimeHelper.CalculateDiffMonthDate(latestPayment.Date, DateTime.UtcNow);
+                    description = $"Ultimo pago hace {diff} {(diff > 1 ? "meses" : "mes")}";
+                }
+            }
+
+            RiskLevelEnum riskLevel = CalculateRisk(diff);
+
+            return new CustomerRiskDashboard
+            {
+                Title = "Riesgo de pago",
+                Description = description,
+                RiskLevel = riskLevel.ToString()
+            };
+        }
+
+        private static RiskLevelEnum CalculateRisk(int qnty)
+        {
+            return qnty switch
+            {
+                0 => RiskLevelEnum.Low,
+                1 => RiskLevelEnum.Medium,
+                _ => RiskLevelEnum.High
+            };
+        }
+
+        public async Task<AppointmentInfoDto> GetCustomerNextAppointment(int customerId)
+        {
+            var now = DateOnly.FromDateTime(DateTime.UtcNow);
+            var currentTime = DateTime.UtcNow.TimeOfDay;
+
+            var appointments = await _uow.Appointments.GetAllAsync(
+                a =>
+                a.CustomerId == customerId &&
+                a.Date >= now &&
+                a.StatusId == (int)AppointmentStatusEnum.Pending);
+
+            var lastestAppointment = appointments
+                .Where(a => a.Date > now || (a.Date == now && a.StartTime >= currentTime))
+                .OrderBy(a => a.Date)
+                .ThenBy(a => a.StartTime)
+                .FirstOrDefault();
+
+            return _mapper.Map<AppointmentInfoDto>(lastestAppointment);
         }
 
         public async Task<Result<CustomerDto>> AddAsync(CreateCustomerDto dto)

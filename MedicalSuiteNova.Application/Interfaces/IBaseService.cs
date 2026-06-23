@@ -1,6 +1,5 @@
 ﻿
 using MedicalSuiteNova.Domain.Dto.Responses;
-using MedicalSuiteNova.Domain.Interfaces;
 using System.Linq.Expressions;
 
 namespace MedicalSuiteNova.Application.Interfaces

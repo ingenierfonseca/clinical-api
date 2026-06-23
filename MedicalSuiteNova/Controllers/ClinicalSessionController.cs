@@ -46,6 +46,13 @@ namespace MedicalSuiteNova.Api.Controllers
             return Ok(item);
         }
 
+        [HttpGet("history-customer/{id:int}")]
+        public async Task<IActionResult> GetHistoryCustomer(int id)
+        {
+            var item = await _clinicalSessionService.GetHistoryCustomer(id);
+            return Ok(item);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(ClinicalSessionDto p)
         {

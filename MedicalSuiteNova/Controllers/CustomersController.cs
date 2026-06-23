@@ -42,6 +42,20 @@ namespace MedicalSuiteNova.Api.Controllers
             return Ok(items);
         }
 
+        [HttpGet("{id:int}/risk-dashboard")]
+        public async Task<IActionResult> GetCustomerRiskDashboard(int id)
+        {
+            var items = await _customerService.GetCustomerRiskDashboard(id);
+            return Ok(items);
+        }
+
+        [HttpGet("{id:int}/next-appointment")]
+        public async Task<IActionResult> GetCustomerNextAppointment(int id)
+        {
+            var items = await _customerService.GetCustomerNextAppointment(id);
+            return Ok(items);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(CreateCustomerDto dto)
         {
