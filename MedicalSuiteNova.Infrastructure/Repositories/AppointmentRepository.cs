@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using MedicalSuiteNova.Application.Enums;
 using MedicalSuiteNova.Domain.Dto.Appointment;
 using MedicalSuiteNova.Domain.Dto.Responses;
 using MedicalSuiteNova.Domain.Entities;
 using MedicalSuiteNova.Domain.Interfaces;
 using MedicalSuiteNova.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace MedicalSuiteNova.Infrastructure.Repositories
@@ -42,6 +44,40 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                 a => a.Status!,
                 a => a.Resource!
             );
+        }
+
+        public async Task<AppointmentInfoDto?> GetNextByCustomerAsync(int customerId)
+        {
+            var now = DateOnly.FromDateTime(DateTime.UtcNow);
+
+            return await _context.Appointments
+                .Where(a => a.CustomerId == customerId && a.Date >= now && (a.StatusId == (int)AppointmentStatusEnum.Pending || a.StatusId == (int)AppointmentStatusEnum.Confirmed))
+                .Include(a => a.Patient!)
+                .Include(a => a.Doctor!).ThenInclude(d => d.Staff!)
+                .Include(a => a.AppointmentType!)
+                .Include(a => a.Status!)
+                .Include(a => a.Resource!)
+                .OrderBy(a => a.Date)
+                .ThenBy(a => a.StartTime)
+                .Select(a => new AppointmentInfoDto
+                {
+                    Id = a.Id,
+                    CustomerId = a.CustomerId,
+                    DoctorId = a.DoctorId,
+                    StatusId = a.StatusId,
+                    AppointmentTypeId = a.AppointmentTypeId,
+                    ResourceId = a.ResourceId,
+                    Date = a.Date,
+                    StartTime = a.StartTime,
+                    EndTime = a.EndTime,
+                    PatientName = a.Patient!.GetShortName(),
+                    DoctorName = a.Doctor!.Staff!.GetShortName(),
+                    TypeName = a.AppointmentType!.Name,
+                    StatusName = a.Status!.Name,
+                    ResourceName = a.Resource != null ? a.Resource.Name : null,
+                    Notes = a.Notes
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }

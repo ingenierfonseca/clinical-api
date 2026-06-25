@@ -29,7 +29,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
             var hoy = DateTime.Today;
 
             var query = _context.Set<Customer>()
-                .Where(a => search != string.Empty && a.FirstName.Contains(search) || a.LastName.Contains(search))
+                .Where(a => (a.FirstName.Trim() + " " + a.LastName.Trim()).Contains(search))
                 .OrderByDescending(a => a.Invoices.Select(i => i.StatusId).FirstOrDefault())
                 .Include(a => a.Currency)
                 .Select(c => new CustomerInvoiceDashboardDto
@@ -69,6 +69,7 @@ namespace MedicalSuiteNova.Infrastructure.Repositories
                 {
                     Id = payment.Id,
                     InvoiceNumber = invoice.Number!,
+                    CurrencySymbol = payment.Currency!.Symbol,
                     Amount = payment.Amount,
                     PaymentTypeName = payment.PaymentType!.Name,
                     Date = payment.Date

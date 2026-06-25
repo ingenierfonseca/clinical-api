@@ -17,7 +17,12 @@ namespace MedicalSuiteNova.Application.Mappings
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
             CreateMap<Appointment, AppointmentDto>();
             CreateMap<AppointmentInfoDto, Appointment>();
-            CreateMap<Appointment, AppointmentInfoDto>();
+            CreateMap<Appointment, AppointmentInfoDto>()
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient!.GetShortName()))
+                .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Doctor!.Staff!.GetShortName()))
+                .ForMember(dest => dest.TypeName, opt => opt.MapFrom(src => src.AppointmentType!.Name))
+                .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status!.Name))
+                .ForMember(dest => dest.ResourceName, opt => opt.MapFrom(src => src.Resource != null ? src.Resource.Name : null));
             CreateMap<AppointmentTypeDto, AppointmentType>();
             CreateMap<AppointmentType, AppointmentTypeDto>();
             CreateMap<ClinicalVisits, ClinicalVisitsDto>();

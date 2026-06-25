@@ -109,24 +109,9 @@ namespace MedicalSuiteNova.Application.Services
             };
         }
 
-        public async Task<AppointmentInfoDto> GetCustomerNextAppointment(int customerId)
+        public async Task<AppointmentInfoDto?> GetCustomerNextAppointment(int customerId)
         {
-            var now = DateOnly.FromDateTime(DateTime.UtcNow);
-            var currentTime = DateTime.UtcNow.TimeOfDay;
-
-            var appointments = await _uow.Appointments.GetAllAsync(
-                a =>
-                a.CustomerId == customerId &&
-                a.Date >= now &&
-                a.StatusId == (int)AppointmentStatusEnum.Pending);
-
-            var lastestAppointment = appointments
-                .Where(a => a.Date > now || (a.Date == now && a.StartTime >= currentTime))
-                .OrderBy(a => a.Date)
-                .ThenBy(a => a.StartTime)
-                .FirstOrDefault();
-
-            return _mapper.Map<AppointmentInfoDto>(lastestAppointment);
+            return await _uow.Appointments.GetNextByCustomerAsync(customerId);
         }
 
         public async Task<Result<CustomerDto>> AddAsync(CreateCustomerDto dto)

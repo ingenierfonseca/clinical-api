@@ -11,7 +11,7 @@ namespace MedicalSuiteNova.Application.Interfaces
     {
         Task<List<CustomerDashboardDto>> GetDashboard();
         Task<List<CustomerRiskDashboard>> GetCustomerRiskDashboard(int customerId);
-        Task<AppointmentInfoDto> GetCustomerNextAppointment(int customerId);
+        Task<AppointmentInfoDto?> GetCustomerNextAppointment(int customerId);
         Task<Result<CustomerDto>> AddAsync(CreateCustomerDto dto);
         Task<Result<CustomerDto>> UpdateAsync(int id, UpdateCustomerDto dto);
         Task<ResponseImportResult> BulkImport(List<CustomerImportDto> dtos);

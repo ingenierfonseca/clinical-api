@@ -22,7 +22,7 @@ namespace MedicalSuiteNova.Api.Controllers
             var items = await _customerService.GetAllAsync<CustomerDto>(
                 pageNumber, 
                 pageSize,
-                a => search != string.Empty && a.FirstName.Contains(search) || a.LastName.Contains(search),
+                a => a.FirstName.Contains(search) || a.LastName.Contains(search),
                 query => query.OrderBy(a => a.FirstName)
             );
             return Ok(items);
