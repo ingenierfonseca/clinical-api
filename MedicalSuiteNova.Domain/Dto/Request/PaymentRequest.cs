@@ -7,6 +7,7 @@ namespace MedicalSuiteNova.Domain.Dto.Request
         public byte CurrencyId { get; set; }
         public int CustomerId { get; set; }
         public decimal Amount { get; set; }
+        public string? Memo { get; set; }
         public DateTime Date { get; set; }
         public byte PaymentTypeId { get; set; }
         public int InvoiceId { get; set; }

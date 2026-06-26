@@ -13,7 +13,7 @@ namespace MedicalSuiteNova.Domain.Dto.Payment
         public required string CurrencySymbol { get; set; }
         public required string PaymentMethod { get; set; }
         public bool IsPartialPayment { get; set; }
-        public string? Description { get; set; }
+        public string? Memo { get; set; }
         public required string InvoiceNumber { get; set; }
         public decimal InvoiceTotal { get; set; }
         public decimal PreviousBalance { get; set; }

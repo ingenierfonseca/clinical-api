@@ -99,8 +99,8 @@ namespace MedicalSuiteNova.Application.Services
                 (int)OperationTypeEnum.InvoicePayment =>
                     await ResolveExistingInvoiceAsync(request.InvoiceId),
 
-                (int)OperationTypeEnum.BalancePayment =>
-                    Result<Invoice>.Success(await CreateBalanceInvoiceAsync(request)),
+                //(int)OperationTypeEnum.BalancePayment =>
+                    //Result<Invoice>.Success(await CreateBalanceInvoiceAsync(request)),
 
                 _ => Result<Invoice>.Failure("Operación no soportada")
             };
@@ -173,6 +173,7 @@ namespace MedicalSuiteNova.Application.Services
                 CustomerId = request.CustomerId,
                 CurrencyId = request.CurrencyId,
                 Amount = request.Amount,
+                Memo = request.Memo,
                 PaymentTypeId = request.PaymentTypeId,
                 Date = request.Date == DateTime.MinValue ? DateTime.UtcNow : request.Date.ToUniversalTime()
             };
@@ -237,6 +238,7 @@ namespace MedicalSuiteNova.Application.Services
                 CompanyNIT = "001-010101-0010C",
                 ReceiptNumber = $"REC-{payment.Id:D6}",
                 AmountPaid = payment.Amount,
+                Memo = payment.Memo,
                 PaymentDate = payment.Date,
                 CurrencySymbol = payment.Currency!.Symbol,
                 PaymentMethod = payment.PaymentType!.Name,

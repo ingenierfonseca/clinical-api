@@ -6,6 +6,7 @@
         public required string InvoiceNumber { get; set; }
         public required string CurrencySymbol { get; set; }
         public decimal Amount { get; set; }
+        public string? Memo { get; set; }
         public DateTime Date { get; set; }
         public required string PaymentTypeName { get; set; }
     }

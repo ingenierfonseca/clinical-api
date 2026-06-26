@@ -525,6 +525,7 @@ CREATE TABLE Payment (
 	CustomerId INT NOT NULL,
     CurrencyId TINYINT NOT NULL,
     Amount DECIMAL(18,2) NOT NULL,
+    Memo VARCHAR(100) NULL,
     Date DATETIME NOT NULL,
     PaymentTypeId TINYINT, -- Cash, Card, Transfer
     CONSTRAINT FK_Payment_Invoice
